@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Hello I’m Prabhdeep Singh">
+    <meta name="description" content="">
+    <meta name="page_type" content="np-template-header-footer-from-plugin">
+    <title>Prabhdeep Singh - Portfolio</title>
+    <link rel="shortcut icon" href="icons8-portfolio-64.png" type="image/x-icon"> 
+
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+    <link rel="stylesheet" href="Page-3.css" media="screen">
+    <script class="u-script" type="text/javascript" src="jquery-1.9.1.min.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <meta name="generator" content="Nicepage 4.6.8, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i|Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|PT+Sans:400,400i,700,700i|Oswald:200,300,400,500,600,700|Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    
+    <script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "",
+    "logo": "images/default-logo.png"
+    }</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Page 3">
+    <meta property="og:type" content="website">
+
+    <style>
+      :root {
+        --palette-1-base: #478ac9; /* Nicepage default blue */
+        --palette-2-base: #db545a; /* Nicepage default red */
+        --palette-5-dark-2: #333333; /* Nicepage dark text */
+        --palette-5-light-3: #f2f2f2; /* Nicepage light background */
+      }
+
+      /* Timeline CSS */
+      .timeline-section {
+        padding: 50px 0;
+      }
+      .timeline-container {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .timeline-container::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        background-color: var(--palette-1-base);
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -2px;
+      }
+      .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        background-color: inherit;
+        width: 50%;
+      }
+      .timeline-item::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        right: -12px;
+        background-color: white;
+        border: 4px solid var(--palette-1-base);
+        top: 25px;
+        border-radius: 50%;
+        z-index: 1;
+      }
+      .timeline-left {
+        left: 0;
+      }
+      .timeline-right {
+        left: 50%;
+      }
+      .timeline-right::after {
+        left: -10px;
+      }
+      .timeline-content {
+        padding: 20px 30px;
+        background-color: white;
+        position: relative;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+      .timeline-date {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.9rem;
+        color: var(--palette-2-base);
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      .timeline-title {
+        font-family: 'Raleway', sans-serif;
+        font-size: 1.25rem;
+        color: var(--palette-1-base);
+        font-weight: 700;
+        margin: 0;
+      }
+      .timeline-subtitle {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.1rem;
+        color: var(--palette-5-dark-2);
+        font-weight: 600;
+        margin-top: 5px;
+        margin-bottom: 10px;
+      }
+      .timeline-text {
+        font-family: 'PT Sans', sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #666;
+      }
+      @media screen and (max-width: 768px) {
+        .timeline-container::after {
+          left: 15px;
+        }
+        .timeline-item {
+          width: 100%;
+          padding-left: 50px;
+          padding-right: 15px;
+        }
+        .timeline-item::after {
+          left: 4px;
+        }
+        .timeline-left, .timeline-right {
+          left: 0%;
+        }
+      }
+
+      /* Testimonial/Quote Section CSS */
+      .testimonial-section {
+        padding: 80px 20px;
+        background-color: #eef2f5; /* A soft neutral background */
+      }
+      .testimonial-card {
+        max-width: 700px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      }
+      .testimonial-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%; /* This makes the image a circle */
+        border: 5px solid var(--palette-1-base);
+        object-fit: cover; /* Prevents the image from stretching */
+        margin: 0 auto 20px auto; /* Centers the image */
+      }
+      .testimonial-quote {
+        font-family: 'PT Sans', sans-serif;
+        font-size: 1.1rem;
+        font-style: italic;
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 25px;
+      }
+      .testimonial-author {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.5rem;
+        color: var(--palette-5-dark-2);
+        margin-bottom: 5px;
+      }
+      .testimonial-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1rem;
+        color: #777;
+        font-weight: 500;
+      }
+
+      /* New Patents Section CSS */
+      .patents-section {
+        padding: 50px 20px;
+        background-color: var(--palette-5-light-3);
+      }
+      .patents-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .patent-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+      .patent-card:hover {
+        transform: translateY(-5px);
+      }
+      .patent-title {
+        font-family: 'Raleway', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--palette-1-base);
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      .patent-description {
+        font-family: 'PT Sans', sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #666;
+        height: 75px; /* Fixed height for a uniform look */
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+      }
+      .patent-card.expanded .patent-description {
+        height: auto;
+        max-height: 500px; /* Large enough to fit all content */
+      }
+      .patent-status {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--palette-2-base);
+        margin-top: 15px;
+      }
+      .read-more-btn {
+        background-color: var(--palette-2-base);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        margin-top: 15px;
+      }
+      .patent-link {
+        color: var(--palette-1-base);
+        text-decoration: underline;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        margin-top: 20px;
+        display: block;
+      }
+
+      /* New Skills Section CSS */
+      .skills-section {
+        padding: 50px 20px;
+        background-color: var(--palette-5-light-3);
+      }
+      .skills-container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+      .skill-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+      .skill-card:hover {
+        transform: translateY(-5px);
+      }
+      .skill-title {
+        font-family: 'Raleway', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--palette-1-base);
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      .skill-description {
+        font-family: 'PT Sans', sans-serif;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: #666;
+      }
+      .skill-progress-bar {
+        width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 15px;
+      }
+      .skill-progress {
+        height: 10px;
+        background-color: var(--palette-1-base);
+        transition: width 0.8s ease-in-out;
+      }
+    </style>
+    </head>
+  <body class="u-body u-xl-mode">
+    <header class="u-clearfix u-header u-header" id="sec-b10b">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <a href="" class="u-image u-logo u-image-1">
+          <img src="images/default-logo.png" class="u-logo-image u-logo-image-1">
+        </a>
+        <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
+          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+              <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
+              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+</g></svg>
+            </a>
+          </div>
+          <div class="u-nav-container"></div>
+          <div class="u-nav-container-collapse">
+            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+              <div class="u-inner-container-layout u-sidenav-overflow">
+                <div class="u-menu-close"></div>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href=""></a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href=""></a>
+</li></ul>
+              </div>
+            </div>
+            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <section class="u-clearfix u-palette-5-light-3 u-section-1" id="carousel_6174">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <img class="u-expanded-width-sm u-expanded-width-xs u-image u-image-round u-radius-20 u-image-1" src="prasnl.JPG" alt="" data-image-width="800" data-image-height="976">
+        <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-group-1">
+          <div class="u-container-layout u-valign-middle-lg u-valign-top-xs u-container-layout-1">
+            <h2 class="u-align-left u-custom-font u-font-raleway u-text u-text-palette-1-base u-text-1">Hello <br>I’m Prabhdeep Singh
+            </h2>
+            <p class="u-align-left u-custom-font u-text u-text-2">A dedicated problem solver with a keen understanding of the quantum realm and a passion for full-stack development. I enjoy analyzing complex challenges and engineering innovative solutions, with a strong focus on creating patented technologies that solve real-world problems.
+            </p>
+            <a href="RESUME.pdf" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-2" download>Download Resume&nbsp;&nbsp;<span class="u-icon u-icon-1"><svg class="u-svg-content" viewBox="0 0 512 512" x="0px" y="0px" style="width: 1em; height: 1em;"><g><g>
+</g>
+</g>
+</svg><img></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-align-center u-clearfix u-palette-5-light-3 u-section-2" id="sec-f08b">
+      <div class="u-clearfix u-sheet u-valign-middle-sm u-valign-middle-xs u-sheet-1">
+        <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-palette-1-base u-radius-20 u-shape-round u-group-1">
+          <div class="u-container-layout u-valign-middle u-container-layout-1">
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-1">name</h6>
+            <p class="u-custom-font u-text u-text-2">Prabhdeep Singh</p>
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-3">Location</h6>
+            <p class="u-custom-font u-text u-text-4">Nabha District Patiala, Punjab</p>
+           <h6 class="u-custom-font u-font-open-sans u-text u-text-7">Email</h6>
+            <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-1">prabhdeepsinghjassal@gmail.com</a>
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-8">Phone</h6>
+            <a href="tel:+919464613198" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-2">+91 94646-13198</a>
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-5">Leetcode</h6>
+            <a href="https://leetcode.com/u/prabhdeepsinghjassal/" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-3">leetcode.com/prabhdeepsinghjassal/</a>
+            
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-9">GitHub</h6>
+            <a href="https://github.com/PrabhdeepJassal" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-3">github.com/PrabhdeepJassal</a>
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-10">LinkedIn</h6>
+            <a href="https://www.linkedin.com/in/prabhdeep-singh-jassal" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-3">linkedin.com/in/prabhdeep-singh-jassal</a>
+          </div>
+        </div>
+        <div class="u-expanded-width-sm u-expanded-width-xs u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-align-left u-container-style u-list-item u-repeater-item u-shape-rectangle">
+              <div class="u-container-layout u-similar-container u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-container-layout-3">
+                <p class="u-text u-text-palette-1-base u-text-17">XP YEARS</p>
+                <h3 class="u-custom-font u-font-montserrat u-text u-text-palette-2-base u-text-18" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">3+</h3>
+              </div>
+            </div>
+            <div class="u-align-left u-container-style u-list-item u-repeater-item u-shape-rectangle">
+              <div class="u-container-layout u-similar-container u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-container-layout-4">
+                <p class="u-text u-text-palette-1-base u-text-19">Patents filed</p>
+                <h3 class="u-custom-font u-font-montserrat u-text u-text-palette-2-base u-text-20" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">4</h3>
+              </div>
+            </div>
+            <div class="u-align-left u-container-style u-list-item u-repeater-item u-shape-rectangle">
+              <div class="u-container-layout u-similar-container u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-container-layout-5">
+                <p class="u-text u-text-palette-1-base u-text-21">Key Projects</p>
+                <h3 class="u-custom-font u-font-montserrat u-text u-text-palette-2-base u-text-22" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">14+</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-group-2">
+          <div class="u-container-layout u-container-layout-6">
+            <h2 class="u-align-left u-custom-font u-font-open-sans u-text u-text-palette-1-base u-text-23">I am committed to pushing the limits of what is feasible in science and technology.</h2>
+            <p class="u-align-left u-custom-font u-text u-text-palette-1-base u-text-24"> With a solid background in quantum physics and a track record of using cutting-edge, problem-solving strategies in software development, I am eager to join a team that shares my enthusiasm for unraveling complex challenges. I bring an analytical mentality and limitless energy to every project, from developing enterprise-level mobile applications to architecting autonomous AI agents.
+            </p>
+            <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-4">Send E-Mail &nbsp;&nbsp;<span class="u-icon u-icon-5"><svg class="u-svg-content" viewBox="0 0 512 512" x="0px" y="0px" style="width: 1em; height: 1em;"><g><g>
+</g></g></svg><img></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="u-clearfix u-palette-5-light-3 u-section-3 timeline-section" id="carousel_c0dc">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <h1 class="u-text u-text-palette-1-base u-text-1">Education & Experience</h1>
+        <p class="u-custom-font u-font-pt-sans u-text u-text-2">
+          My academic journey and hands-on experience in research and corporate environments.
+        </p>
+        <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1" style="margin-bottom: 50px;"></div>
+
+        <div class="timeline-container">
+          <div class="timeline-item timeline-left">
+            <div class="timeline-content">
+              <div class="timeline-date">2024 - 2026</div>
+              <h3 class="timeline-title">Thapar University</h3>
+              <h4 class="timeline-subtitle">Master of Computer Applications (MCA)</h4>
+              <p class="timeline-text">Pursuing advanced studies in computer science, focusing on complex algorithms, systems architecture, and specialized computing paradigms to deepen my technical expertise.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item timeline-right">
+            <div class="timeline-content">
+              <div class="timeline-date">JAN 2024 - JUN 2024</div>
+              <h3 class="timeline-title">International Tractors Limited</h3>
+              <h4 class="timeline-subtitle">React Native Application Developer (Intern)</h4>
+              <p class="timeline-text">Developed and launched a cross-platform mobile app to automate the company's document approval workflow. Led key software implementations that significantly improved process automation and efficiency.</p>
+            </div>
+          </div>
+          
+          <div class="timeline-item timeline-left">
+            <div class="timeline-content">
+              <div class="timeline-date">2021 - 2024</div>
+              <h3 class="timeline-title">Chitkara University</h3>
+              <h4 class="timeline-subtitle">Bachelor of Computer Applications (BCA)</h4>
+              <p class="timeline-text">Completed with a GPA of 9.0/10.0, gaining a strong foundation in computer science, software development, and programming languages while actively engaging in quantum computing research.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item timeline-right">
+            <div class="timeline-content">
+              <div class="timeline-date">JAN 2022 - DEC 2024</div>
+              <h3 class="timeline-title">Chitkara University</h3>
+              <h4 class="timeline-subtitle">Research Scholar</h4>
+              <p class="timeline-text">Conducted extensive research on the theory and application of quantum teleportation. Collaborated with physicists on theoretical studies and contributed to advancing the understanding of quantum principles, including work on Grover's algorithm.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="u-clearfix patents-section" id="patents-section">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <h1 class="u-text u-text-palette-1-base u-text-1" style="text-align: center;">My Patents</h1>
+        <p class="u-custom-font u-font-pt-sans u-text u-text-2" style="text-align: center; margin-bottom: 50px;">
+          Innovative solutions I've engineered to solve real-world problems.
+        </p>
+        <div class="patents-grid">
+          <div class="patent-card" id="patent1">
+            <h3 class="patent-title">EARPHONE WITH AUTO ON AND OFF PROVISION THROUGH MONITORING BRAIN SIGNALS </h3>
+            <p class="patent-description">
+              An earphone device with auto on and off by monitoring brain signals
+              comprises a headset, a pair of earphones with a UV lamp, a plurality
+              of sensors to detect brain signals of a user, a location detection module
+              , and a control unit comprises a microcontroller in communication with a
+              mobile device in a Bluetooth network. The detected brain signals are
+              transmitted to the mobile device to analyse the state of sleep of the brain and
+              to switch on and off the device. UV lamps generate UV rays to kill bacteria
+              in the ear.
+            </p>
+            <button class="read-more-btn" onclick="toggleReadMore('patent1')">Read More</button>
+            <p class="patent-status">Status: Published</p>
+            <a href="earphone.pdf" target="_blank" class="patent-link">View Patent Document</a>
+          </div>
+
+          <div class="patent-card" id="patent2">
+            <h3 class="patent-title">DEVICE AND METHOD FOR DETECTING THE INFECTION STATE OF HAIR </h3>
+            <p class="patent-description">
+              The present disclosure relates to a device for detecting the infection state of
+              the head part of the subject, the device includes a first set of sensors to
+              capture images of the head part. The second set of sensors detects the
+              accurate placement of the device in the head part and tests the quality of hair. A
+              controller is configured to receive the captured images of the head part of the
+              subject, receive the detected placement of the device and determine the quality of
+              the hair of the subject, extract a set of attributes and compare the extracted set of
+              attributes with reference set of attributes, where based on a combination of
+              comparison, the controller is configured to determine a diagnosis for the head part
+              of the subject.
+            </p>
+            <button class="read-more-btn" onclick="toggleReadMore('patent2')">Read More</button>
+            <p class="patent-status">Status: Published</p>
+            <a href="comb.pdf" target="_blank" class="patent-link">View Patent Document</a>
+          </div>
+          
+          <div class="patent-card" id="patent3">
+            <h3 class="patent-title">WEARABLE DEVICE AND METHOD FOR GENERATING SOUND OF ANKLET BELL</h3>
+            <p class="patent-description">
+              A wearable device for generating a sound of anklet bells is
+              disclosed. The wearable device provides a strap adapted
+              to be worn around a leg of a user that comprises pressure sensors
+              and motion sensors to detect an amount of
+              pressure applied and a movement data of a foot of the user. The
+              wearable device compiles the movement data and the amount
+              of pressure using machine learning algorithms and creates a specific
+              sound note. The wearable device further actuates a sound
+              generating unit and a speaker to playback the sound of
+              the anklet bells based on the created sound note. The wearable
+              device is lightweight, portable, and audible to a mass audience.
+            </p>
+            <button class="read-more-btn" onclick="toggleReadMore('patent3')">Read More</button>
+            <p class="patent-status">Status: Published</p>
+            <a href="anklet.pdf" target="_blank" class="patent-link">View Patent Document</a>
+          </div>
+
+          <div class="patent-card" id="patent4">
+            <h3 class="patent-title">COLOR BLIND AND MULTIUSABLE ELECTRIC TOOTHBRUSH</h3>
+            <p class="patent-description">
+              Based on the existing electric toothbrush design, we will replace the pressing button with a fingerprint sensor that vibrates when touched by the wrong owner and does not turn on and writes Welcome (name of owner) on the LED screen when touched by the right owner.   This feature avoids misuse, especially for colourblind persons.   A battery percentage feature will follow.  Since electric toothbrushes don't have battery %, they display Dark Green for full battery, Yellow for half charge, and Red for no battery.  Colourblind persons can't see colours, thus checking their toothbrush batteries is difficult.   We replaced this with battery percentage, which users can observe and control toothbrush charging.   An LED panel will display toothbrush information and remember last use on our electric toothbrush.   GPS trackers help owners find misplaced items.   Its processor regularly sends information to the user's smartphone, such as when they used it (to help parents watch their kids' brushing).   Most people brush poorly, damaging their gums. The gyroscope helps users brush properly.
+            </p>
+            <button class="read-more-btn" onclick="toggleReadMore('patent4')">Read More</button>
+            <p class="patent-status">Status: Published</p>
+            <a href="TOOTHBRUSH.pdf" target="_blank" class="patent-link">View Patent Document</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonial-section" id="sec-72eb">
+      <div class="testimonial-card">
+        <img src="prsnl2.jpg" alt="Prabhdeep Singh" class="testimonial-image">
+        <p class="testimonial-quote">"I have an insatiable curiosity about the world. I enjoy analysing complex problems and coming up with beautiful fixes, and I am passionate about creating patents by focusing on real-life problems."</p>
+        <h3 class="testimonial-author">Prabhdeep Singh</h3>
+        <h6 class="testimonial-title">Innovator & Developer</h6>
+      </div>
+    </section>
+
+    <section class="u-clearfix u-palette-5-light-3 skills-section" id="skills-section">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <div class="u-align-center u-container-style u-group u-radius-20 u-shape-round u-white u-group-1" style="padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+          <div class="u-container-layout">
+            <h1 class="u-text u-text-palette-1-base u-text-1">Skills & Expertise</h1>
+            <p class="u-text u-text-2">My technical skills and proficiencies in various domains.</p>
+            <div class="skills-container">
+              
+              <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 20px; margin-bottom: 20px;"></div>
+              
+              <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left;">Programming Languages</h3>
+              <div class="skills-grid">
+                <div class="skill-card">
+                  <h4 class="skill-title">Python</h4>
+                  <p class="skill-description">Experienced in Python for data analysis, backend development, and scientific computing, including libraries like NumPy, Pandas, and Scikit-learn.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                </div>
+                <div class="skill-card">
+                  <h4 class="skill-title">C/C++</h4>
+                  <p class="skill-description">Strong foundational knowledge in C/C++ for low-level programming, data structures, and algorithms.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+                </div>
+                <div class="skill-card">
+                  <h4 class="skill-title">Java</h4>
+                  <p class="skill-description">Proficient in Java for building robust and scalable applications, with a focus on object-oriented design principles.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+                </div>
+                <div class="skill-card">
+                  <h4 class="skill-title">JavaScript (ES6+)</h4>
+                  <p class="skill-description">Skilled in modern JavaScript for dynamic and interactive web applications, including asynchronous programming and API integration.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+                </div>
+              </div>
+              
+              <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 40px; margin-bottom: 20px;"></div>
+
+              <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left;">Frameworks & Technologies</h3>
+              <div class="skills-grid">
+                <div class="skill-card">
+                  <h4 class="skill-title">React Native</h4>
+                  <p class="skill-description">Hands-on experience developing cross-platform mobile applications for iOS and Android, focusing on performance and user experience.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                </div>
+                <div class="skill-card">
+                  <h4 class="skill-title">Web Development (MERN)</h4>
+                  <p class="skill-description">Full-stack development experience with the MERN stack (MongoDB, Express.js, React, Node.js) for building scalable web applications.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+                </div>
+                <div class="skill-card">
+                  <h4 class="skill-title">Qiskit</h4>
+                  <p class="skill-description">Expertise in using Qiskit for quantum circuit simulation, quantum algorithm implementation, and quantum hardware interaction.</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+                </div>
+                <div class="skill-card">
+                  <h4 class="skill-title">SQL & NoSQL</h4>
+                  <p class="skill-description">Proficient in database design and management using both relational databases (SQL) and non-relational databases (MongoDB).</p>
+                  <div class="skill-progress-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+                </div>
+              </div>
+
+              <div class="u-align-center u-group" style="margin-top: 40px;">
+                <p class="u-text u-text-palette-1-base u-text-3">Feel free to check out my GitHub to see these skills in action!</p>
+                <a href="https://github.com/PrabhdeepJassal" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-2" target="_blank">View Projects</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="u-clearfix u-palette-5-light-3 u-section-6" id="carousel_369d">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <div class="u-clearfix u-expanded-width u-gutter-0 u-layout-wrap u-layout-wrap-1">
+          <div class="u-gutter-0 u-layout">
+            <div class="u-layout-row">
+              <div class="u-align-left u-container-style u-layout-cell u-shape-rectangle u-size-27-lg u-size-27-xl u-size-30-md u-size-30-sm u-size-30-xs u-layout-cell-1">
+                <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-container-layout-1">
+                  <h2 class="u-text u-text-palette-1-base u-text-2">Contact Me</h2>
+                  <p class="u-text u-text-palette-1-base u-text-3">Nabha District Patiala, Punjab<br>+91 94646-13198<br>
+                    <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-2-base u-btn-1"> prabhdeepsinghjassal@gmail.com </a>
+                  </p>
+                  <h2 class="u-text u-text-palette-1-base u-text-4">Follow me</h2>
+                  <div class="u-align-left u-social-icons u-spacing-10 u-social-icons-1">
+                    <a class="u-social-url" target="_blank" href="https://github.com/PrabhdeepJassal"><span class="u-icon u-icon-circle u-social-facebook u-social-icon u-text-palette-1-base u-icon-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.5 2.3.9 2.87.69c.09-.53.36-.9.65-1.11c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+                    </span>
+                    </a>
+                    <a class="u-social-url" target="_blank" href="https://www.linkedin.com/in/prabhdeep-singh-jassal/"><span class="u-icon u-icon-circle u-social-icon u-social-linkedin u-text-palette-1-base u-icon-4">
+                    <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xlink:href="#svg-1f32"></use></svg>
+                    <svg x="0px" y="0px" viewBox="0 0 112 112" id="svg-1f32" class="u-svg-content"><path d="M33.8,96.8H14.5v-58h19.3V96.8z M24.1,30.9L24.1,30.9c-6.6,0-10.8-4.5-10.8-10.1c0-5.8,4.3-10.1,10.9-10.1 S34.9,15,35.1,20.8C35.1,26.4,30.8,30.9,24.1,30.9z M103.3,96.8H84.1v-31c0-7.8-2.7-13.1-9.8-13.1c-5.3,0-8.5,3.6-9.9,7.1 c-0.6,1.3-0.6,3-0.6,4.8V97H44.5c0,0,0.3-52.6,0-58h19.3v8.2c2.6-3.9,7.2-9.6,17.4-9.6c12.7,0,22.2,8.4,22.2,26.1V96.8z"></path></svg>
+                  </span>
+                    </a>
+                  </div>
+                  <p class="u-text u-text-palette-1-base u-text-5"></p>
+                </div>
+              </div>
+              <div class="u-align-left u-container-style u-layout-cell u-palette-1-base u-radius-20 u-shape-round u-size-30-md u-size-30-sm u-size-30-xs u-size-33-lg u-size-33-xl u-layout-cell-2">
+                <div class="u-container-layout u-valign-middle u-container-layout-2">
+                  <h1 class="u-text u-text-6">Get in Touch</h1>
+                  <div class="u-expanded-width u-form u-form-1">
+                    <form action="" method="POST" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" style="padding: 0px;" source="email" name="form">
+                      <div class="u-form-group u-form-name">
+                        <label for="name-3b9a" class="u-form-control-hidden u-label" wfd-invisible="true">Name</label>
+                        <input type="text" placeholder="Enter your Name" id="name-3b9a" name="name" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white u-input-1" required="">
+                      </div>
+                      <div class="u-form-email u-form-group">
+                        <label for="email-3b9a" class="u-form-control-hidden u-label" wfd-invisible="true">Email</label>
+                        <input type="email" placeholder="Enter a valid email address" id="email-3b9a" name="email" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white u-input-2" required="">
+                      </div>
+                      <div class="u-form-group u-form-message">
+                        <label for="message-3b9a" class="u-form-control-hidden u-label" wfd-invisible="true">Message</label>
+                        <textarea placeholder="Enter your message" rows="4" cols="50" id="message-3b9a" name="message" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white u-input-3" required=""></textarea>
+                      </div>
+                      <div class="u-align-left u-form-group u-form-submit">
+                        <a href="#" class="u-active-palette-1-light-3 u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-3 u-palette-1-light-2 u-radius-8 u-text-palette-1-base u-btn-2">Submit</a>
+                        <input type="submit" value="submit" class="u-form-control-hidden" wfd-invisible="true">
+                      </div>
+                      <div class="u-form-send-message u-form-send-success" wfd-invisible="true"> Thank you! Your message has been sent. </div>
+                      <div class="u-form-send-error u-form-send-message" wfd-invisible="true"> Unable to send your message. Please fix errors then try again. </div>
+                      <input type="hidden" value="" name="recaptchaResponse" wfd-invisible="true">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <div class="footer">
+      <div id="button"></div>
+    <div id="container">
+    <div id="cont">
+    <div class="footer_center">
+         <h3>Thanks for Visiting my Portfolio</h3>
+    </div>
+    </div>
+    </div>
+    </div>
+    <script>
+      function toggleReadMore(patentId) {
+        const patentCard = document.getElementById(patentId);
+        const button = patentCard.querySelector('.read-more-btn');
+        
+        if (patentCard.classList.contains('expanded')) {
+          patentCard.classList.remove('expanded');
+          button.textContent = 'Read More';
+        } else {
+          patentCard.classList.add('expanded');
+          button.textContent = 'Read Less';
+        }
+      }
+    </script>
+  </body>
+</html>
