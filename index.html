@@ -35,6 +35,17 @@
         --palette-5-light-3: #f2f2f2; /* Nicepage light background */
       }
 
+      /* Base styles for all sections */
+      .u-sheet {
+        padding: 30px 20px;
+      }
+      .u-container-layout {
+        padding: 20px;
+      }
+      .u-group-1, .u-group-2 {
+        margin: 20px auto;
+      }
+
       /* Timeline CSS */
       .timeline-section {
         padding: 50px 0;
@@ -212,12 +223,11 @@
         font-size: 0.95rem;
         line-height: 1.6;
         color: #666;
-        height: 75px; /* Fixed height for a uniform look */
+        max-height: 75px; /* Fixed height for a uniform look */
         overflow: hidden;
         transition: max-height 0.5s ease-in-out;
       }
       .patent-card.expanded .patent-description {
-        height: auto;
         max-height: 500px; /* Large enough to fit all content */
       }
       .patent-status {
@@ -298,6 +308,116 @@
         height: 10px;
         background-color: var(--palette-1-base);
         transition: width 0.8s ease-in-out;
+      }
+      
+      /* New Articles and Books Section CSS */
+      .publications-section {
+          padding: 50px 20px;
+          background-color: #f2f2f2;
+      }
+      .publications-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 30px;
+          max-width: 1100px;
+          margin: 0 auto;
+      }
+      .publication-card {
+          background-color: white;
+          border-radius: 10px;
+          padding: 30px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          transition: transform 0.3s ease;
+      }
+      .publication-card:hover {
+          transform: translateY(-5px);
+      }
+      .publication-card h3 {
+          font-family: 'Raleway', sans-serif;
+          font-size: 1.4rem;
+          color: var(--palette-1-base);
+          margin-top: 0;
+          margin-bottom: 10px;
+      }
+      .publication-card p {
+          font-family: 'PT Sans', sans-serif;
+          font-size: 1rem;
+          line-height: 1.6;
+          color: #666;
+      }
+      .publication-link {
+          display: inline-block;
+          margin-top: 15px;
+          padding: 10px 20px;
+          background-color: var(--palette-2-base);
+          color: white;
+          border-radius: 5px;
+          text-decoration: none;
+          font-family: 'Open Sans', sans-serif;
+          font-weight: 600;
+      }
+      .book-card {
+          display: flex;
+          align-items: center;
+          gap: 30px;
+      }
+      .book-cover {
+          width: 120px;
+          height: 180px;
+          border-radius: 5px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+
+      /* Responsive adjustments for mobile */
+      @media (max-width: 768px) {
+        .u-section-1 .u-sheet {
+          flex-direction: column;
+          padding: 20px 10px;
+        }
+        .u-section-1 .u-image-1 {
+          width: 80%;
+          margin-bottom: 20px;
+        }
+        .u-group-1, .u-group-2 {
+          width: 100% !important;
+          margin-left: 0;
+          margin-right: 0;
+        }
+        .u-list-1 .u-repeater {
+          flex-direction: column;
+          align-items: center;
+        }
+        .u-list-1 .u-list-item {
+          margin-bottom: 20px;
+        }
+        .u-list-1 .u-list-item:last-child {
+          margin-bottom: 0;
+        }
+        .u-text, h1, h2, h3, h4 {
+          font-size: 1.2rem;
+          text-align: center !important;
+        }
+        .u-btn {
+          width: 100%;
+          text-align: center;
+        }
+        .u-social-icons {
+          justify-content: center;
+        }
+        .u-form {
+          padding: 10px;
+        }
+        .u-layout-row {
+          flex-direction: column;
+        }
+        .u-layout-cell {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+        .book-card {
+            flex-direction: column;
+            text-align: center;
+        }
       }
     </style>
     </head>
@@ -535,6 +655,69 @@
         <p class="testimonial-quote">"I have an insatiable curiosity about the world. I enjoy analysing complex problems and coming up with beautiful fixes, and I am passionate about creating patents by focusing on real-life problems."</p>
         <h3 class="testimonial-author">Prabhdeep Singh</h3>
         <h6 class="testimonial-title">Innovator & Developer</h6>
+      </div>
+    </section>
+    
+    <section class="u-clearfix publications-section" id="publications-section">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <h1 class="u-text u-text-palette-1-base" style="text-align: center;">Articles & Publications</h1>
+        <p class="u-custom-font u-font-pt-sans u-text u-text-2" style="text-align: center; margin-bottom: 50px;">
+          Sharing my knowledge through research papers and a new book.
+        </p>
+        
+        <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left; margin-top: 20px;">Research Articles</h3>
+        <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 10px; margin-bottom: 20px;"></div>
+        <div class="publications-grid">
+          <div class="publication-card">
+            <h3>Dark Energy and Unseen Forces: A Journey Beyond Light</h3>
+            <p>
+              Basic three-dimensional matter corpuscles release work as radiation from electromagnetic waves, forming light.  Photons, a unit of light, are basic three-dimensional particles of matter.  Photons consist of matter and energy components that work together to support and stabilise the complete photon entity.  The matter at the heart of a particle is represented by a disc-shaped object rotating around a photon's diameter.         </p>
+            <a href="darkener.pdf" class="publication-link">Read Full Article</a>
+          </div>
+          
+          <div class="publication-card">
+            <h3>Guardians of the Galaxy: How Space Radiation Affects Astronauts</h3>
+            <p>
+              Astronaut health is a major concern in space exploration. Space radiation, including galactic cosmic rays, solar particle events, affects humans.   DNA damage, acute radiation syndrome, cancer risk, cognitive impairments, cardiovascular issues, cataracts, and lowered immunity are major health hazards.
+              Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, regular radiation monitoring, and genetic research are discussed.            </p>
+            <a href="guard.pdf" class="publication-link">Read Full Article</a>
+          </div>
+
+          <div class="publication-card">
+            <h3>Evolution of Quantum Computing</h3>
+            <p>
+              Moore’s law is going to stop soon because now, we
+              need a new era of computing called quantum
+              computing. For the last 100 years, now we have made
+              much advancement after the invention of computers
+              now we are getting smaller and better and powerful at
+              the same time. But still, there are many problems which
+              cannot be solved by our today’s classical computers, we
+              need a change.            </p>
+            <a href="evoofqa.pdf" class="publication-link">Read Full Article</a>
+          </div>
+
+          <div class="publication-card">
+            <h3>In Search of the Impossible: The Science of Warp Drive</h3>
+            <p>
+              Spacetime can be altered to allow a starship to go at any speed within general relativity, without the requirement for wormholes.  A local expansion of spacetime rearward of the spacecraft and an opposing contraction in front of it can enable motion faster than the speed of light as observed. The resulting distortion resembles the "warp drive" of science fiction.</p>
+            <a href="impwarpdrive.pdf" class="publication-link">Read Full Article</a>
+          </div>
+
+        </div>
+
+        <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left; margin-top: 50px;">Latest Book Release</h3>
+        <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 10px; margin-bottom: 20px;"></div>
+        <div class="publication-card book-card">
+          <img src="book.jpg" alt="Book Cover" class="book-cover">
+          <div>
+            <h3>QUANTUM GIGGLES LAUGHING THROUGH COSMIC WONDERS</h3>
+            <p>
+              My first book details my journey from a quantum physics enthusiast to a full-stack developer, providing insights into how a quantum-analytical mindset can be applied to solve complex problems in software engineering.
+            </p>
+            <a href="https://www.amazon.in/QUANTUM-GIGGLES-LAUGHING-THROUGH-WONDERS-ebook/dp/B0F43NH9R3/ref=sr_1_1?crid=YSPY2MCEV1N7&dib=eyJ2IjoiMSJ9.877L663C6CDu2QgQ16kOmQ.zaqOyaa0iKYAi2YDM3qK8ml5uEjg4r5MYX8FtTmyGUE&dib_tag=se&keywords=quantum+giggles+and+laughing&qid=1756722551&sprefix=quanttum+giggles+and+luaghing%2Caps%2C232&sr=8-1" class="publication-link">Buy on Amazon</a>
+          </div>
+        </div>
       </div>
     </section>
 
