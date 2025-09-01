@@ -508,6 +508,12 @@
                 <h3 class="u-custom-font u-font-montserrat u-text u-text-palette-2-base u-text-22" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">14+</h3>
               </div>
             </div>
+            <div class="u-align-left u-container-style u-list-item u-repeater-item u-shape-rectangle">
+              <div class="u-container-layout u-similar-container u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-container-layout-5">
+                <p class="u-text u-text-palette-1-base u-text-21">LeetCode Problems Solved</p>
+                <h3 class="u-custom-font u-font-montserrat u-text u-text-palette-2-base u-text-22" id="leetcode-solved-count">--</h3>
+              </div>
+            </div>
           </div>
         </div>
         <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-group-2">
@@ -799,7 +805,7 @@
                 <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-container-layout-1">
                   <h2 class="u-text u-text-palette-1-base u-text-2">Contact Me</h2>
                   <p class="u-text u-text-palette-1-base u-text-3">Nabha District Patiala, Punjab<br>+91 94646-13198<br>
-                    <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-2-base u-btn-1"> prabhdeepsinghjassal@gmail.com </a>
+                    <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-1"> prabhdeepsinghjassal@gmail.com </a>
                   </p>
                   
                   <p class="u-text u-text-palette-1-base u-text-5"></p>
@@ -862,6 +868,34 @@
           button.textContent = 'Read Less';
         }
       }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Replace 'prabhdeepsinghjassal' with your actual LeetCode username
+        const username = 'prabhdeepsinghjassal';
+        const url = `https://leetcode-stats-api.herokuapp.com/${username}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const solvedCountElement = document.getElementById('leetcode-solved-count');
+                if (data && data.totalSolved) {
+                    solvedCountElement.textContent = data.totalSolved;
+                } else {
+                    solvedCountElement.textContent = 'N/A';
+                    console.error('Data from API is not in the expected format:', data);
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                const solvedCountElement = document.getElementById('leetcode-solved-count');
+                solvedCountElement.textContent = 'Error';
+            });
+      });
     </script>
   </body>
 </html>
