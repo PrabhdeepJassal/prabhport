@@ -45,17 +45,19 @@
       .u-group-1, .u-group-2 {
         margin: 20px auto;
       }
+
       @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.u-section-1, 
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .u-section-1, 
       .timeline-section, 
       .patents-section, 
       .testimonial-section, 
@@ -63,10 +65,10 @@
       .skills-section,
       .u-section-6 {
         animation: fadeIn 1.2s ease-in-out forwards;
-        opacity: 0; /* Initially hide the elements */
+        opacity: 0;
       }
 
-      /* Staggered animation delays for a smoother effect */
+      /* Staggered animation delays */
       .u-section-1 { animation-delay: 0.2s; }
       .timeline-section { animation-delay: 0.5s; }
       .patents-section { animation-delay: 0.8s; }
@@ -156,27 +158,23 @@
         line-height: 1.6;
         color: #666;
       }
-      @media screen and (max-width: 768px) {
-        .timeline-container::after {
-          left: 15px;
-        }
-        .timeline-item {
-          width: 100%;
-          padding-left: 50px;
-          padding-right: 15px;
-        }
-        .timeline-item::after {
-          left: 4px;
-        }
-        .timeline-left, .timeline-right {
-          left: 0%;
-        }
+      
+      /* Aeroplane SVG */
+      .aeroplane {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: auto;
+        z-index: 2;
+        fill: var(--palette-2-base);
       }
-
+      
       /* Testimonial/Quote Section CSS */
       .testimonial-section {
         padding: 80px 20px;
-        background-color: #eef2f5; /* A soft neutral background */
+        background-color: #eef2f5;
       }
       .testimonial-card {
         max-width: 700px;
@@ -190,10 +188,10 @@
       .testimonial-image {
         width: 120px;
         height: 120px;
-        border-radius: 50%; /* This makes the image a circle */
+        border-radius: 50%;
         border: 5px solid var(--palette-1-base);
-        object-fit: cover; /* Prevents the image from stretching */
-        margin: 0 auto 20px auto; /* Centers the image */
+        object-fit: cover;
+        margin: 0 auto 20px auto;
       }
       .testimonial-quote {
         font-family: 'PT Sans', sans-serif;
@@ -216,7 +214,7 @@
         font-weight: 500;
       }
 
-      /* New Patents Section CSS */
+      /* Patents Section CSS */
       .patents-section {
         padding: 50px 20px;
         background-color: var(--palette-5-light-3);
@@ -253,12 +251,12 @@
         font-size: 0.95rem;
         line-height: 1.6;
         color: #666;
-        max-height: 75px; /* Fixed height for a uniform look */
+        max-height: 75px;
         overflow: hidden;
         transition: max-height 0.5s ease-in-out;
       }
       .patent-card.expanded .patent-description {
-        max-height: 500px; /* Large enough to fit all content */
+        max-height: 500px;
       }
       .patent-status {
         font-family: 'Open Sans', sans-serif;
@@ -287,7 +285,7 @@
         display: block;
       }
 
-      /* New Skills Section CSS */
+      /* Skills Section CSS */
       .skills-section {
         padding: 50px 20px;
         background-color: var(--palette-5-light-3);
@@ -341,100 +339,159 @@
         transition: width 0.8s ease-in-out;
       }
       
-      /* New Articles and Books Section CSS */
+      /* Articles and Books Section CSS */
       .publications-section {
-          padding: 50px 20px;
-          background-color: #f2f2f2;
+        padding: 50px 20px;
+        background-color: #f2f2f2;
       }
       .publications-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 30px;
-          max-width: 1100px;
-          margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 1100px;
+        margin: 0 auto;
       }
       .publication-card {
-          background-color: white;
-          border-radius: 10px;
-          padding: 30px;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
       .publication-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
       }
       .publication-card h3 {
-          font-family: 'Raleway', sans-serif;
-          font-size: 1.4rem;
-          color: var(--palette-1-base);
-          margin-top: 0;
-          margin-bottom: 10px;
+        font-family: 'Raleway', sans-serif;
+        font-size: 1.4rem;
+        color: var(--palette-1-base);
+        margin-top: 0;
+        margin-bottom: 10px;
       }
       .publication-card p {
-          font-family: 'PT Sans', sans-serif;
-          font-size: 1rem;
-          line-height: 1.6;
-          color: #666;
+        font-family: 'PT Sans', sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #666;
       }
       .publication-link {
-          display: inline-block;
-          margin-top: 15px;
-          padding: 10px 20px;
-          background-color: var(--palette-2-base);
-          color: white;
-          border-radius: 5px;
-          text-decoration: none;
-          font-family: 'Open Sans', sans-serif;
-          font-weight: 600;
-          transition: background-color 0.3s ease, transform 0.2s ease;
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: var(--palette-2-base);
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        transition: background-color 0.3s ease, transform 0.2s ease;
       }
       .publication-link:hover {
-        background-color: #c9464b; /* A slightly darker red */
+        background-color: #c9464b;
         transform: translateY(-2px);
       }
       .book-card {
-          display: flex;
-          align-items: center;
-          gap: 30px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
       }
       .book-cover {
-          width: 120px;
-          height: 180px;
-          border-radius: 5px;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-          transition: transform 0.3s ease;
+        width: 120px;
+        height: 180px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
       }
       .book-cover:hover {
         transform: scale(1.05);
       }
-      /* Responsive adjustments for mobile */
-      @media (max-width: 768px) {
+
+      /* Footer CSS */
+      .footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: var(--palette-5-light-3);
+      }
+      .footer_center h3 {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.2rem;
+        color: var(--palette-5-dark-2);
+      }
+
+      /* Enhanced Responsive Styles */
+      @media (max-width: 1024px) {
+        .u-sheet {
+          padding: 20px 15px;
+        }
+        .u-container-layout {
+          padding: 15px;
+        }
         .u-section-1 .u-sheet {
-          flex-direction: column;
-          padding: 20px 10px;
-        }
-        .u-section-1 .u-image-1 {
-          width: 80%;
-          margin-bottom: 20px;
-        }
-        .u-group-1, .u-group-2 {
-          width: 100% !important;
-          margin-left: 0;
-          margin-right: 0;
-        }
-        .u-list-1 .u-repeater {
           flex-direction: column;
           align-items: center;
         }
-        .u-list-1 .u-list-item {
+        .u-section-1 .u-image-1 {
+          width: 80%;
+          max-width: 400px;
           margin-bottom: 20px;
         }
-        .u-list-1 .u-list-item:last-child {
-          margin-bottom: 0;
+        .u-group-1, .u-group-2 {
+          width: 100%;
+          margin-left: 0;
+          margin-right: 0;
+        }
+        .timeline-container::after {
+          left: 20px;
+        }
+        .timeline-item {
+          width: 100%;
+          padding-left: 60px;
+          padding-right: 20px;
+        }
+        .timeline-left, .timeline-right {
+          left: 0;
+        }
+        .timeline-right::after, .timeline-left::after {
+          left: 8px;
+        }
+        .aeroplane {
+          left: 20px;
+        }
+        .patents-grid, .skills-grid, .publications-grid {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .testimonial-card {
+          padding: 30px;
+        }
+        .u-layout-row {
+          flex-direction: column;
+        }
+        .u-layout-cell {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+        .u-form {
+          padding: 10px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        html {
+          font-size: 14px;
+        }
+        .u-sheet {
+          padding: 15px 10px;
+        }
+        .u-container-layout {
+          padding: 10px;
+        }
+        .u-section-1 .u-image-1 {
+          width: 100%;
+          max-width: 300px;
         }
         .u-text, h1, h2, h3, h4 {
-          font-size: 1.2rem;
+          font-size: 1.2rem !important;
           text-align: center !important;
         }
         .u-btn {
@@ -444,26 +501,116 @@
         .u-social-icons {
           justify-content: center;
         }
-        .u-form {
-          padding: 10px;
+        .timeline-container::after {
+          left: 15px;
         }
-        .u-layout-row {
-          flex-direction: column;
+        .timeline-item {
+          padding-left: 50px;
+          padding-right: 15px;
         }
-        .u-layout-cell {
-          width: 100%;
-          margin-bottom: 20px;
+        .timeline-right::after, .timeline-left::after {
+          left: 3px;
+        }
+        .aeroplane {
+          width: 40px;
+          left: 15px;
+        }
+        .patents-grid, .skills-grid, .publications-grid {
+          grid-template-columns: 1fr;
+        }
+        .testimonial-card {
+          padding: 20px;
+        }
+        .testimonial-image {
+          width: 100px;
+          height: 100px;
         }
         .book-card {
-            flex-direction: column;
-            text-align: center;
+          flex-direction: column;
+          text-align: center;
+        }
+        .book-cover {
+          width: 100px;
+          height: 150px;
+        }
+        .u-form input, .u-form textarea {
+          font-size: 0.9rem;
+        }
+        .footer_center h3 {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        html {
+          font-size: 12px;
+        }
+        .u-sheet {
+          padding: 10px 5px;
+        }
+        .u-container-layout {
+          padding: 5px;
+        }
+        .u-section-1 .u-image-1 {
+          width: 100%;
+          max-width: 250px;
+        }
+        .timeline-item {
+          padding-left: 40px;
+          padding-right: 10px;
+        }
+        .timeline-content {
+          padding: 15px 20px;
+        }
+        .timeline-date, .timeline-text {
+          font-size: 0.85rem;
+        }
+        .timeline-title {
+          font-size: 1.1rem;
+        }
+        .timeline-subtitle {
+          font-size: 0.95rem;
+        }
+        .aeroplane {
+          width: 30px;
+          left: 10px;
+        }
+        .patent-card, .skill-card, .publication-card {
+          padding: 20px;
+        }
+        .patent-title, .skill-title, .publication-card h3 {
+          font-size: 1.1rem;
+        }
+        .patent-description, .skill-description, .publication-card p {
+          font-size: 0.85rem;
+        }
+        .testimonial-card {
+          padding: 15px;
+        }
+        .testimonial-quote {
+          font-size: 0.95rem;
+        }
+        .testimonial-author {
+          font-size: 1.2rem;
+        }
+        .testimonial-title {
+          font-size: 0.85rem;
+        }
+        .u-form {
+          padding: 5px;
+        }
+        .u-form input, .u-form textarea {
+          font-size: 0.8rem;
+        }
+        .footer_center h3 {
+          font-size: 0.9rem;
         }
       }
     </style>
-    </head>
+  </head>
   <body class="u-body u-xl-mode">
     <header class="u-clearfix u-header u-header" id="sec-b10b">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <a href="" class="u-image u-logo u-image-1">
           <img src="images/default-logo.png" class="u-logo-image u-logo-image-1">
         </a>
@@ -471,8 +618,7 @@
           <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
             <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
               <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
-              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-</g></svg>
+              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect></g></svg>
             </a>
           </div>
           <div class="u-nav-container"></div>
@@ -480,9 +626,7 @@
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href=""></a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href=""></a>
-</li></ul>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href=""></a></li><li class="u-nav-item"><a class="u-button-style u-nav-link" href=""></a></li></ul>
               </div>
             </div>
             <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
@@ -495,14 +639,9 @@
         <img class="u-expanded-width-sm u-expanded-width-xs u-image u-image-round u-radius-20 u-image-1" src="prasnl.JPG" alt="" data-image-width="800" data-image-height="976">
         <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-group-1">
           <div class="u-container-layout u-valign-middle-lg u-valign-top-xs u-container-layout-1">
-            <h2 class="u-align-left u-custom-font u-font-raleway u-text u-text-palette-1-base u-text-1">Hello <br>I’m Prabhdeep Singh
-            </h2>
+            <h2 class="u-align-left u-custom-font u-font-raleway u-text u-text-palette-1-base u-text-1">Hello <br>I’m Prabhdeep Singh</h2>
             <p class="u-align-left u-custom-font u-text u-text-2">I thrive on solving puzzles that live at the edge of imagination—whether it’s exploring the mysteries of the quantum realm or building full-stack solutions that shape real-world impact. My passion lies in turning complex ideas into innovative technologies, some even patent-worthy.</p>
-            <a href="RESUME.pdf" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-2" download>Download Resume&nbsp;&nbsp;<span class="u-icon u-icon-1"><svg class="u-svg-content" viewBox="0 0 512 512" x="0px" y="0px" style="width: 1em; height: 1em;"><g><g>
-</g>
-</g>
-</svg><img></span>
-            </a>
+            <a href="RESUME.pdf" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-2" download>Download Resume&nbsp;&nbsp;<span class="u-icon u-icon-1"><svg class="u-svg-content" viewBox="0 0 512 512" x="0px" y="0px" style="width: 1em; height: 1em;"></svg></span></a>
           </div>
         </div>
       </div>
@@ -515,13 +654,12 @@
             <p class="u-custom-font u-text u-text-2">Prabhdeep Singh</p>
             <h6 class="u-custom-font u-font-open-sans u-text u-text-3">Location</h6>
             <p class="u-custom-font u-text u-text-4">Nabha District Patiala, Punjab</p>
-           <h6 class="u-custom-font u-font-open-sans u-text u-text-7">Email</h6>
+            <h6 class="u-custom-font u-font-open-sans u-text u-text-7">Email</h6>
             <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-1">prabhdeepsinghjassal@gmail.com</a>
             <h6 class="u-custom-font u-font-open-sans u-text u-text-8">Phone</h6>
             <a href="tel:+919464613198" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-2">+91 94646-13198</a>
             <h6 class="u-custom-font u-font-open-sans u-text u-text-5">Leetcode</h6>
             <a href="https://leetcode.com/u/prabhdeepsinghjassal/" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-3">leetcode.com/prabhdeepsinghjassal/</a>
-            
             <h6 class="u-custom-font u-font-open-sans u-text u-text-9">GitHub</h6>
             <a href="https://github.com/PrabhdeepJassal" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-2-base u-btn u-button-style u-none u-text-active-palette-2-base u-text-body-alt-color u-text-hover-palette-2-base u-btn-3">github.com/PrabhdeepJassal</a>
             <h6 class="u-custom-font u-font-open-sans u-text u-text-10">LinkedIn</h6>
@@ -556,31 +694,26 @@
                 </h3>
               </div>
             </div>
-            
           </div>
         </div>
         <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-group-2">
           <div class="u-container-layout u-container-layout-6">
             <h2 class="u-align-left u-custom-font u-font-open-sans u-text u-text-palette-1-base u-text-23">I am committed to pushing the limits of what is feasible in science and technology.</h2>
-            <p class="u-align-left u-custom-font u-text u-text-palette-1-base u-text-24"> With a solid background in quantum physics and a track record of using cutting-edge, problem-solving strategies in software development, I am eager to join a team that shares my enthusiasm for unraveling complex challenges. I bring an analytical mentality and limitless energy to every project, from developing enterprise-level mobile applications to architecting autonomous AI agents.
-            </p>
-            <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-4">Send E-Mail &nbsp;&nbsp;<span class="u-icon u-icon-5"><svg class="u-svg-content" viewBox="0 0 512 512" x="0px" y="0px" style="width: 1em; height: 1em;"><g><g>
-</g></g></svg><img></span>
-            </a>
+            <p class="u-align-left u-custom-font u-text u-text-palette-1-base u-text-24"> With a solid background in quantum physics and a track record of using cutting-edge, problem-solving strategies in software development, I am eager to join a team that shares my enthusiasm for unraveling complex challenges. I bring an analytical mentality and limitless energy to every project, from developing enterprise-level mobile applications to architecting autonomous AI agents.</p>
+            <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-4">Send E-Mail &nbsp;&nbsp;<span class="u-icon u-icon-5"><svg class="u-svg-content" viewBox="0 0 512 512" x="0px" y="0px" style="width: 1em; height: 1em;"></svg></span></a>
           </div>
         </div>
       </div>
     </section>
-
     <section class="u-clearfix u-palette-5-light-3 u-section-3 timeline-section" id="carousel_c0dc">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <h1 class="u-text u-text-palette-1-base u-text-1">Education & Experience</h1>
-        <p class="u-custom-font u-font-pt-sans u-text u-text-2">
-          My academic journey and hands-on experience in research and corporate environments.
-        </p>
+        <p class="u-custom-font u-font-pt-sans u-text u-text-2">My academic journey and hands-on experience in research and corporate environments.</p>
         <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1" style="margin-bottom: 50px;"></div>
-
         <div class="timeline-container">
+          <svg id="aeroplane-svg" class="aeroplane" viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+          </svg>
           <div class="timeline-item timeline-left">
             <div class="timeline-content">
               <div class="timeline-date">2024 - 2026</div>
@@ -589,7 +722,6 @@
               <p class="timeline-text">Pursuing advanced studies in computer science, focusing on complex algorithms, systems architecture, and specialized computing paradigms to deepen my technical expertise.</p>
             </div>
           </div>
-
           <div class="timeline-item timeline-right">
             <div class="timeline-content">
               <div class="timeline-date">JAN 2024 - JUN 2024</div>
@@ -598,7 +730,6 @@
               <p class="timeline-text">Developed and launched a cross-platform mobile app to automate the company's document approval workflow. Led key software implementations that significantly improved process automation and efficiency.</p>
             </div>
           </div>
-          
           <div class="timeline-item timeline-left">
             <div class="timeline-content">
               <div class="timeline-date">2021 - 2024</div>
@@ -607,7 +738,6 @@
               <p class="timeline-text">Completed with a GPA of 9.0/10.0, gaining a strong foundation in computer science, software development, and programming languages while actively engaging in quantum computing research.</p>
             </div>
           </div>
-
           <div class="timeline-item timeline-right">
             <div class="timeline-content">
               <div class="timeline-date">JAN 2022 - DEC 2024</div>
@@ -619,84 +749,42 @@
         </div>
       </div>
     </section>
-
     <section class="u-clearfix patents-section" id="patents-section">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <h1 class="u-text u-text-palette-1-base u-text-1" style="text-align: center;">My Patents</h1>
-        <p class="u-custom-font u-font-pt-sans u-text u-text-2" style="text-align: center; margin-bottom: 50px;">
-          Innovative solutions I've engineered to solve real-world problems.
-        </p>
+        <p class="u-custom-font u-font-pt-sans u-text u-text-2" style="text-align: center; margin-bottom: 50px;">Innovative solutions I've engineered to solve real-world problems.</p>
         <div class="patents-grid">
           <div class="patent-card" id="patent1">
             <h3 class="patent-title">EARPHONE WITH AUTO ON AND OFF PROVISION THROUGH MONITORING BRAIN SIGNALS </h3>
-            <p class="patent-description">
-              An earphone device with auto on and off by monitoring brain signals
-              comprises a headset, a pair of earphones with a UV lamp, a plurality
-              of sensors to detect brain signals of a user, a location detection module
-              , and a control unit comprises a microcontroller in communication with a
-              mobile device in a Bluetooth network. The detected brain signals are
-              transmitted to the mobile device to analyse the state of sleep of the brain and
-              to switch on and off the device. UV lamps generate UV rays to kill bacteria
-              in the ear.
-            </p>
+            <p class="patent-description">An earphone device with auto on and off by monitoring brain signals comprises a headset, a pair of earphones with a UV lamp, a plurality of sensors to detect brain signals of a user, a location detection module, and a control unit comprises a microcontroller in communication with a mobile device in a Bluetooth network. The detected brain signals are transmitted to the mobile device to analyse the state of sleep of the brain and to switch on and off the device. UV lamps generate UV rays to kill bacteria in the ear.</p>
             <button class="read-more-btn" onclick="toggleReadMore('patent1')">Read More</button>
             <p class="patent-status">Status: Published</p>
             <a href="earphone.pdf" target="_blank" class="patent-link">View Patent Document</a>
           </div>
-
           <div class="patent-card" id="patent2">
             <h3 class="patent-title">DEVICE AND METHOD FOR DETECTING THE INFECTION STATE OF HAIR </h3>
-            <p class="patent-description">
-              The present disclosure relates to a device for detecting the infection state of
-              the head part of the subject, the device includes a first set of sensors to
-              capture images of the head part. The second set of sensors detects the
-              accurate placement of the device in the head part and tests the quality of hair. A
-              controller is configured to receive the captured images of the head part of the
-              subject, receive the detected placement of the device and determine the quality of
-              the hair of the subject, extract a set of attributes and compare the extracted set of
-              attributes with reference set of attributes, where based on a combination of
-              comparison, the controller is configured to determine a diagnosis for the head part
-              of the subject.
-            </p>
+            <p class="patent-description">The present disclosure relates to a device for detecting the infection state of the head part of the subject, the device includes a first set of sensors to capture images of the head part. The second set of sensors detects the accurate placement of the device in the head part and tests the quality of hair. A controller is configured to receive the captured images of the head part of the subject, receive the detected placement of the device and determine the quality of the hair of the subject, extract a set of attributes and compare the extracted set of attributes with reference set of attributes, where based on a combination of comparison, the controller is configured to determine a diagnosis for the head part of the subject.</p>
             <button class="read-more-btn" onclick="toggleReadMore('patent2')">Read More</button>
             <p class="patent-status">Status: Published</p>
             <a href="comb.pdf" target="_blank" class="patent-link">View Patent Document</a>
           </div>
-          
           <div class="patent-card" id="patent3">
             <h3 class="patent-title">WEARABLE DEVICE AND METHOD FOR GENERATING SOUND OF ANKLET BELL</h3>
-            <p class="patent-description">
-              A wearable device for generating a sound of anklet bells is
-              disclosed. The wearable device provides a strap adapted
-              to be worn around a leg of a user that comprises pressure sensors
-              and motion sensors to detect an amount of
-              pressure applied and a movement data of a foot of the user. The
-              wearable device compiles the movement data and the amount
-              of pressure using machine learning algorithms and creates a specific
-              sound note. The wearable device further actuates a sound
-              generating unit and a speaker to playback the sound of
-              the anklet bells based on the created sound note. The wearable
-              device is lightweight, portable, and audible to a mass audience.
-            </p>
+            <p class="patent-description">A wearable device for generating a sound of anklet bells is disclosed. The wearable device provides a strap adapted to be worn around a leg of a user that comprises pressure sensors and motion sensors to detect an amount of pressure applied and a movement data of a foot of the user. The wearable device compiles the movement data and the amount of pressure using machine learning algorithms and creates a specific sound note. The wearable device further actuates a sound generating unit and a speaker to playback the sound of the anklet bells based on the created sound note. The wearable device is lightweight, portable, and audible to a mass audience.</p>
             <button class="read-more-btn" onclick="toggleReadMore('patent3')">Read More</button>
             <p class="patent-status">Status: Published</p>
             <a href="anklet.pdf" target="_blank" class="patent-link">View Patent Document</a>
           </div>
-
           <div class="patent-card" id="patent4">
             <h3 class="patent-title">COLOR BLIND AND MULTIUSABLE ELECTRIC TOOTHBRUSH</h3>
-            <p class="patent-description">
-              Based on the existing electric toothbrush design, we will replace the pressing button with a fingerprint sensor that vibrates when touched by the wrong owner and does not turn on and writes Welcome (name of owner) on the LED screen when touched by the right owner.   This feature avoids misuse, especially for colourblind persons.   A battery percentage feature will follow.  Since electric toothbrushes don't have battery %, they display Dark Green for full battery, Yellow for half charge, and Red for no battery.  Colourblind persons can't see colours, thus checking their toothbrush batteries is difficult.   We replaced this with battery percentage, which users can observe and control toothbrush charging.   An LED panel will display toothbrush information and remember last use on our electric toothbrush.   GPS trackers help owners find misplaced items.   Its processor regularly sends information to the user's smartphone, such as when they used it (to help parents watch their kids' brushing).   Most people brush poorly, damaging their gums. The gyroscope helps users brush properly.
-            </p>
+            <p class="patent-description">Based on the existing electric toothbrush design, we will replace the pressing button with a fingerprint sensor that vibrates when touched by the wrong owner and does not turn on and writes Welcome (name of owner) on the LED screen when touched by the right owner. This feature avoids misuse, especially for colourblind persons. A battery percentage feature will follow. Since electric toothbrushes don't have battery %, they display Dark Green for full battery, Yellow for half charge, and Red for no battery. Colourblind persons can't see colours, thus checking their toothbrush batteries is difficult. We replaced this with battery percentage, which users can observe and control toothbrush charging. An LED panel will display toothbrush information and remember last use on our electric toothbrush. GPS trackers help owners find misplaced items. Its processor regularly sends information to the user's smartphone, such as when they used it (to help parents watch their kids' brushing). Most people brush poorly, damaging their gums. The gyroscope helps users brush properly.</p>
             <button class="read-more-btn" onclick="toggleReadMore('patent4')">Read More</button>
             <p class="patent-status">Status: Published</p>
             <a href="TOOTHBRUSH.pdf" target="_blank" class="patent-link">View Patent Document</a>
           </div>
-
         </div>
       </div>
     </section>
-
     <section class="testimonial-section" id="sec-72eb">
       <div class="testimonial-card">
         <img src="prsnl2.jpg" alt="Prabhdeep Singh" class="testimonial-image">
@@ -705,70 +793,46 @@
         <h6 class="testimonial-title">Innovator & Developer</h6>
       </div>
     </section>
-    
     <section class="u-clearfix publications-section" id="publications-section">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <h1 class="u-text u-text-palette-1-base" style="text-align: center;">Articles & Publications</h1>
-        <p class="u-custom-font u-font-pt-sans u-text u-text-2" style="text-align: center; margin-bottom: 50px;">
-          Sharing my knowledge through research papers and a new book.
-        </p>
-        
+        <p class="u-custom-font u-font-pt-sans u-text u-text-2" style="text-align: center; margin-bottom: 50px;">Sharing my knowledge through research papers and a new book.</p>
         <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left; margin-top: 20px;">Research Articles</h3>
         <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 10px; margin-bottom: 20px;"></div>
         <div class="publications-grid">
           <div class="publication-card">
             <h3>Dark Energy and Unseen Forces: A Journey Beyond Light</h3>
-            <p>
-              Basic three-dimensional matter corpuscles release work as radiation from electromagnetic waves, forming light.  Photons, a unit of light, are basic three-dimensional particles of matter.  Photons consist of matter and energy components that work together to support and stabilise the complete photon entity.  The matter at the heart of a particle is represented by a disc-shaped object rotating around a photon's diameter.         </p>
+            <p>Basic three-dimensional matter corpuscles release work as radiation from electromagnetic waves, forming light. Photons, a unit of light, are basic three-dimensional particles of matter. Photons consist of matter and energy components that work together to support and stabilise the complete photon entity. The matter at the heart of a particle is represented by a disc-shaped object rotating around a photon's diameter.</p>
             <a href="darkener.pdf" class="publication-link">Read Full Article</a>
           </div>
-          
           <div class="publication-card">
             <h3>Guardians of the Galaxy: How Space Radiation Affects Astronauts</h3>
-            <p>
-              Astronaut health is a major concern in space exploration. Space radiation, including galactic cosmic rays, solar particle events, affects humans.   DNA damage, acute radiation syndrome, cancer risk, cognitive impairments, cardiovascular issues, cataracts, and lowered immunity are major health hazards.
-              Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, regular radiation monitoring, and genetic research are discussed.            </p>
+            <p>Astronaut health is a major concern in space exploration. Space radiation, including galactic cosmic rays, solar particle events, affects humans. DNA damage, acute radiation syndrome, cancer risk, cognitive impairments, cardiovascular issues, cataracts, and lowered immunity are major health hazards. Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, regular radiation monitoring, and genetic research are discussed.</p>
             <a href="guard.pdf" class="publication-link">Read Full Article</a>
           </div>
-
           <div class="publication-card">
             <h3>Evolution of Quantum Computing</h3>
-            <p>
-              Moore’s law is going to stop soon because now, we
-              need a new era of computing called quantum
-              computing. For the last 100 years, now we have made
-              much advancement after the invention of computers
-              now we are getting smaller and better and powerful at
-              the same time. But still, there are many problems which
-              cannot be solved by our today’s classical computers, we
-              need a change.            </p>
+            <p>Moore’s law is going to stop soon because now, we need a new era of computing called quantum computing. For the last 100 years, now we have made much advancement after the invention of computers now we are getting smaller and better and powerful at the same time. But still, there are many problems which cannot be solved by our today’s classical computers, we need a change.</p>
             <a href="evoofqa.pdf" class="publication-link">Read Full Article</a>
           </div>
-
           <div class="publication-card">
             <h3>In Search of the Impossible: The Science of Warp Drive</h3>
-            <p>
-              Spacetime can be altered to allow a starship to go at any speed within general relativity, without the requirement for wormholes.  A local expansion of spacetime rearward of the spacecraft and an opposing contraction in front of it can enable motion faster than the speed of light as observed. The resulting distortion resembles the "warp drive" of science fiction.</p>
+            <p>Spacetime can be altered to allow a starship to go at any speed within general relativity, without the requirement for wormholes. A local expansion of spacetime rearward of the spacecraft and an opposing contraction in front of it can enable motion faster than the speed of light as observed. The resulting distortion resembles the "warp drive" of science fiction.</p>
             <a href="impwarpdrive.pdf" class="publication-link">Read Full Article</a>
           </div>
-
         </div>
-
         <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left; margin-top: 50px;">Latest Book Release</h3>
         <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 10px; margin-bottom: 20px;"></div>
         <div class="publication-card book-card">
           <img src="book.jpg" alt="Book Cover" class="book-cover">
           <div>
             <h3>QUANTUM GIGGLES LAUGHING THROUGH COSMIC WONDERS</h3>
-            <p>
-              My first book details my journey from a quantum physics enthusiast to a full-stack developer, providing insights into how a quantum-analytical mindset can be applied to solve complex problems in software engineering.
-            </p>
+            <p>My first book details my journey from a quantum physics enthusiast to a full-stack developer, providing insights into how a quantum-analytical mindset can be applied to solve complex problems in software engineering.</p>
             <a href="https://www.amazon.in/QUANTUM-GIGGLES-LAUGHING-THROUGH-WONDERS-ebook/dp/B0F43NH9R3/ref=sr_1_1?crid=YSPY2MCEV1N7&dib=eyJ2IjoiMSJ9.877L663C6CDu2QgQ16kOmQ.zaqOyaa0iKYAi2YDM3qK8ml5uEjg4r5MYX8FtTmyGUE&dib_tag=se&keywords=quantum+giggles+and+laughing&qid=1756722551&sprefix=quanttum+giggles+and+luaghing%2Caps%2C232&sr=8-1" class="publication-link">Buy on Amazon</a>
           </div>
         </div>
       </div>
     </section>
-
     <section class="u-clearfix u-palette-5-light-3 skills-section" id="skills-section">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <div class="u-align-center u-container-style u-group u-radius-20 u-shape-round u-white u-group-1" style="padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
@@ -776,9 +840,7 @@
             <h1 class="u-text u-text-palette-1-base u-text-1">Skills & Expertise</h1>
             <p class="u-text u-text-2">My technical skills and proficiencies in various domains.</p>
             <div class="skills-container">
-              
               <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 20px; margin-bottom: 20px;"></div>
-              
               <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left;">Programming Languages</h3>
               <div class="skills-grid">
                 <div class="skill-card">
@@ -802,9 +864,7 @@
                   <div class="skill-progress-bar"><div class="skill-progress" style="width: 95%;"></div></div>
                 </div>
               </div>
-              
               <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal" style="margin-top: 40px; margin-bottom: 20px;"></div>
-
               <h3 class="u-text u-text-palette-1-base" style="font-family: 'Open Sans', sans-serif; font-size: 1.5rem; text-align: left;">Frameworks & Technologies</h3>
               <div class="skills-grid">
                 <div class="skill-card">
@@ -828,9 +888,8 @@
                   <div class="skill-progress-bar"><div class="skill-progress" style="width: 80%;"></div></div>
                 </div>
               </div>
-
               <div class="u-align-center u-group" style="margin-top: 40px;">
-                <p class="u-text u-text-palette-1-base u-text-3">Feel free to check out my GitHub to see these skills in action!</p>
+                <p class="u-text u-text-palette-1-base u-text-3">Feel free to check out my GitHub to see these skills in action.</p>
                 <a href="https://github.com/PrabhdeepJassal" class="u-active-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-palette-2-base u-radius-8 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-2" target="_blank">View Projects</a>
               </div>
             </div>
@@ -838,7 +897,6 @@
         </div>
       </div>
     </section>
-
     <section class="u-clearfix u-palette-5-light-3 u-section-6" id="carousel_369d">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <div class="u-clearfix u-expanded-width u-gutter-0 u-layout-wrap u-layout-wrap-1">
@@ -848,14 +906,8 @@
                 <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-container-layout-1">
                   <h2 class="u-text u-text-palette-1-base u-text-2">Contact Me</h2>
                   <p class="u-text u-text-palette-1-base u-text-3">Nabha District Patiala, Punjab<br>+91 94646-13198<br>
-                    <a href="mailto:prabhdeepsinghjassal@gmail.com" 
-                    class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-none u-text-active-palette-2-base u-text-hover-palette-2-base u-btn-1" 
-                    style="color: black;">
-                    prabhdeepsinghjassal@gmail.com
-                 </a>
-                                   </p>
-                  
-                  <p class="u-text u-text-palette-1-base u-text-5"></p>
+                    <a href="mailto:prabhdeepsinghjassal@gmail.com" class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-text-active-palette-2-base u-text-hover-palette-2-base u-btn-1" style="color: black;">prabhdeepsinghjassal@gmail.com</a>
+                  </p>
                 </div>
               </div>
               <div class="u-align-left u-container-style u-layout-cell u-palette-1-base u-radius-20 u-shape-round u-size-30-md u-size-30-sm u-size-30-xs u-size-33-lg u-size-33-xl u-layout-cell-2">
@@ -891,22 +943,21 @@
         </div>
       </div>
     </section>
-    
     <div class="footer">
-      <div id="button"></div>
-    <div id="container">
-    <div id="cont">
-    <div class="footer_center">
-         <h3>Thanks for Visiting my Portfolio</h3>
+      <div id="container">
+        <div id="cont">
+          <div class="footer_center">
+            <h3>Thanks for Visiting my Portfolio</h3>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-    </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
       function toggleReadMore(patentId) {
         const patentCard = document.getElementById(patentId);
         const button = patentCard.querySelector('.read-more-btn');
-        
         if (patentCard.classList.contains('expanded')) {
           patentCard.classList.remove('expanded');
           button.textContent = 'Read More';
@@ -917,40 +968,53 @@
       }
 
       document.addEventListener('DOMContentLoaded', () => {
-    // Replace 'prabhdeepsinghjassal' with your actual LeetCode username
-    const username = 'prabhdeepsinghjassal';
-    const url = `https://leetcode-stats-api.herokuapp.com/${username}`;
-    const solvedCountElement = document.getElementById('leetcode-solved-count');
-
-    // Show loading state
-    solvedCountElement.textContent = 'Loading...';
-    solvedCountElement.style.cursor = 'wait';
-
-    fetch(url)
-        .then(response => {
+        // LeetCode solved count
+        const username = 'prabhdeepsinghjassal';
+        const url = `https://leetcode-stats-api.herokuapp.com/${username}`;
+        const solvedCountElement = document.getElementById('leetcode-solved-count');
+        solvedCountElement.textContent = 'Loading...';
+        solvedCountElement.style.cursor = 'wait';
+        fetch(url)
+          .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+              throw new Error('Network response was not ok');
             }
             return response.json();
-        })
-        .then(data => {
+          })
+          .then(data => {
             if (data && data.totalSolved) {
-                solvedCountElement.textContent = data.totalSolved;
+              solvedCountElement.textContent = data.totalSolved;
             } else {
-                solvedCountElement.textContent = 'N/A';
-                console.error('Data from API is not in the expected format:', data);
+              solvedCountElement.textContent = 'N/A';
+              console.error('Data from API is not in the expected format:', data);
             }
-        })
-        .catch(error => {
+          })
+          .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
             solvedCountElement.textContent = '100+';
-        })
-        .finally(() => {
-            // Reset cursor after loading completes
+          })
+          .finally(() => {
             solvedCountElement.style.cursor = 'default';
-        });
-});
+          });
 
+        // GSAP ScrollTrigger for the aeroplane
+        gsap.registerPlugin(ScrollTrigger);
+        const timelineContainer = document.querySelector('.timeline-container');
+        const aeroplane = document.getElementById('aeroplane-svg');
+        const timelineHeight = timelineContainer.offsetHeight;
+        const startPos = -50;
+        const endPos = timelineHeight + 50;
+        gsap.to(aeroplane, {
+          y: endPos,
+          ease: "none",
+          scrollTrigger: {
+            trigger: timelineContainer,
+            start: "top center",
+            end: "bottom center",
+            scrub: true,
+          }
+        });
+      });
     </script>
   </body>
 </html>
