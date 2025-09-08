@@ -717,6 +717,7 @@
   left: 50%;
   transform: translateX(calc(-50.5% + 5px)) rotate(90deg);
   transform-origin: center;
+  overflow: hidden;
 }
     </style>
     </head>
@@ -1174,108 +1175,135 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
       function toggleReadMore(patentId) {
-        const patentCard = document.getElementById(patentId);
-        const button = patentCard.querySelector('.read-more-btn');
-        
-        if (patentCard.classList.contains('expanded')) {
-          patentCard.classList.remove('expanded');
-          button.textContent = 'Read More';
-        } else {
-          patentCard.classList.add('expanded');
-          button.textContent = 'Read Less';
-        }
+          const patentCard = document.getElementById(patentId);
+          const button = patentCard.querySelector('.read-more-btn');
+          
+          if (patentCard.classList.contains('expanded')) {
+              patentCard.classList.remove('expanded');
+              button.textContent = 'Read More';
+          } else {
+              patentCard.classList.add('expanded');
+              button.textContent = 'Read Less';
+          }
       }
       
+      // NEW: Function to collapse all expanded patent cards
+      function collapseAllPatentCards() {
+          const expandedCards = document.querySelectorAll('.patent-card.expanded');
+          expandedCards.forEach(card => {
+              card.classList.remove('expanded');
+              const button = card.querySelector('.read-more-btn');
+              if (button) {
+                  button.textContent = 'Read More';
+              }
+          });
+      }
+  
       document.addEventListener('DOMContentLoaded', () => {
-        // LeetCode solved count
-        const username = 'prabhdeepsinghjassal';
-        const url = `https://leetcode-stats-api.herokuapp.com/${username}`;
-        const solvedCountElement = document.getElementById('leetcode-solved-count');
+          // LeetCode solved count
+          const username = 'prabhdeepsinghjassal';
+          const url = `https://leetcode-stats-api.herokuapp.com/${username}`;
+          const solvedCountElement = document.getElementById('leetcode-solved-count');
       
-        solvedCountElement.textContent = 'Loading...';
-        solvedCountElement.style.cursor = 'wait';
+          solvedCountElement.textContent = 'Loading...';
+          solvedCountElement.style.cursor = 'wait';
       
-        fetch(url)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (data && data.totalSolved) {
-              solvedCountElement.textContent = data.totalSolved;
-            } else {
-              solvedCountElement.textContent = 'N/A';
-              console.error('Data from API is not in the expected format:', data);
-            }
-          })
-          .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            solvedCountElement.textContent = '100+';
-          })
-          .finally(() => {
-            solvedCountElement.style.cursor = 'default';
-          });
+          fetch(url)
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  if (data && data.totalSolved) {
+                      solvedCountElement.textContent = data.totalSolved;
+                  } else {
+                      solvedCountElement.textContent = 'N/A';
+                      console.error('Data from API is not in the expected format:', data);
+                  }
+              })
+              .catch(error => {
+                  console.error('There was a problem with the fetch operation:', error);
+                  solvedCountElement.textContent = '100+';
+              })
+              .finally(() => {
+                  solvedCountElement.style.cursor = 'default';
+              });
       
-        // GSAP ScrollTrigger for the train with cave emergence effect
-        gsap.registerPlugin(ScrollTrigger);
-        const timelineContainer = document.querySelector('.timeline-container');
-        const train = document.querySelector('.train-container');
-        if (train && timelineContainer) {
-          const timelineHeight = timelineContainer.offsetHeight;
+          // GSAP ScrollTrigger for the train with cave emergence effect
+          gsap.registerPlugin(ScrollTrigger);
+          const timelineContainer = document.querySelector('.timeline-container');
+          const train = document.querySelector('.train-container');
+          if (train && timelineContainer) {
+              const timelineHeight = timelineContainer.offsetHeight;
       
-          // Complex animation timeline
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: timelineContainer,
-              start: "top center",
-              end: "bottom+=200 center",
-              scrub: true,
-            }
-          });
+              // Complex animation timeline
+              const tl = gsap.timeline({
+                  scrollTrigger: {
+                      trigger: timelineContainer,
+                      start: "top center",
+                      end: "bottom+=200 center",
+                      scrub: true,
+                  }
+              });
       
-          // The train will animate from a position above the screen to the final position.
-          tl.fromTo(
-            train,
-            { y: 150 }, 
-            {
-              y: timelineHeight + 200,
-              duration: 1,
-              ease: "none"
-            }
-          );
-        }
-    
-        // Animation for contact section train
-        const contactSection = document.querySelector('.u-section-6');
-        const contactTrain = document.querySelector('.train-container-contact');
-        const curvedTrack = document.querySelector('.curved-track');
-        
-        if (contactTrain && contactSection && curvedTrack) {
-          const trackHeight = curvedTrack.offsetHeight;
+              // The train will animate from a position above the screen to the final position.
+              tl.fromTo(
+                  train,
+                  { y: 150 }, 
+                  {
+                      y: timelineHeight + 200,
+                      duration: 1,
+                      ease: "none"
+                  }
+              );
+          }
           
-          const contactTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: contactSection,
-              start: "top center",
-              end: "bottom center",
-              scrub: 3,
-            }
+          // NEW: ScrollTrigger to collapse patent cards when the section is left
+          ScrollTrigger.create({
+              trigger: "#patents-section",
+              start: "bottom top", // Trigger when the bottom of the section hits the top of the viewport
+              onLeave: () => {
+                  collapseAllPatentCards();
+              },
+              onLeaveBack: () => {
+                  // Optional: You can choose to collapse the cards when scrolling back up as well
+                  // collapseAllPatentCards();
+              },
+              // The scrub value is not needed here as we are not animating, just triggering a function.
+              // markers: true, // Uncomment for debugging purposes
           });
-        
-          contactTl.fromTo(
-            contactTrain,
-            { y: 150 },
-            {
-              y: trackHeight + 170,
-              duration: 1,
-              ease: "none"
-            }
-          );
-        }
+      
+          // Animation for contact section train
+          const contactSection = document.querySelector('.u-section-6');
+          const contactTrain = document.querySelector('.train-container-contact');
+          const curvedTrack = document.querySelector('.curved-track');
+      
+          if (contactTrain && contactSection && curvedTrack) {
+              const trackHeight = curvedTrack.offsetHeight;
+          
+              const contactTl = gsap.timeline({
+                  scrollTrigger: {
+                      trigger: contactSection,
+                      start: "top center",
+                      end: "bottom center",
+                      scrub: 3,
+                  }
+              });
+          
+              contactTl.fromTo(
+                  contactTrain,
+                  { y: 150 },
+                  {
+                      y: trackHeight + 180,
+                      duration: 1,
+                      ease: "none"
+                  }
+              );
+          }
       });
-    </script>
+  </script>
     
 </body>
 </html>
