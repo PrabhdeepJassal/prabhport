@@ -264,10 +264,7 @@
     overflow: hidden; /* This creates the masking effect */
     border-radius: 30px 30px 0 0; /* Rounds the top for cave effect */
 }
-
-    
-      
-      /* Testimonial/Quote Section CSS */
+ /* Testimonial/Quote Section CSS */
       .testimonial-section {
         padding: 80px 20px;
         background-color: #eef2f5; /* A soft neutral background */
@@ -526,18 +523,33 @@
       }
       /* Responsive adjustments for mobile */
       @media (max-width: 768px) {
+        /* General mobile adjustments */
+        .u-sheet,
+        .u-container-layout {
+          padding: 15px 10px;
+        }
+
+        /* Section 1 - Hero */
         .u-section-1 .u-sheet {
           flex-direction: column;
           padding: 20px 10px;
         }
         .u-section-1 .u-image-1 {
-          width: 80%;
+          width: 80% !important;
           margin-bottom: 20px;
+          max-width: 300px;
         }
         .u-group-1, .u-group-2 {
           width: 100% !important;
           margin-left: 0;
           margin-right: 0;
+        }
+        .u-text-1, .u-text-2, .u-text-23, .u-text-24 {
+          text-align: center !important;
+        }
+        .u-btn {
+          width: 100%;
+          text-align: center;
         }
         .u-list-1 .u-repeater {
           flex-direction: column;
@@ -548,17 +560,6 @@
         }
         .u-list-1 .u-list-item:last-child {
           margin-bottom: 0;
-        }
-        .u-text, h1, h2, h3, h4 {
-          font-size: 1.2rem;
-          text-align: center !important;
-        }
-        .u-btn {
-          width: 100%;
-          text-align: center;
-        }
-        .u-social-icons {
-          justify-content: center;
         }
         .u-form {
           padding: 10px;
@@ -574,103 +575,89 @@
             flex-direction: column;
             text-align: center;
         }
+        .u-social-icons {
+          justify-content: center;
+        }
+
+        /* Timeline Section Mobile Adjustments */
+        .timeline-container::before,
+        .timeline-container::after {
+          left: 10px; /* Move the vertical line and rails to the left */
+          margin-left: 0;
+        }
+        .timeline-container {
+          padding-left: 30px; /* Add padding for the vertical line */
+        }
+        .timeline-item,
+        .timeline-left,
+        .timeline-right {
+          width: 100%;
+          padding: 10px 10px 10px 40px; /* Adjust padding for single column */
+          left: 0; /* Align all items to the left */
+        }
+        .timeline-left::after,
+        .timeline-right::after {
+          left: 15px; /* Adjust the position of the arrow on the left side */
+        }
+        .timeline-title {
+          font-size: 1.1rem;
+        }
+        .timeline-subtitle {
+          font-size: 1rem;
+        }
+        .timeline-text {
+          font-size: 0.9rem;
+        }
+        .train-container {
+          display: none; /* Hide the train on mobile for simplicity */
+        }
+        .timeline-section::after {
+          display: none; /* Hide the bottom tunnel on mobile */
+        }
+
+        /* Patents, Publications, and Skills Mobile Adjustments */
+        .patents-grid,
+        .publications-grid,
+        .skills-grid {
+          grid-template-columns: 1fr; /* Stack cards in a single column */
+          gap: 20px;
+        }
+        .patent-card,
+        .publication-card,
+        .skill-card {
+          padding: 20px;
+        }
+        .patent-title,
+        .publication-card h3,
+        .skill-title {
+          font-size: 1.2rem;
+        }
+
+        /* Testimonial Section Mobile Adjustments */
+        .testimonial-card {
+          padding: 20px;
+        }
+        .testimonial-image {
+          width: 100px;
+          height: 100px;
+        }
+        .testimonial-quote {
+          font-size: 1rem;
+        }
+        .testimonial-author {
+          font-size: 1.3rem;
+        }
+
+        /* Contact Section Mobile Adjustments */
+        .u-section-6 .u-layout-cell-2 {
+            padding: 20px;
+        }
+        .u-section-6 .u-text-6 {
+            font-size: 2rem;
+            text-align: center;
+        }
       }
       
-     /* CSS for the tilted, detailed train track */
-.curved-track {
-  position: absolute;
-  top: 865px; /* Adjust start position to move it up */
-  left: 7.2%; /* Start closer to the left edge */
-  width: 40px; /* Width of the track ties */
-  height: 875px; /* Height of the visible track section */
-  transform: rotate(180deg); /* Tilt angle (adjust as needed) */
-  transform-origin: top left; /* Rotate from the top-left corner */
-  z-index: 15;
-  overflow: hidden; /* Hide parts of the track that go outside the section */
-}
-
-.curved-track::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  /* Repeating background for the ties */
-  background: repeating-linear-gradient(
-    180deg,
-    #8B4513 0px,
-    #8B4513 8px,
-    transparent 8px,
-    transparent 25px
-  );
-  z-index: 1;
-}
-
-.curved-track::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  
-  left: 50%; /* Center the rails on the ties */
-  margin-left: -10px; /* Adjust to create two rails */
-  width: 20px;
-  /* Two parallel steel rails */
-  background:
-    linear-gradient(90deg,
-      transparent 0px, transparent 1px,
-      #2c2c2c 1px, #2c2c2c 5px,  /* Left rail */
-      transparent 5px, transparent 15px, /* Gap between rails */
-      #2c2c2c 15px, #2c2c2c 19px, /* Right rail */
-      transparent 19px, transparent 20px
-    );
-  z-index: 2;
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.3);
-}
-.u-section-6::before {
-  content: '';
-  position: absolute;
-  width: 60px;
-  height: 25px;
-  transform: rotate(0deg); /* Tilt angle (adjust as needed) */
-  transform-origin: top left;
-  background: 
-    radial-gradient(ellipse at center bottom, 
-      #6B4423 0%,
-      #4A2C17 30%,
-      #2D1B0E 60%,
-      #1A0F08 100%
-    ),
-    radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(160, 82, 45, 0.2) 0%, transparent 40%);
-  top: -20px; /* Position at the top of the section */
-  left: 5.75%;
-  margin-left: -30px;
-  border-radius: 50% 50% 0 0;
-  z-index: -1;
-  box-shadow: 
-    inset 0 -8px 15px rgba(139, 69, 19, 0.6),
-    0 2px 8px rgba(0, 0, 0, 0.3);
-}
-/* NEW CSS for the contact image */
-
-
-.stopsign {
-  position: relative;
-  top: 350px; /* Adjust this to move it along the track's length */
-  left: -105%;
-  transform: translateX(-50%) rotate(0deg); /* Counter-rotate to be upright */
-  width: 90px; /* Fine-tune width */
-  height: auto;
-  z-index: 500;
-  /* Refined drop shadow */
-  filter: 
-    brightness(1) /* Makes the image darker (0.8 = 80% brightness) */
-    saturate(2) /* Makes the colors more vibrant (1.5 = 150% saturation) */
-    drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.6)); /* Your existing shadow */
-}
-
 /* .u-section-6::after {
   content: '';
   position: absolute;
@@ -697,28 +684,7 @@
     0 -2px 8px rgba(0, 0, 0, 0.3);
 } */
  /* CSS for contact section train */
-.train-container-contact {
-  position: absolute;
-  top: -25px;
-  left: -5.30%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  opacity: 1;
-  transition: none;
-}
 
-.train-image-contact {
-  width: 380px;
-  height: auto;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(calc(-50.5% + 5px)) rotate(90deg);
-  transform-origin: center;
-  overflow: hidden;
-}
     </style>
     </head>
   <body class="u-body u-xl-mode">
@@ -989,7 +955,7 @@
             <h3>Guardians of the Galaxy: How Space Radiation Affects Astronauts</h3>
             <p>
               Astronaut health is a major concern in space exploration. Space radiation, including galactic cosmic rays, solar particle events, affects humans.   DNA damage, acute radiation syndrome, cancer risk, cognitive impairments, cardiovascular issues, cataracts, and lowered immunity are major health hazards.
-              Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, regular radiation monitoring, and genetic research are discussed.            </p>
+              Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, and genetic research are discussed.            </p>
             <a href="guard.pdf" class="publication-link">Read Full Article</a>
           </div>
 
@@ -1102,11 +1068,8 @@
     </section>
 
     <section class="u-clearfix u-palette-5-light-3 u-section-6" id="carousel_369d">
-      <div class="curved-track"></div>
+
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <div class="train-container-contact">
-          <img src="fulltrain.png" alt="Custom Train" class="train-image-contact">
-        </div>
         <div class="u-clearfix u-expanded-width u-gutter-0 u-layout-wrap u-layout-wrap-1">
           <div class="u-gutter-0 u-layout">
             <div class="u-layout-row">
@@ -1119,7 +1082,6 @@
                     style="color: black;">
                     prabhdeepsinghjassal@gmail.com
                  </a>
-                 <img src="stopsign.png" alt="stopsign" class="stopsign">
                                    </p>
                   
                   <p class="u-text u-text-palette-1-base u-text-5"></p>
