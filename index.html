@@ -1207,7 +1207,7 @@
                           <div class="u-container-layout u-valign-middle u-container-layout-2">
                               <h1 class="u-text u-text-6">Get in Touch</h1>
                               <div class="u-expanded-width u-form u-form-1">
-                                  <form id="contactForm" action="https://formspree.io/f/xrbrzjzk" method="POST" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" style="padding: 0px;">
+                                  <form id="contactForm" method="POST" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" style="padding: 0px;">
                                       <div class="u-form-group u-form-name">
                                           <label for="name-3b9a" class="u-form-control-hidden u-label">Name</label>
                                           <input type="text" name="name" id="name-3b9a" placeholder="Enter your Name" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white" required>
@@ -1388,13 +1388,9 @@
     const btnText = document.getElementById('btnText');
 
     function showNotification(type, title, message) {
-        // Remove existing notification if any
         const existingNotification = document.querySelector('.notification');
-        if (existingNotification) {
-            existingNotification.remove();
-        }
+        if (existingNotification) existingNotification.remove();
 
-        // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
@@ -1407,11 +1403,7 @@
         `;
 
         document.body.appendChild(notification);
-
-        // Show notification
         setTimeout(() => notification.classList.add('show'), 100);
-
-        // Auto remove after 5 seconds
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 400);
@@ -1422,32 +1414,51 @@
         contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Disable button and show loading
+            // Disable button & show loading animation
             submitBtn.disabled = true;
             submitBtn.classList.add('submit-btn-loading');
             btnText.innerHTML = 'Sending<span class="spinner"></span>';
 
             try {
                 const formData = new FormData(contactForm);
-                const response = await fetch(contactForm.action, {
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const message = formData.get('message');
+
+                // ✅ Step 1: Send to Formspree (primary action)
+                const formspreeResponse = await fetch('https://formspree.io/f/xrbrzjzk', {
                     method: 'POST',
                     body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
 
-                if (response.ok) {
+                if (formspreeResponse.ok) {
+                    // ✅ Show success message only for Formspree
                     showNotification(
                         'success',
                         'Message Sent Successfully!',
-                        'Thank you for reaching out. I\'ll get back to you soon.'
+                        'Thank you for reaching out. I’ll get back to you soon!'
                     );
+
                     contactForm.reset();
+
+                    // 🔄 Step 2: Run backend auto-response silently (no UI updates)
+                    const BACKEND_URL = 'https://websiteservbackend-1.onrender.com/api/send-autoresponse';
+                    fetch(BACKEND_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, message })
+                    }).catch(err => console.warn('Auto-response failed silently:', err));
                 } else {
-                    throw new Error('Form submission failed');
+                    // ❌ Only Formspree failure triggers error
+                    showNotification(
+                        'error',
+                        'Oops! Something went wrong',
+                        'Please try again or contact me directly via email.'
+                    );
                 }
             } catch (error) {
+                console.error('Form submission error:', error);
                 showNotification(
                     'error',
                     'Oops! Something went wrong',
@@ -1462,6 +1473,8 @@
         });
     }
 });
+
+
   </script>
     
 </body>
