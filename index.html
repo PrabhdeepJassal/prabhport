@@ -684,6 +684,96 @@
     0 -2px 8px rgba(0, 0, 0, 0.3);
 } */
  /* CSS for contact section train */
+ .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 20px 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transform: translateX(400px);
+    transition: transform 0.4s ease;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: var(--palette-1-base);
+    color: white;
+}
+
+.notification.error {
+    background: var(--palette-2-base);
+    color: white;
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.notification-content h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.notification-content p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+    padding: 0;
+    margin-left: auto;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+.submit-btn-loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+    .notification {
+        right: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+    }
+}
 
     </style>
     </head>
@@ -1096,58 +1186,57 @@
     </section>
 
     <section class="u-clearfix u-palette-5-light-3 u-section-6" id="carousel_369d">
-
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <div class="u-clearfix u-expanded-width u-gutter-0 u-layout-wrap u-layout-wrap-1">
-          <div class="u-gutter-0 u-layout">
-            <div class="u-layout-row">
-              <div class="u-align-left u-container-style u-layout-cell u-shape-rectangle u-size-27-lg u-size-27-xl u-size-30-md u-size-30-sm u-size-30-xs u-layout-cell-1">
-                <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-container-layout-1">
-                  <h2 class="u-text u-text-palette-1-base u-text-2">Contact Me</h2>
-                  <p class="u-text u-text-palette-1-base u-text-3">Nabha District Patiala, Punjab<br>+91 94646-13198<br>
-                    <a href="mailto:prabhdeepsinghjassal@gmail.com" 
-                    class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-none u-text-active-palette-2-base u-text-hover-palette-2-base u-btn-1" 
-                    style="color: black;">
-                    prabhdeepsinghjassal@gmail.com
-                 </a>
-                                   </p>
-                  
-                  <p class="u-text u-text-palette-1-base u-text-5"></p>
-                </div>
-              </div>
-              <div class="u-align-left u-container-style u-layout-cell u-palette-1-base u-radius-20 u-shape-round u-size-30-md u-size-30-sm u-size-30-xs u-size-33-lg u-size-33-xl u-layout-cell-2">
-                <div class="u-container-layout u-valign-middle u-container-layout-2">
-                  <h1 class="u-text u-text-6">Get in Touch</h1>
-                  <div class="u-expanded-width u-form u-form-1">
-                    <form action="" method="POST" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" style="padding: 0px;" source="email" name="form">
-                      <div class="u-form-group u-form-name">
-                        <label for="name-3b9a" class="u-form-control-hidden u-label" wfd-invisible="true">Name</label>
-                        <input type="text" placeholder="Enter your Name" id="name-3b9a" name="name" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white u-input-1" required="">
+          <div class="u-clearfix u-expanded-width u-gutter-0 u-layout-wrap u-layout-wrap-1">
+              <div class="u-gutter-0 u-layout">
+                  <div class="u-layout-row">
+                      <div class="u-align-left u-container-style u-layout-cell u-shape-rectangle u-size-27-lg u-size-27-xl u-size-30-md u-size-30-sm u-size-30-xs u-layout-cell-1">
+                          <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-container-layout-1">
+                              <h2 class="u-text u-text-palette-1-base u-text-2">Contact Me</h2>
+                              <p class="u-text u-text-palette-1-base u-text-3">Nabha District Patiala, Punjab<br>+91 94646-13198<br>
+                                  <a href="mailto:prabhdeepsinghjassal@gmail.com" 
+                                  class="u-active-none u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-2-base u-btn u-button-link u-button-style u-hover-none u-none u-text-active-palette-2-base u-text-hover-palette-2-base u-btn-1" 
+                                  style="color: black;">
+                                  prabhdeepsinghjassal@gmail.com
+                                  </a>
+                              </p>
+                              <p class="u-text u-text-palette-1-base u-text-5"></p>
+                          </div>
                       </div>
-                      <div class="u-form-email u-form-group">
-                        <label for="email-3b9a" class="u-form-control-hidden u-label" wfd-invisible="true">Email</label>
-                        <input type="email" placeholder="Enter a valid email address" id="email-3b9a" name="email" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white u-input-2" required="">
+                      <div class="u-align-left u-container-style u-layout-cell u-palette-1-base u-radius-20 u-shape-round u-size-30-md u-size-30-sm u-size-30-xs u-size-33-lg u-size-33-xl u-layout-cell-2">
+                          <div class="u-container-layout u-valign-middle u-container-layout-2">
+                              <h1 class="u-text u-text-6">Get in Touch</h1>
+                              <div class="u-expanded-width u-form u-form-1">
+                                  <form id="contactForm" action="https://formspree.io/f/xrbrzjzk" method="POST" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" style="padding: 0px;">
+                                      <div class="u-form-group u-form-name">
+                                          <label for="name-3b9a" class="u-form-control-hidden u-label">Name</label>
+                                          <input type="text" name="name" id="name-3b9a" placeholder="Enter your Name" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white" required>
+                                      </div>
+                                      
+                                      <div class="u-form-email u-form-group">
+                                          <label for="email-3b9a" class="u-form-control-hidden u-label">Email</label>
+                                          <input type="email" name="email" id="email-3b9a" placeholder="Enter a valid email address" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white" required>
+                                      </div>
+                                      
+                                      <div class="u-form-group u-form-message">
+                                          <label for="message-3b9a" class="u-form-control-hidden u-label">Message</label>
+                                          <textarea name="message" id="message-3b9a" rows="4" placeholder="Enter your message" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white" required></textarea>
+                                      </div>
+                                      
+                                      <div class="u-align-left u-form-group u-form-submit">
+                                          <button type="submit" id="submitBtn" class="u-active-palette-1-light-3 u-btn u-btn-round u-button-style u-hover-palette-1-light-3 u-palette-1-light-2 u-radius-8 u-text-palette-1-base">
+                                              <span id="btnText">Submit</span>
+                                          </button>
+                                      </div>
+                                  </form>
+                              </div>
+                          </div>
                       </div>
-                      <div class="u-form-group u-form-message">
-                        <label for="message-3b9a" class="u-form-control-hidden u-label" wfd-invisible="true">Message</label>
-                        <textarea placeholder="Enter your message" rows="4" cols="50" id="message-3b9a" name="message" class="u-border-2 u-border-white u-input u-input-rectangle u-radius-8 u-white u-input-3" required=""></textarea>
-                      </div>
-                      <div class="u-align-left u-form-group u-form-submit">
-                        <a href="#" class="u-active-palette-1-light-3 u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-3 u-palette-1-light-2 u-radius-8 u-text-palette-1-base u-btn-2">Submit</a>
-                        <input type="submit" value="submit" class="u-form-control-hidden" wfd-invisible="true">
-                      </div>
-                      <div class="u-form-send-message u-form-send-success" wfd-invisible="true"> Thank you! Your message has been sent. </div>
-                      <div class="u-form-send-error u-form-send-message" wfd-invisible="true"> Unable to send your message. Please fix errors then try again. </div>
-                      <input type="hidden" value="" name="recaptchaResponse" wfd-invisible="true">
-                    </form>
                   </div>
-                </div>
               </div>
-            </div>
           </div>
-        </div>
       </div>
-    </section>
+  </section>
     
     <div class="footer">
       <div id="button"></div>
@@ -1293,6 +1382,86 @@
               );
           }
       });
+      document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+
+    function showNotification(type, title, message) {
+        // Remove existing notification if any
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <div class="notification-icon">${type === 'success' ? '✓' : '✕'}</div>
+            <div class="notification-content">
+                <h4>${title}</h4>
+                <p>${message}</p>
+            </div>
+            <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Show notification
+        setTimeout(() => notification.classList.add('show'), 100);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 400);
+        }, 5000);
+    }
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.classList.add('submit-btn-loading');
+            btnText.innerHTML = 'Sending<span class="spinner"></span>';
+
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showNotification(
+                        'success',
+                        'Message Sent Successfully!',
+                        'Thank you for reaching out. I\'ll get back to you soon.'
+                    );
+                    contactForm.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                showNotification(
+                    'error',
+                    'Oops! Something went wrong',
+                    'Please try again or contact me directly via email.'
+                );
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('submit-btn-loading');
+                btnText.textContent = 'Submit';
+            }
+        });
+    }
+});
   </script>
     
 </body>
