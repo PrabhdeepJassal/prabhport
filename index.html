@@ -1498,13 +1498,14 @@
 
                     contactForm.reset();
 
-                    // 🔄 Step 2: Run backend auto-response silently (no UI updates)
-                    const BACKEND_URL = 'https://websiteservbackend-1.onrender.com/api/send-autoresponse';
-                    fetch(BACKEND_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, email, message })
-                    }).catch(err => console.warn('Auto-response failed silently:', err));
+                   // Step 2: Trigger your Vercel API to send auto-response
+fetch("https://prabhdeepportfolio.vercel.app/api/send-autoresponse", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, message })
+}).catch(err => console.warn("Auto-response failed silently:", err));
+
+
                 } else {
                     // ❌ Only Formspree failure triggers error
                     showNotification(
