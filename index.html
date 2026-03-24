@@ -294,13 +294,50 @@
         font-weight: 600;
         margin-bottom: 5px;
       }
-      .timeline-title {
+      h3.timeline-title {
         font-family: 'Raleway', sans-serif;
         font-size: 1.25rem;
         color: var(--palette-1-base);
         font-weight: 700;
         margin: 0;
+        position: relative; /* positioning context for absolute centering */
+        padding: 0 8px; /* small horizontal padding so absolute element has room */
+        line-height: 1.1; /* allow comfortable multi-line wrapping */
+        min-height: 44px; /* ensure some vertical space for centering */
       }
+
+      .title-inner {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: auto; /* allow multi-line text while keeping group centered */
+        padding: 0;
+        margin: 0;
+        white-space: normal;
+        max-width: calc(100% - 24px); /* avoid overflow inside h3 */
+      }
+
+      .title-inner > img.timeline-logo {
+        flex: 0 0 36px;
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+      }
+
+      .title-inner .company-name {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1.1;
+        padding-left: 6px;
+        text-align: left; /* keep internal text left-aligned */
+        max-width: calc(100% - 44px);
+        word-break: break-word;
+      }
+
       .timeline-subtitle {
         font-family: 'Open Sans', sans-serif;
         font-size: 1.1rem;
@@ -662,7 +699,7 @@
           font-size: 1rem;
         }
         .timeline-text {
-          font-size: 0.9rem;
+          font-size: 0.95rem;
         }
         .train-container {
           display: none; /* Hide the train on mobile for simplicity */
@@ -670,166 +707,62 @@
         .timeline-section::after {
           display: none; /* Hide the bottom tunnel on mobile */
         }
-
-        /* Patents, Publications, and Skills Mobile Adjustments */
-        .patents-grid,
-        .publications-grid,
-        .skills-grid {
-          grid-template-columns: 1fr; /* Stack cards in a single column */
-          gap: 20px;
-        }
-        .patent-card,
-        .publication-card,
-        .skill-card {
-          padding: 20px;
-        }
-        .patent-title,
-        .publication-card h3,
-        .skill-title {
-          font-size: 1.2rem;
-        }
-
-        /* Testimonial Section Mobile Adjustments */
-        .testimonial-card {
-          padding: 20px;
-        }
-        .testimonial-image {
-          width: 100px;
-          height: 100px;
-        }
-        .testimonial-quote {
-          font-size: 1rem;
-        }
-        .testimonial-author {
-          font-size: 1.3rem;
-        }
-
-        /* Contact Section Mobile Adjustments */
-        .u-section-6 .u-layout-cell-2 {
-            padding: 20px;
-        }
-        .u-section-6 .u-text-6 {
-            font-size: 2rem;
-            text-align: center;
-        }
       }
-      
-/* .u-section-6::after {
-  content: '';
-  position: absolute;
-  width: 60px;
-  height: 25px;
-  transform: rotate(60deg); 
-  transform-origin: top left;
-  background: 
-    radial-gradient(ellipse at center top, 
-      #6B4423 0%,
-      #4A2C17 30%,
-      #2D1B0E 60%,
-      #1A0F08 100%
-    ),
-    radial-gradient(circle at 30% 70%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 70% 30%, rgba(160, 82, 45, 0.2) 0%, transparent 40%);
-    bottom: 475px; 
-  left: 2%;
-  margin-left: -30px;
-  border-radius: 0 0 50% 50%;
-  z-index: 10;
-  box-shadow: 
-    inset 0 8px 15px rgba(139, 69, 19, 0.6),
-    0 -2px 8px rgba(0, 0, 0, 0.3);
-} */
- /* CSS for contact section train */
- .notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 20px 25px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transform: translateX(400px);
-    transition: transform 0.4s ease;
-    z-index: 1000;
-    max-width: 400px;
-}
 
-.notification.show {
-    transform: translateX(0);
-}
+      /* ------------ Responsive typography & layout (global) ------------ */
+      /* Fluid font sizes using clamp for smooth scaling across devices */
+      html { font-size: 16px; }
+      h1 { font-size: clamp(1.6rem, 4.6vw, 2.4rem); }
+      h2 { font-size: clamp(1.4rem, 3.8vw, 2rem); }
+      h3 { font-size: clamp(1.1rem, 3.0vw, 1.5rem); }
+      h4 { font-size: clamp(1rem, 2.6vw, 1.25rem); }
+      p, .timeline-text, .patent-description, .publication-card p, .skill-description {
+        font-size: clamp(0.9rem, 2.4vw, 1rem);
+      }
 
-.notification.success {
-    background: var(--palette-1-base);
-    color: white;
-}
+      /* Make images scale nicely on all screens */
+      img { max-width: 100%; height: auto; display: block; }
 
-.notification.error {
-    background: var(--palette-2-base);
-    color: white;
-}
+      /* Reduce oversized paddings and ensure containers fit small screens */
+      .u-sheet, .timeline-content, .patent-card, .publication-card, .skill-card {
+        padding-left: clamp(12px, 2.5vw, 24px);
+        padding-right: clamp(12px, 2.5vw, 24px);
+      }
 
-.notification-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
+      /* Buttons and links scale down on small devices */
+      .u-btn { font-size: clamp(0.85rem, 2.2vw, 1rem); padding: 8px 12px; }
 
-.notification-content h4 {
-    font-size: 1rem;
-    margin-bottom: 5px;
-}
+      /* Timeline title/logo adjustments on small screens: avoid absolute centering which breaks wrapping */
+      @media (max-width: 640px) {
+        h3.timeline-title { text-align: center; position: relative; min-height: auto; }
+        .title-inner { position: static; transform: none; display: inline-flex; justify-content: center; gap: 8px; height: auto; }
+        .title-inner > img.timeline-logo { width: 28px; height: 28px; flex: 0 0 28px; }
+        .title-inner .company-name { height: auto; padding-left: 6px; display: inline-flex; align-items: center; justify-content: center; }
+        .timeline-content { padding: 14px; }
+      }
 
-.notification-content p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
+      /* Extra small devices: further reduce text and spacing */
+      @media (max-width: 420px) {
+        html { font-size: 15px; }
+        h1 { font-size: clamp(1.4rem, 6.2vw, 1.8rem); }
+        h2 { font-size: clamp(1.2rem, 4.8vw, 1.6rem); }
+        h3 { font-size: clamp(1rem, 4vw, 1.25rem); }
+        p, .timeline-text { font-size: clamp(0.85rem, 3.2vw, 0.95rem); }
+        .timeline-content { padding: 10px; }
+        .patent-card, .publication-card, .skill-card { padding: 12px; }
+      }
 
-.notification-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-    padding: 0;
-    margin-left: auto;
-}
+      /* Accessibility: ensure high contrast for small text */
+      body, p, li, a { color: #222; }
 
-.notification-close:hover {
-    opacity: 1;
-}
+      /* Ensure long company names wrap below the logo when needed */
+      .title-inner .company-name { word-break: break-word; }
 
-.submit-btn-loading {
-    position: relative;
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-.spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-@media (max-width: 600px) {
-    .notification {
-        right: 10px;
-        left: 10px;
-        max-width: calc(100% - 20px);
-    }
-}
+      /* Restore any timeline specific mobile rules already present but ensure they remain valid */
+      @media (max-width: 768px) {
+        .timeline-item, .timeline-left, .timeline-right { width: 100%; left: 0; }
+        .timeline-container { padding-left: 18px; padding-right: 18px; }
+      }
 
     </style>
     </head>
@@ -956,35 +889,35 @@
             <img src="fulltrain.png" alt="Custom Train" class="train-image">
           </div>
     
-           <!-- 🧠 Mavriq AI Experience -->
-           <div class="timeline-item timeline-left">
-            <div class="timeline-content">
-              <div class="timeline-date">OCTOBER 2025 - FEBRUARY 2026</div>
-              <h3 class="timeline-title">Mavriq AI</h3>
-              <h4 class="timeline-subtitle">AI/ML Engineer</h4>
-              <p class="timeline-text">
-                Engineered advanced AI conversational and voice-enabled agents ElevenLabs to automate client interactions, improving response speed 3× and user engagement by 70%. Enhanced contextual understanding in workflows and built real-time analytics dashboards that boosted customer satisfaction to 92%.
-              </p>
-            </div>
-          </div>
-
           <!-- Mphasis - New Experience (Feb 2026 - Present) -->
           <div class="timeline-item timeline-right">
             <div class="timeline-content">
               <div class="timeline-date">FEBRUARY 2026 - PRESENT</div>
-              <h3 class="timeline-title">Mphasis</h3>
+              <h3 class="timeline-title"><span class="title-inner"><img src="images/mphasis.png" alt="Mphasis logo" class="timeline-logo"><span class="company-name">Mphasis</span></span></h3>
               <h4 class="timeline-subtitle">SDE (Java Full-Stack Developer)</h4>
               <p class="timeline-text">
                 Working as a Software Development Engineer focusing on Java-based full-stack development: building scalable backend services and RESTful APIs with Java and Spring, and implementing responsive frontend features. Collaborating across teams to deliver production-grade features, improve system performance, and drive end-to-end delivery.
               </p>
             </div>
           </div>
-
+    
+          <!-- 🧠 Mavriq AI Experience -->
+          <div class="timeline-item timeline-left">
+            <div class="timeline-content">
+              <div class="timeline-date">OCTOBER 2025 - FEBRUARY 2026</div>
+              <h3 class="timeline-title"><span class="title-inner"><img src="images/mavriq.png" alt="Mavriq logo" class="timeline-logo"><span class="company-name">Mavriq AI</span></span></h3>
+              <h4 class="timeline-subtitle">AI/ML Engineer</h4>
+              <p class="timeline-text">
+                Engineered advanced AI conversational and voice-enabled agents ElevenLabs to automate client interactions, improving response speed 3× and user engagement by 70%. Enhanced contextual understanding in workflows and built real-time analytics dashboards that boosted customer satisfaction to 92%.
+              </p>
+            </div>
+          </div>
+    
           <!-- MCA -->
           <div class="timeline-item timeline-right">
             <div class="timeline-content">
               <div class="timeline-date">JUNE 2024 - Ongoing</div>
-              <h3 class="timeline-title">Thapar University</h3>
+              <h3 class="timeline-title"><span class="title-inner"><img src="images/thapar.png" alt="Thapar logo" class="timeline-logo"><span class="company-name">Thapar University</span></span></h3>
               <h4 class="timeline-subtitle">Master of Computer Applications (MCA)</h4>
               <p class="timeline-text">
                 Pursuing advanced studies in computer science, focusing on complex algorithms, systems architecture, and specialized computing paradigms to deepen my technical expertise.
@@ -996,7 +929,7 @@
           <div class="timeline-item timeline-left">
             <div class="timeline-content">
               <div class="timeline-date">JAN 2024 - JUN 2024</div>
-              <h3 class="timeline-title">International Tractors Limited</h3>
+              <h3 class="timeline-title"><span class="title-inner"><img src="images/itl.png" alt="ITL logo" class="timeline-logo"><span class="company-name">ITL</span></span></h3>
               <h4 class="timeline-subtitle">React Native Application Developer (Intern)</h4>
               <p class="timeline-text">
                 Developed and launched a cross-platform mobile app to automate the company's document approval workflow. Led key software implementations that significantly improved process automation and efficiency.
@@ -1004,13 +937,11 @@
             </div>
           </div>
     
-         
-    
           <!-- BCA -->
           <div class="timeline-item timeline-right">
             <div class="timeline-content">
               <div class="timeline-date">JUNE 2024 - JUNE 2024</div>
-              <h3 class="timeline-title">Chitkara University</h3>
+              <h3 class="timeline-title"><span class="title-inner"><img src="images/chitkara.jpg" alt="Chitkara logo" class="timeline-logo"><span class="company-name">Chitkara University</span></span></h3>
               <h4 class="timeline-subtitle">Bachelor of Computer Applications (BCA)</h4>
               <p class="timeline-text">
                 Completed with a GPA of 9.0/10.0, gaining a strong foundation in computer science, software development, and programming languages while actively engaging in quantum computing research.
@@ -1022,7 +953,7 @@
           <div class="timeline-item timeline-left">
             <div class="timeline-content">
               <div class="timeline-date">JAN 2022 - DEC 2024</div>
-              <h3 class="timeline-title">Chitkara University</h3>
+              <h3 class="timeline-title"><span class="title-inner"><img src="images/chitkara.jpg" alt="Chitkara research logo" class="timeline-logo"><span class="company-name">Chitkara University</span></span></h3>
               <h4 class="timeline-subtitle">Research Scholar</h4>
               <p class="timeline-text">
                 Conducted extensive research on the theory and application of quantum teleportation. Collaborated with physicists on theoretical studies and contributed to advancing the understanding of quantum principles, including work on Grover's algorithm.
