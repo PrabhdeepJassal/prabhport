@@ -139,6 +139,7 @@
         position: relative;
         max-width: 900px;
         margin: 0 auto;
+        overflow: visible; /* important so train can appear from above/below */
       }
       .timeline-container::before {
         content: '';
@@ -403,25 +404,37 @@
       /* New CSS for the image-based train */
       .train-container {
         position: absolute;
-        top: -25px;
+        top: -60px; /* start slightly above the visible timeline */
         left: 50%;
         transform: translateX(-50%);
-        z-index: 10;
+        z-index: 9999; /* keep train well above rails/ties */
         display: flex;
         flex-direction: column;
         opacity: 1;
-        transition: none;
+        pointer-events: none; /* avoid intercepting mouse events */
+        will-change: transform;
       }
       
       .train-image {
-    width: 380px;
-    height: auto;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(calc(-50.5% + 5px)) rotate(90deg);
-    transform-origin: center;
-}
+        width: 380px; /* keep a fixed comfortable width */
+        height: auto;
+        position: relative; /* relative to container so GSAP moves container cleanly */
+        top: 0;
+        left: 50%;
+        transform: translateX(-49.5%) rotate(90deg); /* ensure horizontal orientation */
+        transform-origin: center center;
+        display: block;
+        max-width: 90vw;
+      }
+
+      /* Allow timeline container to show elements that start outside its bounds (train emerges) */
+      .timeline-container {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        overflow: visible; /* important so train can appear from above/below */
+      }
+
       /* New Patents Section CSS */
       .patents-section {
         padding: 50px 20px;
@@ -705,6 +718,7 @@
           display: none; /* Hide the train on mobile for simplicity */
         }
         .timeline-section::after {
+          z-index: 999999999999999;
           display: none; /* Hide the bottom tunnel on mobile */
         }
       }
@@ -763,6 +777,80 @@
         .timeline-item, .timeline-left, .timeline-right { width: 100%; left: 0; }
         .timeline-container { padding-left: 18px; padding-right: 18px; }
       }
+
+    /* Mobile-first overrides: improve responsiveness for screens <= 768px */
+    @media (max-width: 768px) {
+      /* Hide decorative track and train entirely on mobile */
+      .train-container,
+      .train-image,
+      .timeline-container::before,
+      .timeline-container::after,
+      .cave-top-cover,
+      .cave-bottom-cover,
+      .timeline-section::after {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+      }
+
+      /* Make timeline single-column and readable */
+      .timeline-container {
+        background: none !important;
+        padding: 12px 10px !important;
+      }
+      .timeline-item, .timeline-left, .timeline-right {
+        width: 100% !important;
+        left: 0 !important;
+        padding: 12px 12px 12px 18px !important;
+      }
+      .timeline-content { padding: 14px !important; }
+
+      /* Title/logo inline, avoid absolute centering which breaks wrapping */
+      h3.timeline-title { position: relative !important; text-align: left !important; min-height: auto !important; }
+      .title-inner { position: static !important; transform: none !important; display: inline-flex !important; align-items: center !important; gap: 8px !important; }
+      .title-inner > img.timeline-logo { width: 32px !important; height: 32px !important; }
+
+      /* Reduce paddings globally for smaller screens */
+      .u-sheet, .u-container-layout, .timeline-content, .patent-card, .publication-card, .skill-card { padding-left: 12px !important; padding-right: 12px !important; }
+      .u-sheet { padding-top: 18px !important; padding-bottom: 18px !important; }
+
+      /* Make grids single-column for readability */
+      .patents-grid, .publications-grid, .skills-grid, .skills-container, .publications-grid { grid-template-columns: 1fr !important; gap: 18px !important; }
+
+      /* Scale down headings and text for mobile readability */
+      h1 { font-size: clamp(1.2rem, 6vw, 1.6rem) !important; }
+      h2 { font-size: clamp(1rem, 5vw, 1.3rem) !important; }
+      h3, .timeline-title { font-size: clamp(0.95rem, 4.2vw, 1.1rem) !important; }
+      p, .timeline-text, .patent-description, .publication-card p, .skill-description { font-size: clamp(0.85rem, 3.6vw, 0.95rem) !important; line-height: 1.5 !important; }
+
+      /* Images should not overflow and remain performant */
+      img { max-width: 100% !important; height: auto !important; }
+      .book-cover { width: 100px !important; height: auto !important; }
+
+      /* Buttons and links full-width for easier tapping */
+      .u-btn { width: 100% !important; box-sizing: border-box; }
+      .read-more-btn, .publication-link { display: block !important; width: 100% !important; text-align: center !important; }
+
+      /* Reduce box-shadows and heavy effects on mobile for performance */
+      .patent-card, .publication-card, .skill-card, .testimonial-card { box-shadow: none !important; }
+
+      /* Accessibility: increase tap target sizes slightly */
+      .read-more-btn, .publication-link, .u-btn { padding: 12px 14px !important; font-size: 1rem !important; }
+
+      /* Ensure hero image doesn't push content horizontally */
+      .u-section-1 .u-image-1 { width: 80% !important; margin: 0 auto 14px auto !important; }
+
+      /* Hide decorative non-essential elements to declutter */
+      .u-line-1, .u-border-3 { display: none !important; }
+
+      /* For very small devices, tweak spacing further */
+      @media (max-width: 420px) {
+        .u-sheet { padding-left: 10px !important; padding-right: 10px !important; }
+        .timeline-content { padding: 10px !important; }
+        h1 { font-size: 1.1rem !important; }
+      }
+    }
 
     </style>
     </head>
