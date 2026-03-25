@@ -852,6 +852,65 @@
       }
     }
 
+    /* Mobile optimization overrides: fix blue link color/tab, improve spacing and tap targets */
+    @media (max-width: 768px) {
+      /* Remove default blue link color and underline on mobile and ensure links inherit text color */
+      a, a:visited, .u-btn, .u-nav-link, .u-button-link, .u-button-style {
+        color: inherit !important;
+        text-decoration: none !important;
+      }
+
+      /* Remove iOS tap highlight (keeps interaction visually cleaner) */
+      a, button, input, textarea {
+        -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+      }
+
+      /* Ensure inputs and buttons are easy to tap and full-width */
+      input[type="text"], input[type="email"], textarea, .u-btn, .read-more-btn {
+        font-size: 1rem !important;
+        padding: 12px 14px !important;
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+
+      /* Make sure header and nav links are visible on mobile (override any theme blues) */
+      .u-header, .u-menu, .u-menu .u-nav-link, .menu-collapse a {
+        color: #111 !important;
+      }
+
+      /* Ensure hero and section texts maintain high contrast */
+      .u-section-1 .u-text-1, .u-section-1 .u-text-2, .u-section-2 .u-text-23, .u-section-2 .u-text-24 {
+        color: #111 !important;
+      }
+
+      /* Prevent horizontal scrolling caused by long words or oversized elements */
+      html, body {
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        word-break: break-word;
+        word-wrap: break-word; /* standard compatibility */
+        overflow-wrap: break-word; /* modern standard */
+        -ms-word-wrap: break-word;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      /* Improve timeline readability on small phones */
+      .timeline-container { padding-left: 12px !important; padding-right: 12px !important; }
+      .timeline-content { padding: 12px !important; }
+
+      /* Reduce heavy visual effects on mobile for performance */
+      .patent-card, .publication-card, .skill-card, .testimonial-card { box-shadow: none !important; }
+
+      /* Ensure images don't overflow while keeping aspect ratio */
+      img { max-width: 100% !important; height: auto !important; }
+
+      /* Make CTA buttons full width and highly tappable */
+      .u-btn-2, .u-btn-4, .publication-link, .read-more-btn { display: block !important; width: 100% !important; text-align: center !important; }
+
+      /* Slightly larger readable text for small screens */
+      p, .timeline-text, .patent-description { font-size: 1rem !important; line-height: 1.5 !important; }
+    }
+
     </style>
     </head>
   <body class="u-body u-xl-mode">
