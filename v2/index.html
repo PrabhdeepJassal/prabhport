@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prabhdeep Singh — Software Developer & Quantum Researcher</title>
+  <meta name="description"
+    content="Personal portfolio of Prabhdeep Singh. Software Development Engineer, Quantum Computing Researcher, 4 Patents Innovator, Author.">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Magnetic Cursor (Awwwards Ball) -->
+  <div class="mag-cursor-dot" id="magCursorDot" aria-hidden="true"></div>
+  <div class="mag-cursor-circle" id="magCursorCircle" aria-hidden="true"></div>
+
+  <!-- HERO STAGE (EXACT SCREENSHOT MATCH) -->
+  <header class="hero-stage" id="hero">
+    <!-- Top Navigation Bar -->
+    <div class="hero-top-nav">
+      <div class="brand-tag">
+        <span class="brand-dot"></span>
+        <span>@ Code by Prabhdeep</span>
+      </div>
+
+      <!-- Quick Command Palette Pill (⌘K) -->
+      <button class="cmd-palette-trigger" id="cmdPaletteTrigger" aria-label="Open Command Menu (⌘K)" title="Press ⌘K or Ctrl+K">
+        <span class="cmd-icon-key">⌘K</span>
+        <span class="cmd-text">Quick Actions</span>
+      </button>
+
+      <div class="hero-header-desc">
+        Passionate Creative Designer and Developer, dedicated to crafting innovative solutions and exceptional digital
+        experiences through modern technologies
+      </div>
+    </div>
+
+
+    <!-- Interactive Role Callout Next to Picture (Screenshot Aesthetic) -->
+    <div class="hero-callout-group" id="heroCalloutGroup">
+      <div class="hero-role-text" id="heroRoleText" role="button" tabindex="0"
+        title="Click to cycle interactive skills">
+        <span class="role-line role-line-1" id="roleLine1">Creative</span>
+        <span class="role-line role-line-2" id="roleLine2">Designer &amp; Developer</span>
+      </div>
+      <button class="floating-circle-arrow" id="heroArrowBtn" aria-label="Explore Portfolio" title="Explore Portfolio">
+        <span class="arrow-glyph">↗</span>
+      </button>
+    </div>
+
+    <!-- Centerpiece: Giant Sliding Marquee & Portrait Cutout -->
+    <div class="hero-centerpiece">
+      <!-- Centered Portrait Cutout -->
+      <div class="hero-portrait-wrapper">
+        <img src="assets/Smiling%20Sikh%20Man%20in%20Turban%20and%20Shirt.png" alt="Prabhdeep Singh"
+          class="hero-portrait-img">
+      </div>
+
+      <!-- Giant Marquee running across bottom half OVER the portrait -->
+      <div class="marquee-track-hero" aria-hidden="true">
+        <div class="marquee-content-hero">
+          <span class="hero-marquee-text">Software Developer &amp; Quantum Researcher &amp; AI Engineer &amp; Patent
+            Innovator &amp;&nbsp;</span>
+          <span class="hero-marquee-text">Software Developer &amp; Quantum Researcher &amp; AI Engineer &amp; Patent
+            Innovator &amp;&nbsp;</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CURVED PORTAL TRANSITION (Dennis Snellenberg Iconic Arc) -->
+  <div class="curved-hero-arc" aria-hidden="true">
+    <svg class="curved-arc-svg" viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path id="heroCurvePath" d="M 0,0 Q 720,80 1440,0 L 1440,90 L 0,90 Z"></path>
+    </svg>
+  </div>
+
+  <!-- FLOATING MACOS DYNAMIC DOCK (FIXED AT BOTTOM) -->
+  <nav class="floating-dock-container" aria-label="Quick Dock Navigation">
+    <div class="floating-dock">
+      <!-- 1. Home -->
+      <button class="dock-btn" data-target="#hero" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M3 10.5L12 3l9 7.5v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span class="dock-tooltip">Home</span>
+      </button>
+
+      <!-- 2. Code / Experience -->
+      <button class="dock-btn" data-target="#work" aria-label="Work & Experience">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"
+          stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="4" />
+          <polyline points="7 9 10 12 7 15" />
+          <line x1="13" y1="15" x2="17" y2="15" />
+        </svg>
+        <span class="dock-tooltip">Experience</span>
+      </button>
+
+      <!-- 3. Cube / Patents -->
+      <button class="dock-btn" data-target="#patents" aria-label="Patents">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+          <line x1="12" y1="22.08" x2="12" y2="12" />
+        </svg>
+        <span class="dock-tooltip">Patents</span>
+      </button>
+
+      <!-- 4. Central Headshot Avatar -->
+      <button class="dock-btn dock-avatar-btn" data-target="#about" aria-label="About Prabhdeep">
+        <div class="dock-avatar-ring">
+          <img src="assets/Cheerful%20Turbaned%20Avatar%20Portrait.png" alt="Prabhdeep avatar" class="dock-avatar-img">
+        </div>
+        <span class="dock-tooltip">About</span>
+      </button>
+
+      <!-- 5. Document / Resume Modal -->
+      <button class="dock-btn" id="dockResumeBtn" aria-label="Curriculum Vitae">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <line x1="10" y1="9" x2="8" y2="9" />
+        </svg>
+        <span class="dock-tooltip">CV Resume</span>
+      </button>
+
+      <!-- 6. GitHub -->
+      <a href="https://github.com/PrabhdeepJassal" target="_blank" rel="noopener noreferrer" class="dock-btn"
+        aria-label="GitHub">
+        <svg viewBox="0 0 24 24" class="fill-current">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+        </svg>
+        <span class="dock-tooltip">GitHub</span>
+      </a>
+
+      <!-- 7. Contact -->
+      <button class="dock-btn" data-target="#contact" aria-label="Contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"
+          stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+        </svg>
+        <span class="dock-tooltip">Contact</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN STUDIO CONTENT (DARK AESTHETIC) -->
+  <main class="main-wrapper">
+    <!-- ABOUT MANIFESTO -->
+    <section class="studio-section" id="about">
+      <div class="section-label">01 // PHILOSOPHY &amp; PROFILE</div>
+      <h2 class="statement-headline">
+        Helping ambitious brands, teams, and research labs turn <em>quantum mechanics, autonomous voice agents,</em> and
+        full-stack software into transformative products.
+      </h2>
+
+      <div class="stats-grid-v2">
+        <div class="stat-item-v2">
+          <span class="stat-num-v2">03+</span>
+          <span class="stat-desc-v2">Years Engineering</span>
+        </div>
+        <div class="stat-item-v2">
+          <span class="stat-num-v2">04</span>
+          <span class="stat-desc-v2">Patents Authored</span>
+        </div>
+        <div class="stat-item-v2">
+          <span class="stat-num-v2">01</span>
+          <span class="stat-desc-v2">Published Book</span>
+        </div>
+        <div class="stat-item-v2">
+          <span class="stat-num-v2">14+</span>
+          <span class="stat-desc-v2">Key Systems Built</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTED WORK & EXPERIENCE -->
+    <section class="studio-section" id="work">
+      <div class="section-label">02 // CAREER TRAJECTORY</div>
+      <div class="work-table-v2" id="workTableV2">
+        <!-- Row 1: Mphasis -->
+        <div class="work-row-v2" data-project-id="mphasis" role="button" tabindex="0">
+          <div class="work-year-v2">2026 — PRESENT</div>
+          <div class="work-title-v2">Mphasis</div>
+          <div class="work-client-v2">Software Development Engineer (Java Full-Stack)</div>
+          <div class="work-arrow-v2">↗</div>
+        </div>
+
+        <!-- Row 2: Mavriq AI -->
+        <div class="work-row-v2" data-project-id="mavriq" role="button" tabindex="0">
+          <div class="work-year-v2">2025 — 2026</div>
+          <div class="work-title-v2">Mavriq AI</div>
+          <div class="work-client-v2">AI / ML Engineer (Voice Agents &amp; ElevenLabs)</div>
+          <div class="work-arrow-v2">↗</div>
+        </div>
+
+        <!-- Row 3: Chitkara University -->
+        <div class="work-row-v2" data-project-id="chitkara" role="button" tabindex="0">
+          <div class="work-year-v2">2022 — 2024</div>
+          <div class="work-title-v2">Chitkara University</div>
+          <div class="work-client-v2">Quantum Computing Scholar (Teleportation &amp; Qiskit)</div>
+          <div class="work-arrow-v2">↗</div>
+        </div>
+
+        <!-- Row 4: ITL -->
+        <div class="work-row-v2" data-project-id="itl" role="button" tabindex="0">
+          <div class="work-year-v2">2024</div>
+          <div class="work-title-v2">ITL</div>
+          <div class="work-client-v2">Mobile Engineer (React Native &amp; Automation)</div>
+          <div class="work-arrow-v2">↗</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 PATENTS SHOWCASE -->
+    <section class="studio-section" id="patents">
+      <div class="section-label">03 // INTELLECTUAL PROPERTY</div>
+      <div class="patents-grid-v2">
+        <!-- Patent 1 -->
+        <div class="patent-card-v2" data-patent-id="p1">
+          <div class="patent-top-v2">
+            <span class="patent-num-v2">PATENT 01 // PUBLISHED</span>
+            <span class="patent-badge-v2">Published</span>
+          </div>
+          <h3 class="patent-title-v2">Earphone with Auto On &amp; Off via Brain Signal Monitoring</h3>
+          <p class="patent-p-v2">
+            Integrated dry-contact EEG sensors detecting alpha-to-theta transition waves to verify sleep onset and
+            automatically mute audio, equipped with internal UV-C chambers to sterilize in-ear bacteria.
+          </p>
+          <span class="patent-action-v2">Inspect Patent PDF Gazette &amp; Blueprint →</span>
+        </div>
+
+        <!-- Patent 2 -->
+        <div class="patent-card-v2" data-patent-id="p2">
+          <div class="patent-top-v2">
+            <span class="patent-num-v2">PATENT 02 // PUBLISHED</span>
+            <span class="patent-badge-v2">Published</span>
+          </div>
+          <h3 class="patent-title-v2">Device and Method for Detecting Infection State of Hair</h3>
+          <p class="patent-p-v2">
+            Diagnostic trichology wand with multi-spectral optical reflectance imaging evaluating scalp pathogen
+            presence, sebum oxidation, and microscopic hair cuticle damage.
+          </p>
+          <span class="patent-action-v2">Inspect Patent PDF Gazette &amp; Blueprint →</span>
+        </div>
+
+        <!-- Patent 3 -->
+        <div class="patent-card-v2" data-patent-id="p3">
+          <div class="patent-top-v2">
+            <span class="patent-num-v2">PATENT 03 // PUBLISHED</span>
+            <span class="patent-badge-v2">Published</span>
+          </div>
+          <h3 class="patent-title-v2">Wearable Device for Generating Sound of Anklet Bell</h3>
+          <p class="patent-p-v2">
+            Kinetic ankle strap featuring piezoelectric impact transducers and 6-axis IMU velocity tracking, triggering
+            real-time DSP physical-modeling synthesis of traditional Ghungroo brass bells.
+          </p>
+          <span class="patent-action-v2">Inspect Patent PDF Gazette &amp; Blueprint →</span>
+        </div>
+
+        <!-- Patent 4 -->
+        <div class="patent-card-v2" data-patent-id="p4">
+          <div class="patent-top-v2">
+            <span class="patent-num-v2">PATENT 04 // FILED</span>
+            <span class="patent-badge-v2 filed">Filed</span>
+          </div>
+          <h3 class="patent-title-v2">Colorblind Multi-Usable Electric Toothbrush with Biometrics</h3>
+          <p class="patent-p-v2">
+            Replaces ambiguous red/green indicator LEDs with high-contrast tactile OLED numeric telemetry for colorblind
+            accessibility, paired with fingerprint multi-user profile switching.
+          </p>
+          <span class="patent-action-v2">Inspect Patent PDF Gazette &amp; Blueprint →</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 & 05 // THE QUANTUM MIND: NEURAL BRAIN NETWORK -->
+    <section class="studio-section brain-section" id="book">
+      <div id="articles" style="position: relative; top: -100px; visibility: hidden;"></div>
+      <div class="section-label">04 // THE QUANTUM MIND &bull; PUBLICATIONS &amp; RESEARCH NEURAL NETWORK</div>
+      <div class="section-heading-wrap">
+        <h2 class="studio-title-v2">The Research Brain.</h2>
+        <p class="studio-subtitle-v2">
+          A living dual-hemisphere cerebral connectome. The central commanding hyper-core &mdash; <strong style="color: #fbbf24;">QUANTUM GIGGLES</strong> &mdash; actively consumes and synthesizes incoming research streams from the 4 primary master hubs and 14 sub-masters. Filaments magnetically pull toward your cursor &mdash; click any glowing node to read the treatise or book.
+        </p>
+      </div>
+
+      <!-- PURE CANVAS NEURAL NETWORK STAGE -->
+      <div class="brain-network-stage" id="brainNetworkStage">
+        <canvas id="brainCanvas" class="brain-canvas"></canvas>
+        <!-- Floating tooltip rendered by JS on hover -->
+        <div class="brain-tooltip" id="brainTooltip" aria-hidden="true"></div>
+        <!-- Floating Neural HUD Status -->
+        <div class="brain-hud" aria-hidden="true">
+          <div class="brain-hud-item">
+            <span class="brain-hud-dot gold-pulse"></span>
+            <span>HYPER-CORE: QUANTUM GIGGLES</span>
+          </div>
+          <div class="brain-hud-item">
+            <span class="brain-hud-dot cyan-pulse"></span>
+            <span>4 PRIMARY HUBS &bull; 14 SUB-MASTERS</span>
+          </div>
+          <div class="brain-hud-item brain-hud-hint">
+            <span>// ROUTES PULL WITH CURSOR &bull; CLICK TO READ</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- BIG CONTACT HERO SECTION -->
+    <section class="contact-hero-v2" id="contact">
+      <div class="section-label">05 // TRANSMISSION DESK</div>
+      <h2 class="contact-giant-title">
+        Let’s work<br>together.
+      </h2>
+
+      <div class="contact-channels-v2">
+        <a href="mailto:prabhdeepsinghjassal@gmail.com" class="channel-pill-v2">
+          <svg class="channel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M22 6l-10 7L2 6" />
+          </svg>
+          <span>prabhdeepsinghjassal@gmail.com</span>
+        </a>
+        <a href="tel:+919464613198" class="channel-pill-v2">
+          <svg class="channel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="3" />
+            <line x1="12" y1="18" x2="12.01" y2="18" />
+          </svg>
+          <span>+91 94646-13198</span>
+        </a>
+        <a href="https://github.com/PrabhdeepJassal" target="_blank" rel="noopener noreferrer" class="channel-pill-v2">
+          <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/prabhdeep-singh-jassal" target="_blank" rel="noopener noreferrer"
+          class="channel-pill-v2">
+          <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+        <a href="https://leetcode.com/u/prabhdeepsinghjassal/" target="_blank" rel="noopener noreferrer"
+          class="channel-pill-v2">
+          <svg class="channel-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 4.818 3.864c.354.047.708.058 1.06.034.332-.023.662-.073.985-.15a6.002 6.002 0 0 0 2.102-1.026l3.963-3.69 2.502-2.33a1.385 1.385 0 0 0 .37-1.39 1.374 1.374 0 0 0-.965-.965 1.382 1.382 0 0 0-1.387.37l-6.46 6.02a3.256 3.256 0 0 1-2.28 1.09c-.19.014-.38.008-.57-.018a3.224 3.224 0 0 1-2.617-2.1c-.097-.276-.157-.565-.178-.857a3.02 3.02 0 0 1 .069-1.296 3.12 3.12 0 0 1 .712-1.196L7.96 8.358l4.56-4.839A1.376 1.376 0 0 0 13.483 0zm-.833 15.24a1.376 1.376 0 0 0-1.375 1.375v.003a1.376 1.376 0 0 0 1.375 1.375h7.625a1.376 1.376 0 0 0 1.375-1.375v-.003a1.376 1.376 0 0 0-1.375-1.375h-7.625z" />
+          </svg>
+          <span>LeetCode</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER BOTTOM -->
+    <footer class="footer-bottom-v2">
+      <div>© 2026 Prabhdeep Singh &bull; Nabha, Punjab, India</div>
+      <div>
+        <a href="../index.html" class="back-to-v1-link">← Switch to Editorial Edition (v1)</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- PATENT TECHNICAL BLUEPRINT & CUSTOM PDF VIEWER MODAL -->
+  <div class="modal-overlay-v2 patent-modal-overlay" id="patentModalV2" role="dialog" aria-modal="true" aria-labelledby="patentModalTitleV2">
+    <div class="modal-card-v2 patent-modal-card" id="patentModalCardV2">
+      <!-- Top Header / Bar -->
+      <div class="modal-head-v2 pv-head-v2">
+        <div class="pv-head-title-wrap">
+          <span class="pv-kicker-badge" id="patentModalKicker">PATENT INSPECTOR</span>
+          <h3 class="modal-title-v2 pv-title-text" id="patentModalTitleV2">Patent Specification</h3>
+        </div>
+        <div class="pv-head-actions">
+          <button class="pv-head-btn" id="pvMaximizeBtn" title="Toggle Fullscreen Expansion" aria-label="Expand Viewer">
+            <svg class="pv-icon-expand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 3 21 3 21 9"/>
+              <polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/>
+              <line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+          <button class="modal-close-btn-v2" id="patentModalCloseV2" title="Close Viewer (ESC)" aria-label="Close">✕</button>
+        </div>
+      </div>
+
+      <!-- Custom Patent Document & Blueprint Viewer -->
+      <div class="patent-viewer-container">
+        <!-- Interactive Toolbar -->
+        <div class="patent-viewer-toolbar">
+          <div class="pv-toolbar-left">
+            <div class="pv-tab-group" role="tablist">
+              <button class="pv-tab-btn is-active" id="pvTabPdf" data-tab="pdf" role="tab" aria-selected="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <span>Patent PDF Gazette</span>
+              </button>
+              <button class="pv-tab-btn" id="pvTabSpecs" data-tab="specs" role="tab" aria-selected="false">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                <span>Architecture &amp; Blueprint</span>
+              </button>
+            </div>
+            <span class="pv-meta-badge" id="pvStatusBadge">Published Gazette</span>
+          </div>
+
+          <!-- PDF specific controls (Page navigation & Zoom) -->
+          <div class="pv-toolbar-controls" id="pvPdfToolbarControls">
+            <!-- Page Paging -->
+            <div class="pv-control-pill pv-paging-pill">
+              <button class="pv-btn-icon" id="pvPrevPageBtn" title="Previous Page (←)" aria-label="Previous Page">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <span class="pv-page-text">
+                Page <strong id="pvCurrentPage">1</strong> / <span id="pvTotalPages">1</span>
+              </span>
+              <button class="pv-btn-icon" id="pvNextPageBtn" title="Next Page (→)" aria-label="Next Page">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+
+            <!-- Zoom Controls -->
+            <div class="pv-control-pill pv-zoom-pill">
+              <button class="pv-btn-icon" id="pvZoomOutBtn" title="Zoom Out (−)" aria-label="Zoom Out">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="pv-zoom-label" id="pvZoomLevelBtn" title="Click to Reset Zoom (100%)">100%</button>
+              <button class="pv-btn-icon" id="pvZoomInBtn" title="Zoom In (+)" aria-label="Zoom In">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+
+            <button class="pv-btn-action" id="pvFitWidthBtn" title="Fit to Viewer Width">Fit Width</button>
+          </div>
+        </div>
+
+        <!-- Viewer Main Body -->
+        <div class="patent-viewer-body">
+          <!-- Pane 1: PDF Viewer -->
+          <div class="pv-view-pane pv-pdf-pane is-active" id="pvPdfPane">
+            <div class="pv-scroll-viewport" id="pvScrollViewport">
+              <!-- Loading Indicator -->
+              <div class="pv-loader" id="pvLoader">
+                <div class="pv-spinner"></div>
+                <div class="pv-loader-text">Loading patent gazette document...</div>
+              </div>
+
+              <!-- Rendered Pages Flow -->
+              <div class="pv-canvas-flow" id="pvCanvasFlow">
+                <!-- Canvases added dynamically per page -->
+              </div>
+
+              <!-- Fallback Frame Container (if PDF.js blocked on file://) -->
+              <div class="pv-embed-container" id="pvEmbedContainer" style="display:none;"></div>
+
+              <!-- Filed / No PDF Notice (for p4 or missing file) -->
+              <div class="pv-notice-container" id="pvNoticeContainer" style="display:none;">
+                <div class="pv-notice-card">
+                  <div class="pv-notice-icon">
+                    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                  </div>
+                  <h4>Official Patent Application Filed &amp; Docketed</h4>
+                  <p id="pvNoticeDesc">This intellectual property application has been officially filed with the Indian Patent Office (CGPDTM) and is currently in examination pending published gazette issuance.</p>
+                  <button class="btn-pill-v2" id="pvNoticeSwitchSpecsBtn" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; margin-top: 1rem;">
+                    Inspect System Architecture &amp; Claims Blueprint ↗
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 2: Architecture & Specs -->
+          <div class="pv-view-pane pv-specs-pane" id="pvSpecsPane">
+            <div class="pv-specs-scroll" id="patentModalBodyV2">
+              <!-- Technical blueprint & claims injected by app.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CURRICULUM VITAE MODAL -->
+  <div class="modal-overlay-v2" id="resumeModalV2" role="dialog" aria-modal="true">
+    <div class="modal-card-v2">
+      <div class="modal-head-v2">
+        <h3 class="modal-title-v2">Prabhdeep Singh — Curriculum Vitae</h3>
+        <button class="modal-close-btn-v2" id="resumeModalCloseV2" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body-v2">
+        <h2 style="font-size: 1.6rem; margin-bottom: 0.35rem; color: #ffffff;">Prabhdeep Singh</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          AI/ML Engineer &bull; Quantum Computing Researcher &bull; SDE at Mphasis &bull; 4 Patents &bull; Punjab, India
+        </p>
+        <hr style="border: none; border-top: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+
+        <h4
+          style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.75rem;">
+          Experience</h4>
+        <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">Mphasis:</strong> Software Development Engineer
+          (Feb 2026 – Present) — Java &amp; Spring Boot enterprise backend systems.</p>
+        <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">Mavriq AI:</strong> AI/ML Engineer (Oct 2025 –
+          Feb 2026) — ElevenLabs conversational voice agents with 3× response acceleration.</p>
+        <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">Chitkara University:</strong> Quantum Research
+          Scholar (Jan 2022 – Dec 2024) — Quantum teleportation &amp; Grover's algorithm simulations.</p>
+        <p style="margin-bottom: 1.5rem;"><strong style="color: #fff;">ITL:</strong> Mobile Developer Intern (Jan 2024 –
+          Jun 2024) — Cross-platform React Native document workflows.</p>
+
+        <h4
+          style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.75rem;">
+          Education</h4>
+        <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">MCA (CGPA 7.80/10.0):</strong> Thapar Institute of Engineering and Technology (2024 – 2026 &bull; Completed)</p>
+        <p style="margin-bottom: 1.5rem;"><strong style="color: #fff;">BCA (GPA 9.0/10.0):</strong> Chitkara University (2021 – 2024 &bull; Completed with Honors)</p>
+
+        <h4
+          style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.75rem;">
+          Patents (4)</h4>
+        <p style="margin-bottom: 0.4rem;">1. Brainwave Earphone with Auto On &amp; Off and UV Sterilization (Published)
+        </p>
+        <p style="margin-bottom: 0.4rem;">2. Scalp and Hair Cuticle Multi-Spectral Infection Detector (Published)</p>
+        <p style="margin-bottom: 0.4rem;">3. Smart Kinetic Anklet Bell (Ghungroo) Sound Synthesizer (Published)</p>
+        <p style="margin-bottom: 1.5rem;">4. Colorblind Multi-User Biometric Electric Toothbrush (Filed)</p>
+
+        <div style="margin-top: 2rem;">
+          <button onclick="window.print()" class="btn-pill-v2"
+            style="padding: 0.65rem 1.6rem; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.55rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
+            <span>Print / Save as PDF</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT DEEP-DIVE ARCHITECTURE MODAL -->
+  <div class="modal-overlay-v2" id="projectModalV2" role="dialog" aria-modal="true">
+      <div class="modal-card-v2">
+        <div class="modal-head-v2">
+          <h3 class="modal-title-v2" id="projectModalTitleV2">Architecture Deep Dive</h3>
+          <button class="modal-close-btn-v2" id="projectModalCloseV2" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body-v2" id="projectModalBodyV2">
+          <!-- Injected dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+
+  <!-- RESEARCH ARTICLE DEEP-DIVE MODAL -->
+  <div class="modal-overlay-v2" id="articleModalV2" role="dialog" aria-modal="true" aria-labelledby="articleModalTitleV2">
+    <div class="modal-card-v2 article-modal-card">
+      <div class="modal-head-v2">
+        <div class="pv-head-title-wrap">
+          <span class="pv-kicker-badge" id="articleModalKicker">SCIENTIFIC INQUIRY</span>
+          <h3 class="modal-title-v2" id="articleModalTitleV2">Article Title</h3>
+        </div>
+        <button class="modal-close-btn-v2" id="articleModalCloseV2" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body-v2" id="articleModalBodyV2">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+
+    <!-- FLOATING INTERACTIVE PROJECT CURSOR PREVIEW (Dennis Snellenberg Signature) -->
+    <div class="floating-project-preview" id="floatingProjectPreview" aria-hidden="true">
+      <div class="preview-card" id="previewCard">
+        <div class="preview-badge" id="previewBadge">Mphasis • Enterprise</div>
+        <div class="preview-title" id="previewTitle">Java &amp; Spring Boot Core</div>
+        <div class="preview-tags" id="previewTags">Microservices • Distributed Systems</div>
+        <div class="preview-cta">Inspect Case Study ↗</div>
+      </div>
+    </div>
+
+    <!-- MACOS SPOTLIGHT COMMAND PALETTE (⌘K / Ctrl+K) -->
+    <div class="cmd-palette-overlay" id="cmdPaletteOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="cmd-palette-card">
+        <div class="cmd-palette-input-wrap">
+          <svg class="cmd-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="cmdSearchInput" class="cmd-search-input" placeholder="Type a command or jump to section... (ESC to close)" autocomplete="off" spellcheck="false">
+          <span class="cmd-esc-badge">ESC</span>
+        </div>
+        <div class="cmd-palette-list" id="cmdPaletteList">
+          <!-- Dynamically populated & fuzzy filtered by app.js -->
+        </div>
+        <div class="cmd-palette-footer">
+          <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate</span>
+          <span><kbd>↵</kbd> Select</span>
+          <span><kbd>ESC</kbd> Close</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION HUD -->
+    <div class="toast-notification-hud" id="toastNotificationHud" aria-live="polite"></div>
+
+
+    <!-- PDF.js Mozilla Library for In-Browser Vector Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

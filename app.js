@@ -1,0 +1,3160 @@
+/**
+ * ============================================================================
+ * PRABHDEEP SINGH — MODERN MINIMAL AWWWARDS ENGINE
+ * ============================================================================
+ * Features:
+ *  01. Magnetic Ball Cursor System
+ *  02. Magnetic Elastic Floating Arrow Button
+ *  03. Dynamic Marquee Velocity Acceleration
+ *  04. Floating macOS Island Dock Navigation & Active Section Tracker
+ *  05. Patent Technical Blueprints & In-Modal PDF Viewer
+ *  06. Curriculum Vitae (CV) Modal
+ *  07. Smooth Navigation Links
+ *  08. Dennis Snellenberg Floating Cursor Project Preview
+ *  09. The Quantum Mind: Neural Brain Connectome
+ *  10. Project Architecture Deep-Dive Drawer
+ *  11. Toast Notification HUD
+ *  12. Spotlight Command Palette (⌘K / Ctrl+K)
+ * ============================================================================
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
+  /* ==========================================================================
+     01. MAGNETIC BALL CURSOR (Awwwards Style)
+     ========================================================================== */
+  const cursorDot    = document.getElementById('magCursorDot');
+  const cursorCircle = document.getElementById('magCursorCircle');
+
+  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (hasFinePointer && cursorDot && cursorCircle) {
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let circleX = mouseX;
+    let circleY = mouseY;
+    let isVisible = true;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.left = `${mouseX}px`;
+      cursorDot.style.top  = `${mouseY}px`;
+
+      if (!isVisible) {
+        isVisible = true;
+        cursorDot.classList.remove('is-hidden');
+        cursorCircle.classList.remove('is-hidden');
+      }
+    });
+
+    function animateCursorCircle() {
+      circleX += (mouseX - circleX) * 0.15;
+      circleY += (mouseY - circleY) * 0.15;
+      cursorCircle.style.left = `${circleX}px`;
+      cursorCircle.style.top  = `${circleY}px`;
+      requestAnimationFrame(animateCursorCircle);
+    }
+    requestAnimationFrame(animateCursorCircle);
+
+    document.addEventListener('mouseleave', () => {
+      isVisible = false;
+      cursorDot.classList.add('is-hidden');
+      cursorCircle.classList.add('is-hidden');
+    });
+
+    document.addEventListener('mouseenter', () => {
+      isVisible = true;
+      cursorDot.classList.remove('is-hidden');
+      cursorCircle.classList.remove('is-hidden');
+    });
+
+    const hoverSelectors = 'a, button, [data-hover], .work-row-v2, .patent-card-v2, .floating-circle-arrow, .dock-btn, .hero-role-text, .hero-callout-group';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(hoverSelectors)) {
+        cursorDot.classList.add('is-hovering');
+        cursorCircle.classList.add('is-hovering');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(hoverSelectors)) {
+        cursorDot.classList.remove('is-hovering');
+        cursorCircle.classList.remove('is-hovering');
+      }
+    });
+  }
+
+
+  /* ==========================================================================
+     02. INTERACTIVE ROLE CALLOUT & MAGNETIC FLOATING ARROW
+     ========================================================================== */
+  const calloutGroup = document.getElementById('heroCalloutGroup');
+  const arrowBtn     = document.getElementById('heroArrowBtn');
+  const roleText     = document.getElementById('heroRoleText');
+  const roleLine1    = document.getElementById('roleLine1');
+  const roleLine2    = document.getElementById('roleLine2');
+
+  // Magnetic Elastic Motion for Callout Group & Arrow
+  if (calloutGroup && hasFinePointer) {
+    calloutGroup.addEventListener('mousemove', (e) => {
+      const rect = calloutGroup.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const deltaX = (e.clientX - centerX) * 0.22;
+      const deltaY = (e.clientY - centerY) * 0.22;
+      calloutGroup.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    });
+
+    calloutGroup.addEventListener('mouseleave', () => {
+      calloutGroup.style.transform = 'translate(0px, 0px)';
+    });
+  }
+
+  // Interactive Roles personalized to Prabhdeep
+  const roles = [
+    { line1: 'Creative', line2: 'Designer & Developer' },
+    { line1: 'AI & ML', line2: 'Conversational Voice' },
+    { line1: 'Quantum', line2: 'Computing Researcher' },
+    { line1: 'Inventor', line2: '4 Granted Patents' }
+  ];
+
+  let currentRoleIdx = 0;
+  let roleCycleTimer = null;
+
+  function switchRole(nextIdx) {
+    if (!roleText || !roleLine1 || !roleLine2) return;
+    roleText.classList.add('is-switching');
+    setTimeout(() => {
+      currentRoleIdx = nextIdx !== undefined ? nextIdx : (currentRoleIdx + 1) % roles.length;
+      roleLine1.textContent = roles[currentRoleIdx].line1;
+      roleLine2.textContent = roles[currentRoleIdx].line2;
+      roleText.classList.remove('is-switching');
+    }, 220);
+  }
+
+  if (roleText) {
+    roleText.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchRole();
+      restartRoleTimer();
+    });
+
+    roleText.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        switchRole();
+        restartRoleTimer();
+      }
+    });
+  }
+
+  function restartRoleTimer() {
+    if (roleCycleTimer) clearInterval(roleCycleTimer);
+    roleCycleTimer = setInterval(() => {
+      switchRole();
+    }, 4800);
+  }
+  restartRoleTimer();
+
+  // Arrow click navigates smoothly to Work showcase
+  if (arrowBtn) {
+    arrowBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const target = document.getElementById('work') || document.getElementById('about');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+
+  /* ==========================================================================
+     03. FLOATING MACOS DOCK NAVIGATION & DYNAMIC SIDE-SNAP MORPH
+     ========================================================================== */
+  const dockContainer = document.querySelector('.floating-dock-container');
+  const dockButtons   = document.querySelectorAll('.dock-btn[data-target]');
+  const sections      = document.querySelectorAll('section[id], header[id]');
+
+  // Smooth scroll click handler
+  dockButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      if (targetId) {
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  // Track active section and dynamic 3-phase collapse, travel & expand
+  const LAPTOP_MIN_WIDTH = 992;
+  function isLaptop() {
+    return window.innerWidth >= LAPTOP_MIN_WIDTH;
+  }
+
+  let isSideDocked = false;
+  let isTransitioning = false;
+  let transitionTimeout = null;
+
+  function morphToSide() {
+    if (!isLaptop() || isSideDocked || isTransitioning) return;
+    isSideDocked = true;
+    isTransitioning = true;
+    if (transitionTimeout) clearTimeout(transitionTimeout);
+
+    // Step 1: Collapse whole bar into the center circle (right where it is at bottom)
+    dockContainer.classList.add('is-collapsed');
+    dockContainer.classList.remove('is-bottom-docked');
+
+    // Step 2: Once collapsed (after 140ms), travel the center circle over to the right side
+    transitionTimeout = setTimeout(() => {
+      if (!isLaptop()) {
+        dockContainer.classList.remove('is-collapsed', 'is-side-docked');
+        dockContainer.classList.add('is-bottom-docked');
+        isSideDocked = false;
+        isTransitioning = false;
+        return;
+      }
+      dockContainer.classList.add('is-side-docked');
+
+      // Step 3: Once arrived at right side (after 280ms travel), open both ways instantly!
+      transitionTimeout = setTimeout(() => {
+        dockContainer.classList.remove('is-collapsed');
+        isTransitioning = false;
+      }, 280);
+    }, 140);
+  }
+
+  function morphToBottom() {
+    if (!isSideDocked || isTransitioning) return;
+    isSideDocked = false;
+    isTransitioning = true;
+    if (transitionTimeout) clearTimeout(transitionTimeout);
+
+    // Step 1: Collapse vertical bar into the center circle on the right side
+    dockContainer.classList.add('is-collapsed');
+
+    // Step 2: Once collapsed (after 140ms), travel the center circle down to the bottom center
+    transitionTimeout = setTimeout(() => {
+      dockContainer.classList.remove('is-side-docked');
+      dockContainer.classList.add('is-bottom-docked');
+
+      // Step 3: Once arrived at bottom center (after 280ms travel), open both ways horizontally!
+      transitionTimeout = setTimeout(() => {
+        dockContainer.classList.remove('is-collapsed');
+        isTransitioning = false;
+      }, 280);
+    }, 140);
+  }
+
+  function handleDockScroll() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+
+    // Trigger 3-phase morph based on scroll fold ONLY ON LAPTOP (>= 992px)
+    if (dockContainer) {
+      if (isLaptop()) {
+        if (scrollY > 120) {
+          morphToSide();
+        } else {
+          morphToBottom();
+        }
+      } else {
+        // Mobile / Tablet: Guarantee dock stays firmly pinned to bottom center
+        if (isSideDocked || dockContainer.classList.contains('is-collapsed') || dockContainer.classList.contains('is-side-docked')) {
+          isSideDocked = false;
+          isTransitioning = false;
+          if (transitionTimeout) clearTimeout(transitionTimeout);
+          dockContainer.classList.remove('is-side-docked', 'is-collapsed');
+          dockContainer.classList.add('is-bottom-docked');
+        }
+      }
+    }
+
+    // Track active section and highlight dock icon
+    let currentId = '';
+    const scrollPosition = scrollY + 220;
+
+    sections.forEach((section) => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPosition >= top && scrollPosition < top + height) {
+        currentId = `#${section.id}`;
+      }
+    });
+
+    if (currentId) {
+      dockButtons.forEach((btn) => {
+        const target = btn.getAttribute('data-target');
+        if (target === currentId) {
+          btn.style.color = '#ffffff';
+          btn.style.background = 'rgba(255, 255, 255, 0.18)';
+        } else {
+          btn.style.color = '';
+          btn.style.background = '';
+        }
+      });
+    }
+  }
+
+  window.addEventListener('scroll', handleDockScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    if (!isLaptop() && dockContainer) {
+      isSideDocked = false;
+      isTransitioning = false;
+      if (transitionTimeout) clearTimeout(transitionTimeout);
+      dockContainer.classList.remove('is-side-docked', 'is-collapsed');
+      dockContainer.classList.add('is-bottom-docked');
+    }
+  });
+  handleDockScroll();
+
+
+  /* ==========================================================================
+     04. CUSTOM IN-MODAL PATENT PDF VIEWER & BLUEPRINT INSPECTION
+     ========================================================================== */
+  const patentModal           = document.getElementById('patentModalV2');
+  const patentModalCard       = document.getElementById('patentModalCardV2');
+  const patentModalTitle      = document.getElementById('patentModalTitleV2');
+  const patentModalKicker     = document.getElementById('patentModalKicker');
+  const patentModalClose      = document.getElementById('patentModalCloseV2');
+  const patentModalBody       = document.getElementById('patentModalBodyV2');
+  const pvMaximizeBtn         = document.getElementById('pvMaximizeBtn');
+  const pvTabPdf              = document.getElementById('pvTabPdf');
+  const pvTabSpecs            = document.getElementById('pvTabSpecs');
+  const pvStatusBadge         = document.getElementById('pvStatusBadge');
+  const pvPdfToolbarControls  = document.getElementById('pvPdfToolbarControls');
+  const pvPrevPageBtn         = document.getElementById('pvPrevPageBtn');
+  const pvNextPageBtn         = document.getElementById('pvNextPageBtn');
+  const pvCurrentPageEl       = document.getElementById('pvCurrentPage');
+  const pvTotalPagesEl        = document.getElementById('pvTotalPages');
+  const pvZoomOutBtn          = document.getElementById('pvZoomOutBtn');
+  const pvZoomInBtn           = document.getElementById('pvZoomInBtn');
+  const pvZoomLevelBtn        = document.getElementById('pvZoomLevelBtn');
+  const pvFitWidthBtn         = document.getElementById('pvFitWidthBtn');
+  const pvPdfPane             = document.getElementById('pvPdfPane');
+  const pvSpecsPane           = document.getElementById('pvSpecsPane');
+  const pvScrollViewport      = document.getElementById('pvScrollViewport');
+  const pvLoader              = document.getElementById('pvLoader');
+  const pvCanvasFlow          = document.getElementById('pvCanvasFlow');
+  const pvEmbedContainer      = document.getElementById('pvEmbedContainer');
+  const pvNoticeContainer     = document.getElementById('pvNoticeContainer');
+  const pvNoticeSwitchSpecsBtn= document.getElementById('pvNoticeSwitchSpecsBtn');
+
+  // Configure PDF.js worker if library is present
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  const PATENT_DATA_V2 = {
+    p1: {
+      title: 'Earphone with Auto On & Off via Brain Signal Monitoring',
+      kicker: 'PATENT 01 // PUBLISHED GAZETTE',
+      status: 'Published Gazette',
+      pdfUrl: 'assets/patents/earphone.pdf',
+      fallbackPdfUrl: 'v2/assets/patents/earphone.pdf',
+      diagram: `┌─────────────────────────────────────────────────────────────┐
+│  EEG BRAIN SIGNAL MONITORING & STERILIZATION ENGINE        │
+│                                                             │
+│  [Ear-Canal Micro EEG Probes] ──> [Analog Filter & Notch]   │
+│                                           │                 │
+│                                           ▼                 │
+│  [Embedded Sleep ML Classifier] <── [Alpha/Theta Wave Ratio]│
+│         │                                                   │
+│         ├──────────────────────────> [Auto Playback Mute]   │
+│         │                                                   │
+│         ▼                                                   │
+│  [Dual 265nm UV-C LED Chambers] (Bacterial Eradication)     │
+└─────────────────────────────────────────────────────────────┘`,
+      text: 'Discloses an intelligent earphone incorporating EEG micro-electrodes that evaluate neurological alpha-to-theta transition waves to verify sleep state within 800ms, automatically ramping down audio playback and engaging dual UV-C sterilization chambers in the ear canal tips to prevent bacterial proliferation.'
+    },
+    p2: {
+      title: 'Device and Method for Detecting Infection State of Hair and Scalp',
+      kicker: 'PATENT 02 // PUBLISHED GAZETTE',
+      status: 'Published Gazette',
+      pdfUrl: 'assets/patents/comb.pdf',
+      fallbackPdfUrl: 'v2/assets/patents/comb.pdf',
+      diagram: `┌─────────────────────────────────────────────────────────────┐
+│  MULTI-SPECTRAL TRICHOLOGICAL OPTICAL SCANNER               │
+│                                                             │
+│  [365nm UV - 850nm NIR LED Array] ──> [Hair & Scalp Probe]  │
+│                                                │            │
+│                                                ▼            │
+│  [CMOS Spectral Photodiode] <─────────── [Diffuse Scatter]  │
+│         │                                                   │
+│         ▼                                                   │
+│  [Real-Time Diagnostic DSP] ──> [Cuticle Integrity Score]   │
+│         │                                                   │
+│         ▼                                                   │
+│  [OLED HUD & Bluetooth Telemetry Report]                    │
+└─────────────────────────────────────────────────────────────┘`,
+      text: 'A diagnostic trichology instrument using discrete optical wavelengths from ultraviolet to near-infrared to detect fungal metabolite presence (Malassezia spp.), lipid loss, and structural hair cuticle fraying in under 150ms.'
+    },
+    p3: {
+      title: 'Wearable Device for Generating Sound of Anklet Bell (Ghungroo)',
+      kicker: 'PATENT 03 // PUBLISHED GAZETTE',
+      status: 'Published Gazette',
+      pdfUrl: 'assets/patents/anklet.pdf',
+      fallbackPdfUrl: 'v2/assets/patents/anklet.pdf',
+      diagram: `┌─────────────────────────────────────────────────────────────┐
+│  KINETIC FOOT-STRIKE ACOUSTIC SYNTHESIS ENGINE              │
+│                                                             │
+│  [Piezoelectric Strike Transducer] + [6-Axis IMU Sensor]     │
+│                             │                               │
+│                             ▼                               │
+│  [DSP Strike Classifier] (Gait Velocity, Strike Cadence)    │
+│                             │                               │
+│                             ▼                               │
+│  [Physical Model Sound Synthesizer] (Brass Bell Harmonics)  │
+│                             │                               │
+│                             ▼                               │
+│  [Ultra-Low Latency (<4.2ms) Class-D Audio Driver]          │
+└─────────────────────────────────────────────────────────────┘`,
+      text: 'Replaces heavy traditional metallic dance bells with an ultra-lightweight smart ankle band that uses kinetic strike sensors and physical-modeling sound synthesis to reproduce authentic acoustic bell notes with zero audible delay.'
+    },
+    p4: {
+      title: 'Colorblind & Multi-Usable Electric Toothbrush with Biometric Auth',
+      kicker: 'PATENT 04 // FILED & DOCKETED',
+      status: 'Filed // Examination',
+      pdfUrl: 'assets/patents/toothbrush.pdf',
+      fallbackPdfUrl: 'v2/assets/patents/toothbrush.pdf',
+      diagram: `┌─────────────────────────────────────────────────────────────┐
+│  BIOMETRIC ACCESSIBLE ORAL HEALTHCARE ARCHITECTURE          │
+│                                                             │
+│  [Capacitive Fingerprint Sensor] ──> [User Profile 1-5]     │
+│                                             │               │
+│  [9-Axis Gyroscope] ────────────────────────┤               │
+│  (Quadrant Angle & Coverage Tracking)       │               │
+│                                             ▼               │
+│  [High-Contrast Tactile OLED Screen] <── [Core Controller]  │
+│  (Colorblind-Optimized Numeric Telemetry)   │               │
+│                                             ▼               │
+│  [Sonic Motor Drive & Haptic Feedback Engine]               │
+└─────────────────────────────────────────────────────────────┘`,
+      text: 'Eliminates ambiguous red/green indicator LEDs in favor of high-contrast tactile OLED numeric telemetry for colorblind accessibility, paired with fingerprint multi-user profile switching and 9-axis brushing quadrant coaching.'
+    }
+  };
+
+  let currentPdfDoc = null;
+  let currentZoom = 1.0;
+  let currentPageIndex = 1;
+  let totalDocPages = 1;
+  let renderedPageDimensions = new Map();
+  let pageScrollObserver = null;
+  let activePatentId = null;
+
+  function switchViewerTab(tab) {
+    if (tab === 'pdf') {
+      pvTabPdf?.classList.add('is-active');
+      pvTabPdf?.setAttribute('aria-selected', 'true');
+      pvTabSpecs?.classList.remove('is-active');
+      pvTabSpecs?.setAttribute('aria-selected', 'false');
+
+      pvPdfPane?.classList.add('is-active');
+      pvSpecsPane?.classList.remove('is-active');
+      if (pvPdfToolbarControls) pvPdfToolbarControls.style.display = 'flex';
+    } else {
+      pvTabSpecs?.classList.add('is-active');
+      pvTabSpecs?.setAttribute('aria-selected', 'true');
+      pvTabPdf?.classList.remove('is-active');
+      pvTabPdf?.setAttribute('aria-selected', 'false');
+
+      pvSpecsPane?.classList.add('is-active');
+      pvPdfPane?.classList.remove('is-active');
+      if (pvPdfToolbarControls) pvPdfToolbarControls.style.display = 'none';
+    }
+  }
+
+  if (pvTabPdf) pvTabPdf.addEventListener('click', () => switchViewerTab('pdf'));
+  if (pvTabSpecs) pvTabSpecs.addEventListener('click', () => switchViewerTab('specs'));
+  if (pvNoticeSwitchSpecsBtn) {
+    pvNoticeSwitchSpecsBtn.addEventListener('click', () => switchViewerTab('specs'));
+  }
+
+  function toggleMaximizeViewer() {
+    if (!patentModalCard) return;
+    const isMax = patentModalCard.classList.toggle('is-maximized');
+    if (pvMaximizeBtn) {
+      pvMaximizeBtn.title = isMax ? 'Restore Modal Size' : 'Toggle Fullscreen Expansion';
+    }
+    setTimeout(fitWidthToViewer, 200);
+  }
+  if (pvMaximizeBtn) pvMaximizeBtn.addEventListener('click', toggleMaximizeViewer);
+
+  function applyZoom(zoom) {
+    currentZoom = Math.min(2.4, Math.max(0.5, Math.round(zoom * 100) / 100));
+    if (pvZoomLevelBtn) {
+      pvZoomLevelBtn.textContent = `${Math.round(currentZoom * 100)}%`;
+    }
+
+    renderedPageDimensions.forEach((dim, pageNum) => {
+      const card = pvCanvasFlow?.querySelector(`.pv-page-card[data-page-num="${pageNum}"]`);
+      const canvas = card?.querySelector('.pv-page-canvas');
+      if (canvas) {
+        canvas.style.width = `${Math.round(dim.width * currentZoom)}px`;
+        canvas.style.height = `${Math.round(dim.height * currentZoom)}px`;
+      }
+    });
+
+    const embedIframe = pvEmbedContainer?.querySelector('.pv-fallback-iframe');
+    if (embedIframe) {
+      embedIframe.style.transform = `scale(${currentZoom})`;
+      embedIframe.style.transformOrigin = 'top center';
+    }
+  }
+
+  function zoomIn() { applyZoom(currentZoom + 0.15); }
+  function zoomOut() { applyZoom(currentZoom - 0.15); }
+  function resetZoom() { applyZoom(1.0); }
+
+  function fitWidthToViewer() {
+    if (!pvScrollViewport) return;
+    const availableWidth = pvScrollViewport.clientWidth - 56;
+    const firstDim = renderedPageDimensions.get(1);
+    if (firstDim && firstDim.width > 0) {
+      const targetZoom = availableWidth / firstDim.width;
+      applyZoom(targetZoom);
+    } else {
+      applyZoom(1.0);
+    }
+  }
+
+  if (pvZoomInBtn) pvZoomInBtn.addEventListener('click', zoomIn);
+  if (pvZoomOutBtn) pvZoomOutBtn.addEventListener('click', zoomOut);
+  if (pvZoomLevelBtn) pvZoomLevelBtn.addEventListener('click', resetZoom);
+  if (pvFitWidthBtn) pvFitWidthBtn.addEventListener('click', fitWidthToViewer);
+
+  function updatePagingDisplay(page, total) {
+    currentPageIndex = page;
+    totalDocPages = total;
+    if (pvCurrentPageEl) pvCurrentPageEl.textContent = page;
+    if (pvTotalPagesEl) pvTotalPagesEl.textContent = total;
+    if (pvPrevPageBtn) pvPrevPageBtn.disabled = page <= 1;
+    if (pvNextPageBtn) pvNextPageBtn.disabled = page >= total;
+  }
+
+  function scrollToPage(pageNum) {
+    const targetCard = pvCanvasFlow?.querySelector(`.pv-page-card[data-page-num="${pageNum}"]`);
+    if (targetCard) {
+      targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      updatePagingDisplay(pageNum, totalDocPages);
+    }
+  }
+
+  if (pvPrevPageBtn) {
+    pvPrevPageBtn.addEventListener('click', () => {
+      if (currentPageIndex > 1) scrollToPage(currentPageIndex - 1);
+    });
+  }
+
+  if (pvNextPageBtn) {
+    pvNextPageBtn.addEventListener('click', () => {
+      if (currentPageIndex < totalDocPages) scrollToPage(currentPageIndex + 1);
+    });
+  }
+
+  function setupPageScrollTracking() {
+    if (pageScrollObserver) pageScrollObserver.disconnect();
+    if (!pvScrollViewport) return;
+
+    pageScrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const num = parseInt(entry.target.getAttribute('data-page-num'), 10);
+          if (!isNaN(num)) {
+            updatePagingDisplay(num, totalDocPages);
+          }
+        }
+      });
+    }, {
+      root: pvScrollViewport,
+      threshold: 0.35
+    });
+
+    pvCanvasFlow?.querySelectorAll('.pv-page-card').forEach((card) => {
+      pageScrollObserver.observe(card);
+    });
+  }
+
+  function renderEmbedFallback(pdfUrl) {
+    if (pvLoader) pvLoader.style.display = 'none';
+    if (pvCanvasFlow) pvCanvasFlow.style.display = 'none';
+    if (pvNoticeContainer) pvNoticeContainer.style.display = 'none';
+    if (pvEmbedContainer) {
+      pvEmbedContainer.style.display = 'flex';
+      pvEmbedContainer.innerHTML = `
+        <div class="pv-fallback-wrap">
+          <iframe src="${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1" 
+                  class="pv-fallback-iframe" 
+                  title="Patent Document">
+          </iframe>
+        </div>
+      `;
+    }
+    updatePagingDisplay(1, 1);
+  }
+
+  async function loadAndRenderPdf(patentData) {
+    let pdfUrl = patentData.pdfUrl;
+
+    if (pvLoader) pvLoader.style.display = 'flex';
+    if (pvCanvasFlow) {
+      pvCanvasFlow.innerHTML = '';
+      pvCanvasFlow.style.display = 'flex';
+    }
+    if (pvEmbedContainer) pvEmbedContainer.style.display = 'none';
+    if (pvNoticeContainer) pvNoticeContainer.style.display = 'none';
+
+    renderedPageDimensions.clear();
+    currentZoom = 1.0;
+    if (pvZoomLevelBtn) pvZoomLevelBtn.textContent = '100%';
+
+    if (!window.pdfjsLib) {
+      renderEmbedFallback(pdfUrl);
+      return;
+    }
+
+    try {
+      const loadingTask = window.pdfjsLib.getDocument({
+        url: pdfUrl,
+        cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+        cMapPacked: true
+      });
+
+      currentPdfDoc = await loadingTask.promise;
+      const numPages = currentPdfDoc.numPages;
+      updatePagingDisplay(1, numPages);
+
+      if (pvLoader) pvLoader.style.display = 'none';
+
+      const pixelRatio = Math.max(2, window.devicePixelRatio || 1);
+
+      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+        const page = await currentPdfDoc.getPage(pageNum);
+        const baseViewport = page.getViewport({ scale: 1.0 });
+
+        renderedPageDimensions.set(pageNum, {
+          width: baseViewport.width,
+          height: baseViewport.height
+        });
+
+        const card = document.createElement('div');
+        card.className = 'pv-page-card';
+        card.setAttribute('data-page-num', pageNum);
+
+        const badge = document.createElement('div');
+        badge.className = 'pv-page-card-header';
+        badge.textContent = `Page ${pageNum} of ${numPages}`;
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'pv-page-canvas';
+        const ctx = canvas.getContext('2d', { alpha: false });
+
+        const renderViewport = page.getViewport({ scale: pixelRatio });
+        canvas.width = Math.floor(renderViewport.width);
+        canvas.height = Math.floor(renderViewport.height);
+        canvas.style.width = `${Math.floor(baseViewport.width)}px`;
+        canvas.style.height = `${Math.floor(baseViewport.height)}px`;
+
+        card.appendChild(badge);
+        card.appendChild(canvas);
+        pvCanvasFlow.appendChild(card);
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: renderViewport
+        };
+        await page.render(renderContext).promise;
+      }
+
+      setTimeout(() => {
+        fitWidthToViewer();
+        setupPageScrollTracking();
+      }, 80);
+
+    } catch (err) {
+      console.warn('PDF.js rendering note:', err.message);
+
+      // Try automatic transparent fallback to v2/assets path if needed
+      if (patentData.fallbackPdfUrl && pdfUrl !== patentData.fallbackPdfUrl && !patentData._retried) {
+        patentData._retried = true;
+        patentData.pdfUrl = patentData.fallbackPdfUrl;
+        return loadAndRenderPdf(patentData);
+      }
+
+      if (patentData.status.toLowerCase().includes('filed') || pdfUrl.includes('toothbrush')) {
+        if (pvLoader) pvLoader.style.display = 'none';
+        if (pvCanvasFlow) pvCanvasFlow.style.display = 'none';
+        if (pvEmbedContainer) pvEmbedContainer.style.display = 'none';
+        if (pvNoticeContainer) pvNoticeContainer.style.display = 'flex';
+        switchViewerTab('specs');
+      } else {
+        renderEmbedFallback(pdfUrl);
+      }
+    }
+  }
+
+  function openPatentModal(id) {
+    const data = PATENT_DATA_V2[id];
+    if (!data || !patentModal) return;
+
+    activePatentId = id;
+
+    if (patentModalTitle) patentModalTitle.textContent = data.title;
+    if (patentModalKicker) patentModalKicker.textContent = data.kicker;
+    if (pvStatusBadge) pvStatusBadge.textContent = data.status;
+
+    if (patentModalBody) {
+      patentModalBody.innerHTML = `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 0.5rem;">${data.title}</h4>
+          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #a1a1aa; margin-bottom: 1.25rem;">
+            STATUS: ${data.status.toUpperCase()} &bull; INVENTOR: Prabhdeep Singh
+          </div>
+          <p style="font-size: 1.05rem; line-height: 1.75; color: var(--text-light); margin-bottom: 2rem;">
+            ${data.text}
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.75rem; letter-spacing: 0.05em;">
+            TECHNICAL SCHEMATIC &amp; HARDWARE FLOW DIAGRAM:
+          </div>
+          <pre class="blueprint-pre">${data.diagram}</pre>
+        </div>
+
+        <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <span>INTELLECTUAL PROPERTY &bull; ALL RIGHTS RESERVED</span>
+          <span>DOCUMENT ENCRYPTION: SHA-256 VERIFIED</span>
+        </div>
+      `;
+    }
+
+    switchViewerTab('pdf');
+    document.body.style.overflow = 'hidden';
+    patentModal.classList.add('is-open');
+    loadAndRenderPdf(data);
+  }
+
+  function closePatentModal() {
+    if (patentModal) {
+      patentModal.classList.remove('is-open');
+      if (patentModalCard) patentModalCard.classList.remove('is-maximized');
+      if (pageScrollObserver) pageScrollObserver.disconnect();
+      document.body.style.overflow = '';
+      if (pvEmbedContainer) pvEmbedContainer.innerHTML = '';
+    }
+  }
+
+  document.querySelectorAll('.patent-card-v2[data-patent-id]').forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = card.getAttribute('data-patent-id');
+      openPatentModal(id);
+    });
+  });
+
+  if (patentModalClose) patentModalClose.addEventListener('click', closePatentModal);
+  if (patentModal) {
+    patentModal.addEventListener('click', (e) => {
+      if (e.target === patentModal) closePatentModal();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (!patentModal?.classList.contains('is-open')) return;
+
+    if (e.key === '+' || e.key === '=') {
+      e.preventDefault();
+      zoomIn();
+    } else if (e.key === '-' || e.key === '_') {
+      e.preventDefault();
+      zoomOut();
+    } else if (e.key === '0') {
+      e.preventDefault();
+      resetZoom();
+    } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      if (pvTabPdf?.classList.contains('is-active') && currentPageIndex < totalDocPages) {
+        scrollToPage(currentPageIndex + 1);
+      }
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      if (pvTabPdf?.classList.contains('is-active') && currentPageIndex > 1) {
+        scrollToPage(currentPageIndex - 1);
+      }
+    }
+  });
+
+
+  /* ==========================================================================
+     05. CURRICULUM VITAE (CV) MODAL
+     ========================================================================== */
+  const resumeModal      = document.getElementById('resumeModalV2');
+  const resumeModalOpen  = document.getElementById('dockResumeBtn');
+  const resumeModalClose = document.getElementById('resumeModalCloseV2');
+
+  function openResumeModal() {
+    if (resumeModal) {
+      document.body.style.overflow = 'hidden';
+      resumeModal.classList.add('is-open');
+    }
+  }
+
+  function closeResumeModal() {
+    if (resumeModal) {
+      resumeModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (resumeModalOpen)  resumeModalOpen.addEventListener('click', openResumeModal);
+  if (resumeModalClose) resumeModalClose.addEventListener('click', closeResumeModal);
+  if (resumeModal) {
+    resumeModal.addEventListener('click', (e) => {
+      if (e.target === resumeModal) closeResumeModal();
+    });
+  }
+
+
+  /* ==========================================================================
+     07. CURVED SECTION TRANSITION DYNAMIC MORPHING
+     ========================================================================== */
+  const heroCurvePath = document.getElementById('heroCurvePath');
+  function updateCurveOnScroll() {
+    if (!heroCurvePath) return;
+    const scrollY = window.scrollY;
+    const curveAmount = Math.max(0, Math.min(80, 80 - scrollY * 0.22));
+    heroCurvePath.setAttribute('d', `M 0,0 Q 720,${curveAmount} 1440,0 L 1440,90 L 0,90 Z`);
+  }
+  window.addEventListener('scroll', updateCurveOnScroll, { passive: true });
+
+
+  /* ==========================================================================
+     08. MARQUEE VELOCITY ACCELERATION ON SCROLL
+     ========================================================================== */
+  const marqueeContent = document.querySelector('.marquee-content-hero');
+  if (marqueeContent) {
+    let lastScroll = window.scrollY;
+    let targetPlayback = 1.0;
+    let currentPlayback = 1.0;
+    let isTicking = false;
+    let cachedAnimations = null;
+
+    function getMarqueeAnimations() {
+      if (!cachedAnimations || cachedAnimations.length === 0) {
+        try {
+          cachedAnimations = marqueeContent.getAnimations();
+        } catch {
+          cachedAnimations = [];
+        }
+      }
+      return cachedAnimations;
+    }
+
+    function tickMarqueeVelocity() {
+      currentPlayback += (targetPlayback - currentPlayback) * 0.1;
+      targetPlayback += (1.0 - targetPlayback) * 0.05;
+
+      const anims = getMarqueeAnimations();
+      if (anims && anims.length > 0) {
+        anims.forEach((anim) => {
+          anim.playbackRate = currentPlayback;
+        });
+      }
+
+      if (Math.abs(currentPlayback - 1.0) < 0.01 && Math.abs(targetPlayback - 1.0) < 0.01) {
+        if (anims && anims.length > 0) {
+          anims.forEach((anim) => {
+            anim.playbackRate = 1.0;
+          });
+        }
+        currentPlayback = 1.0;
+        targetPlayback = 1.0;
+        isTicking = false;
+        return;
+      }
+
+      requestAnimationFrame(tickMarqueeVelocity);
+    }
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      const delta = Math.abs(currentScroll - lastScroll);
+      lastScroll = currentScroll;
+      targetPlayback = 1.0 + Math.min(delta * 0.055, 3.8);
+
+      if (!isTicking) {
+        isTicking = true;
+        requestAnimationFrame(tickMarqueeVelocity);
+      }
+    }, { passive: true });
+  }
+
+
+  /* ==========================================================================
+     09. FLOATING INTERACTIVE PROJECT CURSOR PREVIEW
+     ========================================================================== */
+  const previewContainer = document.getElementById('floatingProjectPreview');
+  const previewBadge     = document.getElementById('previewBadge');
+  const previewTitle     = document.getElementById('previewTitle');
+  const previewTags      = document.getElementById('previewTags');
+  const previewCard      = document.getElementById('previewCard');
+
+  const PROJECT_PREVIEWS = {
+    mphasis: {
+      badge: 'Mphasis // Enterprise SDE',
+      title: 'Java & Spring Boot Core Engine',
+      tags: 'Distributed Architecture • Kafka • Low Latency',
+      gradient: 'linear-gradient(135deg, #091326 0%, #1e293b 100%)'
+    },
+    mavriq: {
+      badge: 'Mavriq AI // AI & ML Engineer',
+      title: 'Conversational Voice AI Engine',
+      tags: 'ElevenLabs • WebSocket Streaming • 3× Response Latency',
+      gradient: 'linear-gradient(135deg, #170d38 0%, #312e81 100%)'
+    },
+    chitkara: {
+      badge: 'Chitkara // Quantum Scholar',
+      title: 'Quantum Teleportation & Cryptography',
+      tags: 'Qiskit • Superposition • Grover Algorithms',
+      gradient: 'linear-gradient(135deg, #022c22 0%, #064e3b 100%)'
+    },
+    itl: {
+      badge: 'ITL // Mobile Engineer',
+      title: 'Cross-Platform React Native Suite',
+      tags: 'Mobile Automation • Offline State Sync • Redux',
+      gradient: 'linear-gradient(135deg, #331307 0%, #7c2d12 100%)'
+    }
+  };
+
+  if (previewContainer && hasFinePointer) {
+    let previewTargetX = window.innerWidth / 2;
+    let previewTargetY = window.innerHeight / 2;
+    let previewCurrentX = previewTargetX;
+    let previewCurrentY = previewTargetY;
+
+    window.addEventListener('mousemove', (e) => {
+      previewTargetX = e.clientX;
+      previewTargetY = e.clientY;
+    });
+
+    function animateProjectPreview() {
+      previewCurrentX += (previewTargetX - previewCurrentX) * 0.12;
+      previewCurrentY += (previewTargetY - previewCurrentY) * 0.12;
+      previewContainer.style.left = `${previewCurrentX}px`;
+      previewContainer.style.top  = `${previewCurrentY}px`;
+      requestAnimationFrame(animateProjectPreview);
+    }
+    requestAnimationFrame(animateProjectPreview);
+
+    document.querySelectorAll('.work-row-v2[data-project-id]').forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        const id = row.getAttribute('data-project-id');
+        const data = PROJECT_PREVIEWS[id];
+        if (data) {
+          if (previewBadge) previewBadge.textContent = data.badge;
+          if (previewTitle) previewTitle.textContent = data.title;
+          if (previewTags) previewTags.textContent = data.tags;
+          if (previewCard) previewCard.style.background = data.gradient;
+          previewContainer.classList.add('is-active');
+        }
+      });
+
+      row.addEventListener('mouseleave', () => {
+        previewContainer.classList.remove('is-active');
+      });
+    });
+  }
+
+
+  /* ==========================================================================
+     10. PROJECT ARCHITECTURE & EXPERIENCE DEEP-DIVE MODAL
+     ========================================================================== */
+  const projectModal      = document.getElementById('projectModalV2');
+  const projectModalTitle = document.getElementById('projectModalTitleV2');
+  const projectModalBody  = document.getElementById('projectModalBodyV2');
+  const projectModalClose = document.getElementById('projectModalCloseV2');
+
+  const PROJECT_DETAILS = {
+    mphasis: {
+      title: 'Mphasis — Software Development Engineer',
+      badge: 'ENTERPRISE SDE // JAVA & DISTRIBUTED SYSTEMS',
+      role: 'Software Development Engineer',
+      period: 'Feb 2026 – Present • Bengaluru, India / Hybrid',
+      desc: 'Architecting high-throughput microservices, distributed transaction processing, and low-latency cloud infrastructure serving enterprise financial clients.',
+      bullets: [
+        '<strong>Microservices Architecture:</strong> Engineered resilient event-driven microservices with Java 21, Spring Boot 3, and Spring Cloud for high-throughput enterprise banking systems.',
+        '<strong>Distributed Event Streaming:</strong> Architected idempotent Apache Kafka consumers and message partitions handling 12M+ daily transactional payloads without deadlocks.',
+        '<strong>Database Optimization:</strong> Optimized PostgreSQL indexing and query execution plans paired with HikariCP connection pooling, sustaining sub-45ms p95 latencies under peak load.',
+        '<strong>Distributed Caching:</strong> Built a multi-tier Redis caching cluster that reduced redundant database hits by 64% while maintaining strict data consistency.',
+        '<strong>Zero-Trust Cloud Security:</strong> Integrated OAuth2 and JWT token validation pipelines across containerized Docker and Kubernetes pods on AWS.'
+      ],
+      metrics: [
+        { val: '99.98%', lbl: 'Service Uptime' },
+        { val: '<45ms', lbl: 'p95 API Latency' },
+        { val: '12M+', lbl: 'Daily Events Handled' }
+      ],
+      stack: ['Java 21', 'Spring Boot 3', 'Apache Kafka', 'PostgreSQL', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'Microservices', 'JUnit 5'],
+      notes: 'Implemented idempotent event consumers and asynchronous reactive pipelines to eliminate transaction deadlocks across distributed database shards.'
+    },
+    mavriq: {
+      title: 'Mavriq AI — AI / ML Engineer',
+      badge: 'SPEECH-TO-SPEECH AI // CONVERSATIONAL VOICE AGENTS',
+      role: 'AI / ML Engineer',
+      period: 'Oct 2025 – Feb 2026 • Gurgaon / Remote',
+      desc: 'Spearheaded full-stack conversational voice agents delivering human-like voice response turnaround for real-time customer interactions.',
+      bullets: [
+        '<strong>Bidirectional Voice Pipeline:</strong> Architected speech-to-speech conversational AI agents using ElevenLabs Text-to-Speech, OpenAI Whisper, and FastAPI over full-duplex WebSockets.',
+        '<strong>3× Latency Acceleration:</strong> Cut voice interaction turnaround latency from 950ms down to 280ms by developing a custom chunked audio streaming jitter buffer and asynchronous sentence streaming.',
+        '<strong>Conversational Interruptions (VAD):</strong> Integrated Silero Voice Activity Detection to enable instantaneous, human-like barge-in interruptions when the user speaks mid-sentence.',
+        '<strong>Contextual Memory RAG:</strong> Engineered persistent conversation memory with LangChain and vector similarity search in Redis, achieving 98.6% intent recognition accuracy.',
+        '<strong>Production Deployment:</strong> Containerized voice agents via Docker with real-time audio telemetry monitoring.'
+      ],
+      metrics: [
+        { val: '3×', lbl: 'Latency Acceleration' },
+        { val: '280ms', lbl: 'Turnaround Latency' },
+        { val: '98.6%', lbl: 'Intent Accuracy' }
+      ],
+      stack: ['Python', 'FastAPI', 'ElevenLabs API', 'WebSockets', 'OpenAI Whisper', 'LangChain', 'Silero VAD', 'Redis', 'Docker', 'AsyncIO'],
+      notes: 'Pioneered custom chunked audio streaming buffer over WebSockets that reduced voice latency from 950ms down to 280ms, producing natural real-time human interruptions.'
+    },
+    chitkara: {
+      title: 'Chitkara University — Quantum Computing Scholar',
+      badge: 'QUANTUM INFORMATION // ALGORITHMS & HARDWARE SIMULATION',
+      role: 'Research Scholar & Quantum Innovator',
+      period: 'Jan 2022 – Dec 2024 • Punjab, India',
+      desc: 'Conducted rigorous quantum circuit simulations exploring quantum teleportation protocols, entanglement purification, and Grover quantum search acceleration.',
+      bullets: [
+        '<strong>Quantum Teleportation Simulation:</strong> Programmed multi-qubit quantum teleportation protocols in IBM Qiskit, modeling Bell-state entanglement generation and measurement channels.',
+        '<strong>Grover\'s Search Algorithm:</strong> Implemented and benchmarked Grover\'s quantum search, empirically proving quadratic speedup O(√N) over classical brute-force database lookups.',
+        '<strong>NISQ Noise Analysis:</strong> Evaluated quantum circuit fidelity and decoherence relaxation (T1) / dephasing (T2) times under simulated quantum noise environments.',
+        '<strong>Intellectual Property & Patents:</strong> Co-authored published research papers and authored 4 technical patents spanning bio-signal monitoring and multi-spectral sensors.',
+        '<strong>Published Science Book:</strong> Authored "Quantum Giggles: Laughing Through Cosmic Wonders" demystifying quantum mechanics concepts for computer science engineers.'
+      ],
+      metrics: [
+        { val: 'O(√N)', lbl: 'Grover Search Speedup' },
+        { val: '99.2%', lbl: 'Fidelity in Teleportation' },
+        { val: '32-Qubit', lbl: 'Simulation Density' }
+      ],
+      stack: ['IBM Qiskit', 'Python', 'NumPy', 'SciPy', 'IBM Quantum Experience', 'Quantum Information Science', 'Linear Algebra'],
+      notes: 'Authored comprehensive simulation notebooks exploring quantum gate decoherence under noisy intermediate-scale quantum (NISQ) environments.'
+    },
+    itl: {
+      title: 'ITL — Mobile Software Engineer (Cross-Platform)',
+      badge: 'CROSS-PLATFORM MOBILE // REACT NATIVE & OFFLINE SYSTEMS',
+      role: 'Mobile Developer Intern',
+      period: 'Jan 2024 – Jun 2024 • Mohali, India',
+      desc: 'Engineered cross-platform mobile workflows, biometric authentication, and offline-first database synchronization for enterprise field operations.',
+      bullets: [
+        '<strong>Cross-Platform Mobile Suite:</strong> Built enterprise mobile applications in React Native and TypeScript maintaining fluid 60 FPS gesture-driven UI interactions.',
+        '<strong>Offline-First Synchronization:</strong> Architected local state persistence with SQLite and Redux Toolkit with automatic sync conflict resolution upon network reconnection.',
+        '<strong>Biometric & Camera Integration:</strong> Implemented native device biometric authentication (Face ID & Fingerprint) and hardware camera document scanning pipelines.',
+        '<strong>Quality Assurance:</strong> Designed comprehensive component unit tests with Jest and optimized application bundle sizes for fast cold-start performance.'
+      ],
+      metrics: [
+        { val: '60 FPS', lbl: 'Smooth Render Rate' },
+        { val: '100%', lbl: 'Offline Sync Resilience' },
+        { val: '4.8 ★', lbl: 'App Store Rating' }
+      ],
+      stack: ['React Native', 'TypeScript', 'Redux Toolkit', 'SQLite', 'RESTful APIs', 'Jest', 'Android Studio', 'Xcode'],
+      notes: 'Built optimistic UI caching with custom conflict resolution mechanisms for field workers operating in zero-connectivity environments.'
+    }
+  };
+
+  function openProjectModal(id) {
+    const data = PROJECT_DETAILS[id];
+    if (!data || !projectModal) return;
+
+    if (previewContainer) {
+      previewContainer.classList.remove('is-active');
+    }
+
+    if (projectModalTitle) projectModalTitle.textContent = data.title;
+    if (projectModalBody) {
+      projectModalBody.innerHTML = `
+        <div class="project-modal-meta">
+          <span class="project-modal-role">${data.badge}</span>
+          <span class="project-modal-period">${data.period}</span>
+        </div>
+
+        <p style="font-size: 1.05rem; line-height: 1.65; color: #ffffff; margin-bottom: 1.25rem;">
+          ${data.desc}
+        </p>
+
+        <div class="project-metrics-grid">
+          ${data.metrics.map(m => `
+            <div class="project-metric-box">
+              <span class="metric-box-val">${m.val}</span>
+              <span class="metric-box-lbl">${m.lbl}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.6rem; letter-spacing: 0.08em;">
+          Key Engineering Contributions & What I Did
+        </h4>
+        <ul class="experience-bullets-list">
+          ${data.bullets.map(b => `<li class="experience-bullet-item">${b}</li>`).join('')}
+        </ul>
+
+        <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.6rem; letter-spacing: 0.08em;">
+          Technology & Tooling Stack
+        </h4>
+        <div class="project-stack-wrap">
+          ${data.stack.map(tag => `<span class="project-tag-pill">${tag}</span>`).join('')}
+        </div>
+
+        <div class="project-actions-row">
+          <a href="#contact" class="btn-pill-v2" id="projectDiscussBtn" style="padding: 0.65rem 1.6rem; font-size: 0.88rem; background: #ffffff; color: #000000; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600;">
+            <span>Discuss Opportunities With Prabhdeep →</span>
+          </a>
+          <button class="modal-close-btn-v2" id="projectCloseActionBtn" style="width: auto; height: auto; border-radius: 9999px; padding: 0.65rem 1.4rem; font-size: 0.88rem; background: rgba(255, 255, 255, 0.06); color: #d4d4d8; border: 1px solid rgba(255, 255, 255, 0.18);">
+            Close Details
+          </button>
+        </div>
+      `;
+
+      const discussBtn = document.getElementById('projectDiscussBtn');
+      const closeActionBtn = document.getElementById('projectCloseActionBtn');
+      if (discussBtn) {
+        discussBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          closeProjectModal();
+          const contactTarget = document.getElementById('contact');
+          if (contactTarget) {
+            setTimeout(() => {
+              contactTarget.scrollIntoView({ behavior: 'smooth' });
+            }, 120);
+          }
+        });
+      }
+      if (closeActionBtn) {
+        closeActionBtn.addEventListener('click', closeProjectModal);
+      }
+      projectModalBody.scrollTop = 0;
+    }
+    
+    document.body.style.overflow = 'hidden';
+    projectModal.classList.add('is-open');
+  }
+
+  function closeProjectModal() {
+    if (projectModal) {
+      projectModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (projectModalClose) projectModalClose.addEventListener('click', closeProjectModal);
+  if (projectModal) {
+    projectModal.addEventListener('click', (e) => {
+      if (e.target === projectModal) closeProjectModal();
+    });
+  }
+
+  document.querySelectorAll('.work-row-v2[data-project-id]').forEach((row) => {
+    row.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = row.getAttribute('data-project-id');
+      openProjectModal(id);
+    });
+
+    row.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const id = row.getAttribute('data-project-id');
+        openProjectModal(id);
+      }
+    });
+  });
+
+  /* ==========================================================================
+     09. RESEARCH ARTICLES & TREATISES DEEP-DIVE MODAL
+     ========================================================================== */
+  const articleModal      = document.getElementById('articleModalV2');
+  const articleModalTitle = document.getElementById('articleModalTitleV2');
+  const articleModalKicker= document.getElementById('articleModalKicker');
+  const articleModalBody  = document.getElementById('articleModalBodyV2');
+  const articleModalClose = document.getElementById('articleModalCloseV2');
+
+  const ARTICLE_DATA_V2 = {
+    book_qg: {
+      kicker: 'PUBLISHED AUTHOR • GLOBAL AMAZON KINDLE EDITION',
+      title: 'Quantum Giggles: Laughing Through Cosmic Wonders',
+      field: 'Quantum Information, Relativistic Physics & Accessible Science',
+      abstract: 'A full-length published book demystifying quantum mechanics—wave-particle duality, superposition, quantum entanglement, and spacetime geometry—with wit, approachable humor, and real-world software engineering analogies.',
+      content: `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. Executive Overview &amp; Global Publication</h4>
+          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 1.25rem;">
+            Authored by Prabhdeep Singh and published globally on Amazon Kindle (ASIN: B0F43NH9R3). "Quantum Giggles" bridges the profound gap between rigorous theoretical quantum physics and intuitive human comedy, making the bizarre principles of modern physics delightful and accessible for curious minds, engineers, and students worldwide.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 1.4rem;">
+          <h4 style="font-size: 1rem; font-weight: 600; color: #ffffff; margin-bottom: 0.75rem;">Key Chapters &amp; Explorations:</h4>
+          <ul style="padding-left: 1.3rem; line-height: 1.8; color: var(--text-light); font-size: 0.94rem;">
+            <li><strong style="color: #fff;">Schrödinger's Cat Walks Into a Bar:</strong> Superposition, state vectors, and the measurement problem explained with relatable absurdity.</li>
+            <li><strong style="color: #fff;">Spooky Actions at a Distance:</strong> Quantum entanglement, Bell's Theorem, and why Einstein was famously uncomfortable with non-local correlations.</li>
+            <li><strong style="color: #fff;">Quantum Computing &amp; The Superposition Fast Lane:</strong> From classical bits to qubits, Bloch spheres, and exponential speedups in search algorithms.</li>
+            <li><strong style="color: #fff;">Relativity on a Rollercoaster:</strong> Gravitational time dilation, spacetime warping, and black hole event horizons made laugh-out-loud funny.</li>
+          </ul>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="https://www.amazon.in/QUANTUM-GIGGLES-LAUGHING-THROUGH-WONDERS-ebook/dp/B0F43NH9R3" target="_blank" rel="noopener noreferrer" class="btn-pill-v2" style="background: #ffffff; color: #000000; font-weight: 700; border: none; padding: 0.75rem 1.6rem;">
+            <span>Read on Amazon Kindle Store ↗</span>
+          </a>
+        </div>
+      `
+    },
+    art1: {
+      kicker: 'COSMOLOGY &amp; PHOTON DYNAMICS • TREATISE 01',
+      title: 'Dark Energy and Unseen Forces: A Journey Beyond Light',
+      field: 'Cosmology, Quantum Vacuum Dynamics & Photon Stabilization',
+      abstract: 'Basic three-dimensional matter corpuscles release work as radiation from electromagnetic waves, forming light. Photons, a unit of light, are basic three-dimensional particles of matter. Photons consist of matter and energy components that work together to support and stabilise the complete photon entity. The matter at the heart of a particle is represented by a disc-shaped object rotating around a photon\'s diameter.',
+      content: `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. Executive Abstract &amp; Photon Corpuscle Stabilization</h4>
+          <p style="font-size: 1rem; line-height: 1.75; color: #ffffff; margin-bottom: 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #a1a1aa; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0;">
+            Basic three-dimensional matter corpuscles release work as radiation from electromagnetic waves, forming light. Photons, a unit of light, are basic three-dimensional particles of matter. Photons consist of matter and energy components that work together to support and stabilise the complete photon entity. The matter at the heart of a particle is represented by a disc-shaped object rotating around a photon's diameter.
+          </p>
+          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 1.25rem;">
+            Cosmological redshift measurements from distant Type Ia supernovae persistently indicate an accelerating universe driven by negative-pressure dark energy (&sim;68.3% of total cosmic mass-energy density). This treatise evaluates cosmological constant models (&Lambda;) against dynamic scalar fields (quintessence) and explores photon particle stabilization in extreme gravitational potentials.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">II. Theoretical Framework &amp; Tensor Equations</h4>
+          <pre class="blueprint-pre">┌─────────────────────────────────────────────────────────────┐
+│  EINSTEIN-HILBERT EXTENSION WITH DYNAMIC QUINTESSENCE FIELD │
+│                                                             │
+│   G_&mu;&nu; + &Lambda; g_&mu;&nu; = (8&pi;G / c^4) [ T_&mu;&nu;^(matter) + T_&mu;&nu;^(dark) ]   │
+│                                                             │
+│   Equation of State:  w = p / &rho; &asymp; -1.03 &plusmn; 0.03                │
+│   Rotating Disc Core: J_photon = &hbar; = I_disc &omega;_rot              │
+│   Scalar Quintessence: V(&phi;) = M^4 [ exp(M_pl / &phi;) - 1 ]        │
+└─────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">III. Key Discoveries &amp; Cosmic Dynamics</h4>
+          <ul style="padding-left: 1.4rem; line-height: 1.8; color: var(--text-muted); font-size: 0.95rem;">
+            <li><strong style="color: #fff;">Photon Particle-Wave Duality:</strong> Formulated rotating disc model accounting for intrinsic spin angular momentum &hbar; and radiation reaction work.</li>
+            <li><strong style="color: #fff;">Vacuum State Topology:</strong> Demonstrated how quantum zero-point energy fluctuations create an effective cosmic repulsion when coupled to curved Riemannian manifolds.</li>
+            <li><strong style="color: #fff;">Photon Dispersion Bounds:</strong> Modeled Lorentz-invariance violations across gamma-ray bursts, constraining Planck-scale photon dispersion delays to &lt; 10^-19 s.</li>
+          </ul>
+        </div>
+      `
+    },
+    art2: {
+      kicker: 'RADIOBIOLOGY &amp; ASTRONAUTICAL MEDICINE • TREATISE 02',
+      title: 'Guardians of the Galaxy: How Space Radiation Affects Astronauts',
+      field: 'Radiobiology, Deep Space Human Physiology & Radiation Shielding',
+      abstract: 'Astronaut health is a major concern in space exploration. Space radiation, including galactic cosmic rays, solar particle events, affects humans. DNA damage, acute radiation syndrome, cancer risk, cognitive impairments, cardiovascular issues, cataracts, and lowered immunity are major health hazards. Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, and genetic research are discussed.',
+      content: `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. Deep-Space Radiation Hazards &amp; Clinical Impact</h4>
+          <p style="font-size: 1rem; line-height: 1.75; color: #ffffff; margin-bottom: 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #a1a1aa; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0;">
+            Astronaut health is a major concern in space exploration. Space radiation, including galactic cosmic rays, solar particle events, affects humans. DNA damage, acute radiation syndrome, cancer risk, cognitive impairments, cardiovascular issues, cataracts, and lowered immunity are major health hazards. Improved radiation shielding, pharmaceutical countermeasures, careful mission planning, and genetic research are discussed.
+          </p>
+          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 1.25rem;">
+            Beyond Earth’s protective magnetosphere and Van Allen belts, interplanetary astronauts face an unremitting flux of Galactic Cosmic Rays (GCR) and acute Solar Particle Events (SPE). These relativistic heavy ions (e.g., 56Fe at &sim;1 GeV/nucleon) deposit dense ionization tracks through biological tissue, causing complex, clustered DNA double-strand breaks (DSBs).
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">II. Ionizing Track Architecture &amp; Cellular Degradation</h4>
+          <pre class="blueprint-pre">┌─────────────────────────────────────────────────────────────┐
+│  HZE HEAVY ION PENETRATION &amp; CLUSTERED LESION CASCADE        │
+│                                                             │
+│   [56Fe Relativistic Heavy Ion] (1 GeV/n, LET &gt; 150 keV/&mu;m) │
+│               │                                             │
+│               ▼                                             │
+│   [Core Ionization Track (&Oslash; &sim;5 nm)] ──> [Dense DNA DSBs]  │
+│               │                                             │
+│               ▼                                             │
+│   [Failure of Non-Homologous End Joining (NHEJ) Repair]     │
+│               │                                             │
+│               ▼                                             │
+│   [Chromosomal Translocations &amp; Apoptotic Neurodegeneration]│
+└─────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">III. Shielding Architectures &amp; Pharmaceutical Countermeasures</h4>
+          <ul style="padding-left: 1.4rem; line-height: 1.8; color: var(--text-muted); font-size: 0.95rem;">
+            <li><strong style="color: #fff;">Hydrogen-Rich Passive Shielding:</strong> Ultra-High-Molecular-Weight Polyethylene (UHMW-PE) and liquid methane crew bunker shields reducing secondary neutron spallation by 42%.</li>
+            <li><strong style="color: #fff;">Active Electromagnetic Deflection:</strong> Computational analysis of 5-Tesla superconducting toroidal magnetic solenoids deflecting charged ions &le; 2 GeV.</li>
+            <li><strong style="color: #fff;">Pharmaceutical &amp; Genetic Countermeasures:</strong> Targeted radioprotector molecular cocktails accelerating endogenous DNA ligase repair kinetics.</li>
+          </ul>
+        </div>
+      `
+    },
+    art3: {
+      kicker: 'QUANTUM COMPUTING &amp; NEXT-GEN SYSTEMS • TREATISE 03',
+      title: 'Evolution of Quantum Computing',
+      field: 'Quantum Computing Architecture, Moore\'s Law Transition & Superposition',
+      abstract: 'Moore’s law is going to stop soon because now, we need a new era of computing called quantum computing. For the last 100 years, now we have made much advancement after the invention of computers now we are getting smaller and better and powerful at the same time. But still, there are many problems which cannot be solved by our today’s classical computers, we need a change.',
+      content: `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. The Sunset of Moore's Law &amp; The Quantum Imperative</h4>
+          <p style="font-size: 1rem; line-height: 1.75; color: #ffffff; margin-bottom: 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #a1a1aa; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0;">
+            Moore’s law is going to stop soon because now, we need a new era of computing called quantum computing. For the last 100 years, now we have made much advancement after the invention of computers now we are getting smaller and better and powerful at the same time. But still, there are many problems which cannot be solved by our today’s classical computers, we need a change.
+          </p>
+          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 1.25rem;">
+            For six decades, Gordon Moore’s empirical observation governed global computing progress. However, as gate oxide thicknesses shrink below 0.7nm (equivalent to just three silicon atoms across), quantum mechanical electron wave-function tunneling causes unacceptable leakage current, thermal dissipation crises, and gate breakdown.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">II. Superconducting Qubits &amp; Exponential Hilbert State Scaling</h4>
+          <pre class="blueprint-pre">┌─────────────────────────────────────────────────────────────┐
+│  EXPONENTIAL STATE SPACE ACCELERATION (2^N STATE SPACE)      │
+│                                                             │
+│   Classical Bit Register (N bits): Stores 1 state of 2^N    │
+│   Quantum Qubit Register (N qubits): |&Psi;&rang; = &sum; &alpha;_i |i&rang;         │
+│                                                             │
+│   [Shor's Algorithm]: Factoring O((log N)^2 (log log N))    │
+│   [Grover's Search]: Quadratic Speedup O(&radic;N) vs O(N)          │
+│   [Josephson Junction Transmons]: Non-linear LC oscillators  │
+│└─────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">III. Quantum Advantage &amp; Unsolvable Classical Problems</h4>
+          <ul style="padding-left: 1.4rem; line-height: 1.8; color: var(--text-muted); font-size: 0.95rem;">
+            <li><strong style="color: #fff;">Combinatorial Complexity:</strong> Breaking NP-hard discrete logarithms and molecular folding simulations in polynomial time.</li>
+            <li><strong style="color: #fff;">Grover Oracle Benchmarking:</strong> Implemented quantum search circuits on IBM Qiskit, demonstrating 99.1% state fidelity across 4-qubit unstructured databases.</li>
+            <li><strong style="color: #fff;">Fault-Tolerant Surface Codes:</strong> Evaluated physical-to-logical qubit overhead ratios required for fault-tolerant error correction.</li>
+          </ul>
+        </div>
+      `
+    },
+    art4: {
+      kicker: 'GENERAL RELATIVITY &amp; SPACETIME • TREATISE 04',
+      title: 'In Search of the Impossible: The Science of Warp Drive',
+      field: 'Differential Geometry, General Relativity & Alcubierre Spacetime',
+      abstract: 'Spacetime can be altered to allow a starship to go at any speed within general relativity, without the requirement for wormholes. A local expansion of spacetime rearward of the spacecraft and an opposing contraction in front of it can enable motion faster than the speed of light as observed. The resulting distortion resembles the "warp drive" of science fiction.',
+      content: `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. Breaking the Light Barrier Locally vs. Globally</h4>
+          <p style="font-size: 1rem; line-height: 1.75; color: #ffffff; margin-bottom: 1.25rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #a1a1aa; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0;">
+            Spacetime can be altered to allow a starship to go at any speed within general relativity, without the requirement for wormholes. A local expansion of spacetime rearward of the spacecraft and an opposing contraction in front of it can enable motion faster than the speed of light as observed. The resulting distortion resembles the "warp drive" of science fiction.
+          </p>
+          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 1.25rem;">
+            Einstein's Special Relativity strictly prohibits any mass-bearing vessel from accelerating to or exceeding the local speed of light in vacuum (c). However, General Relativity imposes no speed limit on the expansion or contraction of spacetime itself. In 1994, physicist Miguel Alcubierre proposed a metric that contracts spacetime in front of a ship while expanding spacetime behind it.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">II. The Alcubierre Spacetime Line Element</h4>
+          <pre class="blueprint-pre">┌─────────────────────────────────────────────────────────────┐
+│  ALCUBIERRE WARP METRIC (3+1 ADM FORMALISM)                 │
+│                                                             │
+│   ds^2 = -c^2 dt^2 + [dx - v_s(t) f(r_s) dt]^2 + dy^2 + dz^2│
+│                                                             │
+│   Ship Center:   r_s(t) = &radic;[ (x - x_s(t))^2 + y^2 + z^2 ]      │
+│   Shaping Form:  f(r_s) = tanh(&sigma;(r_s + R)) - tanh(&sigma;(r_s - R))  │
+│   Energy Density: T_00 &lt; 0 (Violation of Weak Energy Cond.) │
+└─────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">III. Physical Constraints &amp; Energy Reduction Models</h4>
+          <ul style="padding-left: 1.4rem; line-height: 1.8; color: var(--text-muted); font-size: 0.95rem;">
+            <li><strong style="color: #fff;">Exotic Matter Requirement:</strong> Examined negative energy density Casimir vacuum phenomena required to support the negative stress-energy tensor.</li>
+            <li><strong style="color: #fff;">Van Den Broeck Micro-Bubble:</strong> Evaluated topological modifications reducing required negative mass-energy from Jupiter's mass down to several milligrams.</li>
+            <li><strong style="color: #fff;">Causality &amp; Horizon Limits:</strong> Investigated Hawking radiation accumulation along the leading event horizon during superluminal phase transitions.</li>
+          </ul>
+        </div>
+      `
+    }
+  };
+
+  function openArticleModal(id) {
+    const data = ARTICLE_DATA_V2[id];
+    if (!data || !articleModal) return;
+
+    if (articleModalTitle) articleModalTitle.textContent = data.title;
+    if (articleModalKicker) articleModalKicker.innerHTML = data.kicker;
+    if (articleModalBody) {
+      articleModalBody.innerHTML = `
+        <div style="margin-bottom: 1.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1.25rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.4rem;">
+            FIELD OF RESEARCH: ${data.field.toUpperCase()}
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);">
+            AUTHOR: Prabhdeep Singh &bull; PEER RESEARCH &bull; THEORETICAL INQUIRY
+          </div>
+        </div>
+        ${data.content}
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);">DOCUMENT STATUS: ARCHIVED &bull; CITATION FORMAT: APA/IEEE</span>
+          <button class="btn-pill-v2" onclick="window.print()" style="padding: 0.5rem 1.25rem; font-size: 0.82rem; background: #ffffff; color: #000000; border: none; font-weight: 600;">
+            Print / Save Treatise ↗
+          </button>
+        </div>
+      `;
+    }
+
+    document.body.style.overflow = 'hidden';
+    articleModal.classList.add('is-open');
+  }
+
+  function closeArticleModal() {
+    if (articleModal) {
+      articleModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (articleModalClose) articleModalClose.addEventListener('click', closeArticleModal);
+  if (articleModal) {
+    articleModal.addEventListener('click', (e) => {
+      if (e.target === articleModal) closeArticleModal();
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     NEURAL BRAIN CONNECTOME — High-Luminescence Glowing Dark Node Engine
+     -------------------------------------------------------------------------- */
+  function initBrainNetwork() {
+    const canvas  = document.getElementById('brainCanvas');
+    const stage   = document.getElementById('brainNetworkStage');
+    const tooltip = document.getElementById('brainTooltip');
+    if (!canvas || !stage) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let W = 0, H = 0, cx = 0, cy = 0, Rx = 0, Ry = 0;
+    let dpr = window.devicePixelRatio || 1;
+    let animId = null;
+
+    const PALETTE = {
+      core:       '#fbbf24',
+      coreGlow:   'rgba(251, 191, 36, 0.70)',
+      cyan:       '#38bdf8',
+      cyanGlow:   'rgba(56, 189, 248, 0.65)',
+      indigo:     '#818cf8',
+      indigoGlow: 'rgba(129, 140, 248, 0.65)',
+      mint:       '#2dd4bf',
+      mintGlow:   'rgba(45, 212, 191, 0.65)',
+      amethyst:   '#c084fc',
+      amethystGlow:'rgba(192, 132, 252, 0.65)',
+      slate:      '#38bdf8',
+      starWhite:  '#ffffff',
+      contour:    'rgba(56, 189, 248, 0.06)'
+    };
+
+    const CORTEX = {
+      artId: 'book_qg',
+      label: 'QUANTUM GIGGLES',
+      sub: 'MY PUBLISHED BOOK // AMAZON',
+      title: 'Quantum Giggles: Laughing Through Cosmic Wonders',
+      kicker: 'CENTRAL HYPER-CORE // PUBLISHED BOOK',
+      action: 'CLICK TO EXPLORE BOOK CHAPTERS & READ ON AMAZON ↗',
+      coreRadius: 13.0,
+      glowRadius: 28.0,
+      color: PALETTE.core,
+      glowColor: PALETTE.coreGlow,
+      isCortex: true,
+      isMaster: true,
+      ping: 0
+    };
+
+    const MASTER_CORES = [
+      {
+        artId: 'art1',
+        lobe: 'FRONTAL LOBE // COSMOLOGY',
+        label: 'DARK ENERGY',
+        sub: 'Beyond Light // Treatise 01',
+        title: 'Dark Energy and Unseen Forces: A Journey Beyond Light',
+        kicker: 'LEFT FRONTAL LOBE // COSMOLOGY & PHOTON DYNAMICS',
+        action: 'CLICK TO READ FULL TREATISE & EQUATIONS ↗',
+        uNorm: -0.68,
+        vNorm: -0.48,
+        coreRadius: 8.5,
+        glowRadius: 18.0,
+        color: PALETTE.cyan,
+        glowColor: PALETTE.cyanGlow,
+        isCortex: false,
+        isMaster: true,
+        ping: 0
+      },
+      {
+        artId: 'art2',
+        lobe: 'PARIETAL LOBE // RADIOBIOLOGY',
+        label: 'SPACE RADIATION',
+        sub: 'Astronaut Health // Treatise 02',
+        title: 'Guardians of the Galaxy: How Space Radiation Affects Astronauts',
+        kicker: 'RIGHT PARIETAL LOBE // RADIOBIOLOGY & SHIELDING',
+        action: 'CLICK TO READ FULL TREATISE & COUNTERMEASURES ↗',
+        uNorm: 0.70,
+        vNorm: -0.22,
+        coreRadius: 8.5,
+        glowRadius: 18.0,
+        color: PALETTE.indigo,
+        glowColor: PALETTE.indigoGlow,
+        isCortex: false,
+        isMaster: true,
+        ping: 0
+      },
+      {
+        artId: 'art3',
+        lobe: 'TEMPORAL LOBE // QUANTUM SYSTEMS',
+        label: 'QUANTUM COMPUTING',
+        sub: 'Evolution & Moore // Treatise 03',
+        title: 'Evolution of Quantum Computing',
+        kicker: 'LEFT TEMPORAL LOBE // QUANTUM REVOLUTION & QUBITS',
+        action: 'CLICK TO READ FULL TREATISE & ANALYSIS ↗',
+        uNorm: -0.82,
+        vNorm: 0.28,
+        coreRadius: 8.5,
+        glowRadius: 18.0,
+        color: PALETTE.mint,
+        glowColor: PALETTE.mintGlow,
+        isCortex: false,
+        isMaster: true,
+        ping: 0
+      },
+      {
+        artId: 'art4',
+        lobe: 'OCCIPITAL LOBE // GENERAL RELATIVITY',
+        label: 'WARP DRIVE',
+        sub: 'Alcubierre Metric // Treatise 04',
+        title: 'In Search of the Impossible: The Science of Warp Drive',
+        kicker: 'RIGHT OCCIPITAL LOBE // GENERAL RELATIVITY & SPACETIME',
+        action: 'CLICK TO READ FULL TREATISE & TENSORS ↗',
+        uNorm: 0.68,
+        vNorm: 0.58,
+        coreRadius: 8.5,
+        glowRadius: 18.0,
+        color: PALETTE.amethyst,
+        glowColor: PALETTE.amethystGlow,
+        isCortex: false,
+        isMaster: true,
+        ping: 0
+      }
+    ];
+
+    const SUB_MASTERS = [
+      {
+        artId: 'art1',
+        parentMasterIdx: 1,
+        label: 'Photon Core Disc',
+        code: 'rot_disc.diam',
+        uNorm: -0.52,
+        vNorm: -0.62,
+        coreRadius: 5.0,
+        glowRadius: 10.0,
+        color: '#38bdf8',
+        kicker: 'DARK ENERGY // PHOTON ENTITY',
+        title: 'Rotating Disc Core & Photon Particle Stabilization',
+        action: 'CLICK TO READ TREATISE 01 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art1',
+        parentMasterIdx: 1,
+        label: '3D Matter Corpuscles',
+        code: 'matter_rad.3d',
+        uNorm: -0.80,
+        vNorm: -0.32,
+        coreRadius: 4.8,
+        glowRadius: 10.0,
+        color: '#0284c7',
+        kicker: 'DARK ENERGY // CORPUSCLE DYNAMICS',
+        title: 'Work Released as Electromagnetic Radiation',
+        action: 'CLICK TO READ TREATISE 01 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art1',
+        parentMasterIdx: 1,
+        label: 'Unseen Cosmic Forces',
+        code: 'dark_e.quint',
+        uNorm: -0.40,
+        vNorm: -0.35,
+        coreRadius: 4.6,
+        glowRadius: 9.5,
+        color: '#06b6d4',
+        kicker: 'DARK ENERGY // VACUUM EXPANSION',
+        title: 'Dynamic Quintessence & Vacuum Energy Polarization',
+        action: 'CLICK TO READ TREATISE 01 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art2',
+        parentMasterIdx: 2,
+        label: 'Cosmic Ray Flux',
+        code: 'gcr_hze.1gev',
+        uNorm: 0.52,
+        vNorm: -0.38,
+        coreRadius: 5.0,
+        glowRadius: 10.0,
+        color: '#818cf8',
+        kicker: 'SPACE RADIATION // GALACTIC COSMIC RAYS',
+        title: 'HZE Relativistic Heavy Ion Ionization Tracks',
+        action: 'CLICK TO READ TREATISE 02 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art2',
+        parentMasterIdx: 2,
+        label: 'DNA Damage Repair',
+        code: 'dna_dsb.repair',
+        uNorm: 0.84,
+        vNorm: -0.10,
+        coreRadius: 4.8,
+        glowRadius: 10.0,
+        color: '#6366f1',
+        kicker: 'SPACE RADIATION // CELLULAR HAZARDS',
+        title: 'Clustered DNA Double-Strand Breaks & Genetic Countermeasures',
+        action: 'CLICK TO READ TREATISE 02 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art2',
+        parentMasterIdx: 2,
+        label: 'Radiation Shielding',
+        code: 'shield_uhmw.pe',
+        uNorm: 0.44,
+        vNorm: -0.10,
+        coreRadius: 4.6,
+        glowRadius: 9.5,
+        color: '#a5b4fc',
+        kicker: 'SPACE RADIATION // COUNTERMEASURES',
+        title: 'Passive Polyethylene & Active Magnetic Deflection Shields',
+        action: 'CLICK TO READ TREATISE 02 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art3',
+        parentMasterIdx: 3,
+        label: 'Moore’s Law Ceiling',
+        code: 'moore_limit.07nm',
+        uNorm: -0.62,
+        vNorm: 0.14,
+        coreRadius: 5.0,
+        glowRadius: 10.0,
+        color: '#2dd4bf',
+        kicker: 'QUANTUM COMPUTING // MOORE LIMITS',
+        title: 'Quantum Tunneling Limits of Classical Silicon',
+        action: 'CLICK TO READ TREATISE 03 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art3',
+        parentMasterIdx: 3,
+        label: 'Qubit Superposition',
+        code: 'qubit.psi[2^n]',
+        uNorm: -0.88,
+        vNorm: 0.45,
+        coreRadius: 4.8,
+        glowRadius: 10.0,
+        color: '#10b981',
+        kicker: 'QUANTUM COMPUTING // 2^N EXPANSION',
+        title: 'Exponential State Space & Multi-Qubit Entanglement',
+        action: 'CLICK TO READ TREATISE 03 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art3',
+        parentMasterIdx: 3,
+        label: 'Quantum Supremacy',
+        code: 'q_speedup.algo',
+        uNorm: -0.48,
+        vNorm: 0.42,
+        coreRadius: 4.6,
+        glowRadius: 9.5,
+        color: '#34d399',
+        kicker: 'QUANTUM COMPUTING // ALGORITHMIC EDGE',
+        title: 'Shor & Grover Quantum Algorithmic Speedups',
+        action: 'CLICK TO READ TREATISE 03 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art4',
+        parentMasterIdx: 4,
+        label: 'Spacetime Expansion',
+        code: 'metric.expand_r',
+        uNorm: 0.50,
+        vNorm: 0.42,
+        coreRadius: 5.0,
+        glowRadius: 10.0,
+        color: '#c084fc',
+        kicker: 'WARP DRIVE // METRIC DISTORTION',
+        title: 'Rearward Local Spacetime Expansion Dynamics',
+        action: 'CLICK TO READ TREATISE 04 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art4',
+        parentMasterIdx: 4,
+        label: 'Spacetime Contraction',
+        code: 'metric.contract_f',
+        uNorm: 0.80,
+        vNorm: 0.72,
+        coreRadius: 4.8,
+        glowRadius: 10.0,
+        color: '#a855f7',
+        kicker: 'WARP DRIVE // METRIC DISTORTION',
+        title: 'Opposing Forward Contraction Within Relativity',
+        action: 'CLICK TO READ TREATISE 04 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'art4',
+        parentMasterIdx: 4,
+        label: 'Alcubierre Metric',
+        code: 'warp_vs.3p1',
+        uNorm: 0.38,
+        vNorm: 0.65,
+        coreRadius: 4.6,
+        glowRadius: 9.5,
+        color: '#e879f9',
+        kicker: 'WARP DRIVE // GENERAL RELATIVITY',
+        title: 'Superluminal Transit Without Local Violations',
+        action: 'CLICK TO READ TREATISE 04 ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'book_qg',
+        parentMasterIdx: 0,
+        label: 'Cosmic Wonders',
+        code: 'psi_sup.cosmic',
+        uNorm: -0.18,
+        vNorm: -0.22,
+        coreRadius: 5.0,
+        glowRadius: 10.0,
+        color: '#f59e0b',
+        kicker: 'QUANTUM GIGGLES // FOUNDATIONAL LOGIC',
+        title: 'Cosmic Superposition & Humor as Perspective Shift',
+        action: 'CLICK TO EXPLORE BOOK CHAPTERS ↗',
+        isSubMaster: true
+      },
+      {
+        artId: 'book_qg',
+        parentMasterIdx: 0,
+        label: 'Quantum Matrix',
+        code: 'matrix_h.uncert',
+        uNorm: 0.20,
+        vNorm: 0.22,
+        coreRadius: 5.0,
+        glowRadius: 10.0,
+        color: '#fbbf24',
+        kicker: 'QUANTUM GIGGLES // OBSERVATION DYNAMICS',
+        title: 'The Observer Effect in Mind, Philosophy & Code',
+        action: 'CLICK TO EXPLORE BOOK CHAPTERS ↗',
+        isSubMaster: true
+      }
+    ];
+
+    const CLUSTER_NEBULAE = [
+      { uNorm: -0.65, vNorm: -0.45, r: 250, color: 'rgba(56, 189, 248, 0.16)', core: 'rgba(56, 189, 248, 0.30)' },
+      { uNorm: 0.68,  vNorm: -0.22, r: 230, color: 'rgba(129, 140, 248, 0.14)', core: 'rgba(129, 140, 248, 0.26)' },
+      { uNorm: -0.72, vNorm: 0.32,  r: 240, color: 'rgba(45, 212, 191, 0.16)', core: 'rgba(45, 212, 191, 0.28)' },
+      { uNorm: 0.62,  vNorm: 0.58,  r: 230, color: 'rgba(192, 132, 252, 0.15)', core: 'rgba(217, 70, 239, 0.26)' },
+      { uNorm: 0.0,   vNorm: 0.14,  r: 270, color: 'rgba(245, 158, 11, 0.13)', core: 'rgba(251, 191, 36, 0.24)' }
+    ];
+
+    const TECH_MICRO_LABELS = [
+      'tensor_fp16.cu', 'qstate_0x3F', 'psi_decohere', 'shor.alu_256',
+      'qubit.entangle', 'euv_high_na', 'sub1nm_drift', 'tunnel_leak',
+      'gaa_sheet_3d', 'co2_epoch.kWh', 'sparse.92%', 'dvfs_0.75v',
+      'gemm.sparse', 'lif_neuron.42hz', 'memristor.4x4', 'stdp_decay',
+      'axon.spike_train', 'weight_w[i,j]', 'loss.0014', 'entropy_H(x)',
+      'gradient.norm', 'backprop_snn', 'qpu_v100_link', 'fp32_accum',
+      'superposition_p', 'qubit_fid.99.9%', 'photon_interconnect',
+      'prune.iter_14', 'neuromorph.v2', 'matrix_mul.tpu', 'phase_est.qft',
+      'leak_current.nA', 'nanosheet_w', 'carbon_footprint', 'inference_lat.ms',
+      'synaptic_wt.0.84', 'spiking_rate.kHz', 'hebbian.update', 'quantum_flux',
+      'cuda_stream_0', 'synapse_cond.mS', 'sub_threshold', 'qubit_gate.cnot'
+    ];
+
+    function getBrainLobeWidth(v) {
+      let w = 0.5;
+      if (v < -0.45) {
+        const t = (v + 0.45) / 0.50;
+        w = 0.78 * Math.sqrt(Math.max(0, 1 - t * t)) + 0.10;
+      } else if (v < 0.15) {
+        w = 0.90;
+      } else if (v < 0.55) {
+        const t = (v - 0.35) / 0.20;
+        w = 0.96 - 0.05 * (t * t);
+      } else {
+        const t = (v - 0.55) / 0.40;
+        w = 0.68 * Math.sqrt(Math.max(0, 1 - t * t)) + 0.12;
+      }
+      w *= (1 + 0.045 * Math.sin(v * 9.5) + 0.03 * Math.cos(v * 15.0));
+      return Math.min(1.0, Math.max(0.12, w));
+    }
+
+    let nodes = [];
+    let edges = [];
+    let signals = [];
+    let shockwaves = [];
+    let ambientVesicles = [];
+    let subMasterStartIndex = 5;
+    let subMasterEndIndex = 19;
+
+    const mouse = { x: -9999, y: -9999, isInside: false };
+    let hoveredNode = null;
+
+    function hexToRgba(hex, alpha) {
+      if (!hex) return 'rgba(148, 163, 184, ' + alpha.toFixed(3) + ')';
+      if (typeof hex === 'string' && hex.startsWith('rgba(')) {
+        return hex.replace(/[\d\.]+\)$/g, alpha.toFixed(3) + ')');
+      }
+      if (!hex || hex[0] !== '#') return 'rgba(148, 163, 184, ' + alpha.toFixed(3) + ')';
+      let r = 0, g = 0, b = 0;
+      if (hex.length === 4) {
+        r = parseInt(hex[1] + hex[1], 16);
+        g = parseInt(hex[2] + hex[2], 16);
+        b = parseInt(hex[3] + hex[3], 16);
+      } else if (hex.length >= 7) {
+        r = parseInt(hex.slice(1, 3), 16);
+        g = parseInt(hex.slice(3, 5), 16);
+        b = parseInt(hex.slice(5, 7), 16);
+      }
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(3) + ')';
+    }
+
+    function getBezierPoint(p0, cp, p1, t) {
+      const it = 1 - t;
+      return {
+        x: it * it * p0.x + 2 * it * t * cp.x + t * t * p1.x,
+        y: it * it * p0.y + 2 * it * t * cp.y + t * t * p1.y
+      };
+    }
+
+    function getEdgeControlPoint(edge, n1, n2) {
+      const mx = (n1.x + n2.x) * 0.5;
+      const my = (n1.y + n2.y) * 0.5;
+      const dx = n2.x - n1.x;
+      const dy = n2.y - n1.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const px = -dy / len;
+      const py = dx / len;
+
+      let cpx = mx + px * edge.curvature;
+      let cpy = my + py * edge.curvature;
+
+      if (mouse.isInside) {
+        const dist = Math.hypot(mouse.x - cpx, mouse.y - cpy);
+        const pullRadius = edge.isTrunk ? 190 : 130;
+        if (dist < pullRadius) {
+          const force = Math.pow(1 - dist / pullRadius, 1.4);
+          const pullStrength = edge.isTrunk ? 60 : 42;
+          cpx += (mouse.x - cpx) * (force * (pullStrength / pullRadius));
+          cpy += (mouse.y - cpy) * (force * (pullStrength / pullRadius));
+        }
+      }
+
+      return { x: cpx, y: cpy };
+    }
+
+    function drawGlowingDarkNode(ctx, x, y, coreR, glowR, color, alpha, options = {}) {
+      const isHovered = options.isHovered || false;
+      const isCentral = options.isCentral || false;
+      const isMaster  = options.isMaster || false;
+      const pulse     = options.pulse !== undefined ? options.pulse : 0.5;
+      const ping      = options.ping || 0;
+
+      const r = coreR * (isHovered ? 1.25 : 1.0) * (1 + ping * 0.15);
+      const haloR = r * (isCentral ? 2.5 : isMaster ? 2.2 : 1.9);
+
+      const haloGrd = ctx.createRadialGradient(x, y, r * 0.3, x, y, haloR);
+      haloGrd.addColorStop(0, hexToRgba(color, alpha * (isHovered ? 0.75 : 0.40)));
+      haloGrd.addColorStop(0.65, hexToRgba(color, alpha * 0.12));
+      haloGrd.addColorStop(1.0, 'transparent');
+
+      ctx.fillStyle = haloGrd;
+      ctx.beginPath();
+      ctx.arc(x, y, haloR, 0, Math.PI * 2);
+      ctx.fill();
+
+      const coreGrd = ctx.createRadialGradient(x, y, 0, x, y, r);
+      if (isCentral) {
+        coreGrd.addColorStop(0, '#ffffff');
+        coreGrd.addColorStop(0.40, '#fef08a');
+        coreGrd.addColorStop(0.85, '#f59e0b');
+        coreGrd.addColorStop(1.0, '#b45309');
+      } else if (isMaster) {
+        coreGrd.addColorStop(0, '#ffffff');
+        coreGrd.addColorStop(0.45, color);
+        coreGrd.addColorStop(1.0, color);
+      } else {
+        coreGrd.addColorStop(0, '#ffffff');
+        coreGrd.addColorStop(0.60, color);
+        coreGrd.addColorStop(1.0, color);
+      }
+
+      ctx.fillStyle = coreGrd;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = isHovered ? '#ffffff' : (isCentral ? '#fde68a' : isMaster ? '#ffffff' : hexToRgba(color, 0.85));
+      ctx.lineWidth = isCentral ? 1.5 : (isMaster ? 1.2 : 0.75);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      if (isCentral || isHovered) {
+        const ringR = r + 3.5 + pulse * 2.0;
+        ctx.strokeStyle = hexToRgba(color, (isHovered ? 0.65 : 0.30) * alpha);
+        ctx.lineWidth = 0.85;
+        ctx.beginPath();
+        ctx.arc(x, y, ringR, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    function createPRNG(seed = 42819) {
+      let s = seed >>> 0;
+      return function() {
+        s = (s + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(s ^ (s >>> 15), 1 | s);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function buildTopology() {
+      const prng = createPRNG(78219);
+      nodes = [];
+      edges = [];
+      signals = [];
+
+      CORTEX.x = cx;
+      CORTEX.y = cy;
+      CORTEX.baseX = cx;
+      CORTEX.baseY = cy;
+      CORTEX.vx = 0;
+      CORTEX.vy = 0;
+      CORTEX.z = 1.0;
+      nodes.push(CORTEX);
+
+      MASTER_CORES.forEach((mc) => {
+        mc.x = cx + mc.uNorm * Rx;
+        mc.y = cy + mc.vNorm * Ry;
+        mc.baseX = mc.x;
+        mc.baseY = mc.y;
+        mc.vx = 0;
+        mc.vy = 0;
+        mc.z = 0.95;
+        nodes.push(mc);
+      });
+
+      subMasterStartIndex = nodes.length;
+      SUB_MASTERS.forEach((sm) => {
+        sm.x = cx + sm.uNorm * Rx;
+        sm.y = cy + sm.vNorm * Ry;
+        sm.baseX = sm.x;
+        sm.baseY = sm.y;
+        sm.vx = 0;
+        sm.vy = 0;
+        sm.z = 0.85;
+        sm.ping = 0;
+        sm.floatAmpX = 4.2 + prng() * 3.0;
+        sm.floatAmpY = 3.2 + prng() * 2.6;
+        sm.floatSpeed = 0.00045 + prng() * 0.00035;
+        sm.pulsePhase = prng() * Math.PI * 2;
+        nodes.push(sm);
+      });
+      subMasterEndIndex = nodes.length;
+
+      const TOTAL_LEAF_NODES = 120;
+      const stellarColors = [
+        PALETTE.cyan, PALETTE.cyan,
+        PALETTE.indigo, PALETTE.indigo,
+        PALETTE.mint, PALETTE.mint,
+        PALETTE.amethyst, PALETTE.amethyst,
+        PALETTE.core, PALETTE.slate, PALETTE.starWhite
+      ];
+
+      for (let i = 0; i < TOTAL_LEAF_NODES; i++) {
+        const side = (i % 2 === 0) ? -1 : 1;
+        const v = -0.95 + prng() * 1.90;
+        const maxW = getBrainLobeWidth(v);
+
+        let uVal = 0, color = PALETTE.slate;
+        const roll = prng();
+
+        if (roll < 0.38) {
+          uVal = side * (maxW * (0.84 + prng() * 0.16));
+          if (v < -0.2) color = (side === -1 ? PALETTE.cyan : PALETTE.indigo);
+          else color = (side === -1 ? PALETTE.mint : PALETTE.amethyst);
+        } else if (roll < 0.72) {
+          uVal = side * (0.05 + prng() * (maxW * 0.78));
+          color = stellarColors[Math.floor(prng() * stellarColors.length)];
+        } else if (roll < 0.88) {
+          const angle = prng() * Math.PI * 2;
+          const rad = 24 + prng() * 85;
+          const nx = cx + Math.cos(angle) * rad * 1.15;
+          const ny = cy + Math.sin(angle) * (rad * 0.85);
+          nodes.push(createLeafNode(nx, ny, PALETTE.core, 0.45 + prng() * 0.5, i));
+          continue;
+        } else {
+          const t = (prng() - 0.5) * 0.14;
+          uVal = t;
+          color = prng() > 0.4 ? PALETTE.core : PALETTE.starWhite;
+        }
+
+        const nx = cx + uVal * Rx;
+        const ny = cy + v * Ry;
+        const z = 0.22 + prng() * 0.68;
+        nodes.push(createLeafNode(nx, ny, color, z, i));
+      }
+
+      function createLeafNode(nx, ny, color, z, idx) {
+        const coreR = 1.6 + z * 1.0;
+        const glowR = coreR * 2.2;
+        const hasMicroLabel = (idx % 12 === 0);
+        const microLabel = hasMicroLabel ? TECH_MICRO_LABELS[Math.floor(idx / 12) % TECH_MICRO_LABELS.length] : null;
+
+        return {
+          x: nx,
+          y: ny,
+          baseX: nx,
+          baseY: ny,
+          vx: 0,
+          vy: 0,
+          z: z,
+          coreRadius: coreR,
+          glowRadius: glowR,
+          baseAlpha: (0.35 + z * 0.40),
+          color: color,
+          pulsePhase: prng() * Math.PI * 2,
+          pulseSpeed: 0.003 + prng() * 0.003,
+          twinkleSpeed: 0.0005 + prng() * 0.0008,
+          floatAmpX: 2.2 + prng() * 1.8,
+          floatAmpY: 1.8 + prng() * 1.4,
+          floatSpeed: 0.00025 + prng() * 0.00025,
+          isCortex: false,
+          isMaster: false,
+          isSubMaster: false,
+          microLabel: microLabel,
+          ping: 0
+        };
+      }
+
+      for (let m = 1; m <= 4; m++) {
+        const mc = nodes[m];
+        const curv = (mc.x < cx ? -1 : 1) * (18 + prng() * 12);
+        edges.push({
+          from: m,
+          to: 0,
+          isTrunk: true,
+          color: mc.color,
+          curvature: curv,
+          width: 2.4,
+          pulseOffset: m * 1.2
+        });
+      }
+
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        const sm = nodes[s];
+        const parentIdx = sm.parentMasterIdx !== undefined ? sm.parentMasterIdx : 0;
+        const curv = (prng() - 0.5) * 14;
+        edges.push({
+          from: s,
+          to: parentIdx,
+          isSubTrunk: true,
+          color: sm.color,
+          curvature: curv,
+          width: 1.5
+        });
+      }
+
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        const sm = nodes[s];
+        const curv = (sm.x < cx ? -1 : 1) * (10 + prng() * 14);
+        edges.push({
+          from: s,
+          to: 0,
+          isTrunk: true,
+          isDirectToBig: true,
+          color: sm.color,
+          curvature: curv,
+          width: 1.4
+        });
+      }
+
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        for (let s2 = s + 1; s2 < subMasterEndIndex; s2++) {
+          if (nodes[s].parentMasterIdx === nodes[s2].parentMasterIdx) {
+            const curv = (prng() - 0.5) * 12;
+            edges.push({
+              from: s,
+              to: s2,
+              isTrunk: false,
+              color: nodes[s].color,
+              curvature: curv,
+              width: 1.1
+            });
+          }
+        }
+      }
+
+      const leafStartIndex = subMasterEndIndex;
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        const sm = nodes[s];
+        const clusterNeighbors = [];
+        for (let i = leafStartIndex; i < nodes.length; i++) {
+          const dx = nodes[i].baseX - sm.baseX;
+          const dy = nodes[i].baseY - sm.baseY;
+          clusterNeighbors.push({ idx: i, dist: Math.hypot(dx, dy) });
+        }
+        clusterNeighbors.sort((a, b) => a.dist - b.dist);
+        const kCount = Math.min(12, clusterNeighbors.length);
+        for (let k = 0; k < kCount; k++) {
+          const curv = (prng() - 0.5) * 12;
+          edges.push({
+            from: clusterNeighbors[k].idx,
+            to: s,
+            isTrunk: false,
+            color: sm.color,
+            curvature: curv,
+            width: 1.05
+          });
+        }
+      }
+
+      const maxConnectDist = Math.min(W, H) * 0.12;
+      for (let i = leafStartIndex; i < nodes.length; i++) {
+        let connected = 0;
+        for (let j = i + 1; j < nodes.length; j++) {
+          if (connected >= 3) break;
+          const dx = nodes[i].baseX - nodes[j].baseX;
+          const dy = nodes[i].baseY - nodes[j].baseY;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < maxConnectDist) {
+            const curv = (prng() - 0.5) * 10;
+            edges.push({
+              from: i,
+              to: j,
+              isTrunk: false,
+              color: nodes[i].color,
+              curvature: curv,
+              width: 0.95
+            });
+            connected++;
+          }
+        }
+      }
+
+      const crossPairs = [
+        { from: 1, to: 2 },
+        { from: 3, to: 4 },
+        { from: 1, to: 3 },
+        { from: 2, to: 4 }
+      ];
+      crossPairs.forEach((pair) => {
+        edges.push({
+          from: pair.from,
+          to: pair.to,
+          isTrunk: false,
+          color: '#38bdf8',
+          curvature: (prng() - 0.5) * 20,
+          width: 1.1
+        });
+      });
+
+      const MAX_SIGNALS = 28;
+      signals = [];
+      for (let s = 0; s < MAX_SIGNALS; s++) {
+        const sig = {
+          edge: null,
+          t: (s / MAX_SIGNALS),
+          speed: 0.0007,
+          size: 2.0,
+          color: PALETTE.cyan
+        };
+        resetSignal(sig);
+        sig.t = Math.random();
+        signals.push(sig);
+      }
+    }
+
+    function resetSignal(sig) {
+      if (edges.length === 0) return;
+      const roll = Math.random();
+      let edge;
+      if (roll < 0.55) {
+        const centralTrunks = edges.filter(e => e.to === 0);
+        edge = centralTrunks[Math.floor(Math.random() * centralTrunks.length)] || edges[0];
+      } else if (roll < 0.82) {
+        const subTrunks = edges.filter(e => e.isSubTrunk);
+        edge = subTrunks[Math.floor(Math.random() * subTrunks.length)] || edges[0];
+      } else {
+        const meshEdges = edges.filter(e => !e.isTrunk && !e.isSubTrunk);
+        edge = meshEdges[Math.floor(Math.random() * meshEdges.length)] || edges[0];
+      }
+
+      sig.edge = edge;
+      sig.t = 0;
+      sig.speed = edge.isTrunk ? (0.00065 + Math.random() * 0.00045) : (0.00045 + Math.random() * 0.00035);
+      sig.size = edge.isTrunk ? 2.6 : (edge.isSubTrunk ? 2.0 : 1.4);
+      sig.color = edge.color || PALETTE.cyan;
+    }
+
+    function resize() {
+      const rect = stage.getBoundingClientRect();
+      W = Math.floor(rect.width);
+      H = Math.floor(rect.height);
+      if (W <= 0 || H <= 0) return;
+
+      dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+
+      cx = W * 0.50;
+      cy = H * 0.49;
+      Rx = Math.min(W * 0.485, 780);
+      Ry = Math.min(H * 0.45, 340);
+
+      buildTopology();
+      initAmbientVesicles();
+    }
+
+    function initAmbientVesicles() {
+      ambientVesicles = [];
+      const count = Math.min(65, Math.floor((W * H) / 10000));
+      for (let i = 0; i < count; i++) {
+        ambientVesicles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: 0.5 + Math.random() * 1.2,
+          alpha: 0.08 + Math.random() * 0.25,
+          speed: (Math.random() - 0.5) * 0.045,
+          drift: (Math.random() - 0.5) * 0.035,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function renderNebulae(time) {
+      CLUSTER_NEBULAE.forEach((neb, i) => {
+        const nx = cx + neb.uNorm * Rx + Math.sin(time * 0.00022 + i * 1.5) * 5;
+        const ny = cy + neb.vNorm * Ry + Math.cos(time * 0.00018 + i * 1.2) * 4;
+        const pulse = 0.88 + 0.12 * Math.sin(time * 0.00035 + i);
+        const r = neb.r * pulse;
+
+        const grd = ctx.createRadialGradient(nx, ny, 0, nx, ny, r);
+        grd.addColorStop(0, neb.core);
+        grd.addColorStop(0.35, neb.color);
+        grd.addColorStop(0.70, hexToRgba(neb.color, 0.03));
+        grd.addColorStop(1.0, 'transparent');
+
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(nx, ny, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function renderBrainSilhouette(time) {
+      ctx.save();
+      const pulse = 0.5 + 0.5 * Math.sin(time * 0.00045);
+      const alpha = 0.038 + pulse * 0.015;
+
+      drawHemisphereOutline(-1, alpha);
+      drawHemisphereOutline(1, alpha);
+
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.035)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 8]);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - Ry * 0.95);
+      ctx.lineTo(cx, cy + Ry * 0.92);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = '600 8.5px monospace';
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.28)';
+      ctx.textAlign = 'center';
+      ctx.fillText('FRONTAL CORTEX // ANTERIOR', cx, cy - Ry * 1.02);
+      ctx.fillText('OCCIPITAL CORTEX // POSTERIOR', cx, cy + Ry * 1.05);
+
+      ctx.textAlign = 'left';
+      ctx.fillText('LEFT CEREBRAL HEMISPHERE', cx - Rx * 1.05, cy);
+      ctx.textAlign = 'right';
+      ctx.fillText('RIGHT CEREBRAL HEMISPHERE', cx + Rx * 1.05, cy);
+
+      ctx.restore();
+    }
+
+    function drawHemisphereOutline(side, alpha) {
+      ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha.toFixed(3) + ')';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+
+      const steps = 38;
+      let first = true;
+      for (let s = 0; s <= steps; s++) {
+        const v = -0.95 + (s / steps) * 1.90;
+        const w = getBrainLobeWidth(v);
+        const px = cx + side * w * Rx;
+        const py = cy + v * Ry;
+        if (first) { ctx.moveTo(px, py); first = false; }
+        else { ctx.lineTo(px, py); }
+      }
+      ctx.stroke();
+    }
+
+    function renderAmbientVesicles(time) {
+      ambientVesicles.forEach((v) => {
+        v.x += v.drift;
+        v.y += v.speed;
+        if (v.x < 0) v.x = W;
+        if (v.x > W) v.x = 0;
+        if (v.y < 0) v.y = H;
+        if (v.y > H) v.y = 0;
+        const flicker = 0.6 + 0.4 * Math.sin(time * 0.0004 + v.phase);
+        ctx.fillStyle = 'rgba(226, 232, 240, ' + (v.alpha * flicker).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(v.x, v.y, v.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function renderEdges(time) {
+      edges.forEach((edge) => {
+        const n1 = nodes[edge.from];
+        const n2 = nodes[edge.to];
+        if (!n1 || !n2) return;
+
+        const isHovered = (hoveredNode && (hoveredNode === n1 || hoveredNode === n2));
+        const cp = getEdgeControlPoint(edge, n1, n2);
+
+        if (edge.isTrunk) {
+          const pulse = 0.38 + 0.14 * Math.sin(time * 0.0006 + (edge.pulseOffset || 0));
+          const alpha = isHovered ? 0.88 : pulse;
+          const grad = ctx.createLinearGradient(n1.x, n1.y, n2.x, n2.y);
+          grad.addColorStop(0, hexToRgba(edge.color, alpha));
+          grad.addColorStop(0.5, hexToRgba(edge.color, alpha * 0.65));
+          grad.addColorStop(1, hexToRgba(PALETTE.core, alpha * 0.80));
+
+          ctx.save();
+          ctx.strokeStyle = hexToRgba(edge.color, isHovered ? 0.50 : 0.20);
+          ctx.lineWidth = isHovered ? 1.8 : 1.2;
+          ctx.beginPath();
+          ctx.moveTo(n1.x, n1.y);
+          ctx.quadraticCurveTo(cp.x, cp.y, n2.x, n2.y);
+          ctx.stroke();
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = isHovered ? 1.3 : 0.85;
+          ctx.setLineDash([5, 8]);
+          ctx.lineDashOffset = -(time * 0.004);
+          ctx.beginPath();
+          ctx.moveTo(n1.x, n1.y);
+          ctx.quadraticCurveTo(cp.x, cp.y, n2.x, n2.y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.restore();
+        } else {
+          const depthAlpha = ((n1.z + n2.z) * 0.5);
+          const alpha = isHovered ? 0.85 : (0.12 + depthAlpha * 0.12);
+          ctx.strokeStyle = hexToRgba(edge.color, alpha);
+          ctx.lineWidth = isHovered ? 1.3 : (edge.isSubTrunk ? 1.0 : 0.75);
+          ctx.beginPath();
+          ctx.moveTo(n1.x, n1.y);
+          ctx.quadraticCurveTo(cp.x, cp.y, n2.x, n2.y);
+          ctx.stroke();
+        }
+      });
+    }
+
+    function renderSignals() {
+      for (let i = 0; i < signals.length; i++) {
+        const sig = signals[i];
+        const accel = (sig.edge.to === 0) ? (1 + sig.t * 0.25) : 1.0;
+        sig.t += sig.speed * accel;
+
+        if (sig.t >= 1) {
+          const targetNode = nodes[sig.edge.to];
+          if (targetNode) {
+            targetNode.ping = 0.6;
+            if (targetNode.isCortex && shockwaves.length < 2) {
+              shockwaves.push({
+                x: targetNode.x,
+                y: targetNode.y,
+                radius: targetNode.coreRadius * 0.8,
+                maxRadius: targetNode.coreRadius * 2.2,
+                color: sig.color,
+                alpha: 0.5
+              });
+            }
+          }
+          resetSignal(sig);
+          continue;
+        }
+
+        const n1 = nodes[sig.edge.from];
+        const n2 = nodes[sig.edge.to];
+        if (!n1 || !n2) continue;
+
+        const cp = getEdgeControlPoint(sig.edge, n1, n2);
+        const pt = getBezierPoint(n1, cp, n2, sig.t);
+        const trailLen = sig.edge.isTrunk ? 0.12 : 0.08;
+        const trailT = Math.max(0, sig.t - trailLen);
+        const trailPt = getBezierPoint(n1, cp, n2, trailT);
+
+        const trailGrd = ctx.createLinearGradient(trailPt.x, trailPt.y, pt.x, pt.y);
+        trailGrd.addColorStop(0, 'transparent');
+        trailGrd.addColorStop(1, hexToRgba(sig.color, 0.80));
+
+        ctx.strokeStyle = trailGrd;
+        ctx.lineWidth = sig.size;
+        ctx.beginPath();
+        ctx.moveTo(trailPt.x, trailPt.y);
+        ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, sig.size * 0.75, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (sig.edge.to === 0) {
+          ctx.fillStyle = hexToRgba(sig.color, 0.35);
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, sig.size * 1.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function renderShockwaves() {
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const sw = shockwaves[i];
+        sw.radius += 0.60;
+        sw.alpha *= 0.975;
+        if (sw.alpha <= 0.02 || sw.radius >= sw.maxRadius) {
+          shockwaves.splice(i, 1);
+          continue;
+        }
+        ctx.strokeStyle = hexToRgba(sw.color, sw.alpha);
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    function renderMouseProbe() {
+      if (!mouse.isInside) return;
+      const probeDist = 110;
+      const near = [];
+      nodes.forEach((n) => {
+        const d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
+        if (d < probeDist) near.push({ node: n, dist: d });
+      });
+      near.sort((a, b) => a.dist - b.dist);
+      const top = near.slice(0, 3);
+      top.forEach((item) => {
+        const alpha = (1 - item.dist / probeDist) * 0.40;
+        ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha.toFixed(3) + ')';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 4]);
+        ctx.beginPath();
+        ctx.moveTo(mouse.x, mouse.y);
+        ctx.lineTo(item.node.x, item.node.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      });
+    }
+
+    function renderInterneurons(time) {
+      for (let i = subMasterEndIndex; i < nodes.length; i++) {
+        const n = nodes[i];
+        const tFloat = time * n.floatSpeed + n.pulsePhase;
+        const driftX = Math.sin(tFloat) * n.floatAmpX + Math.cos(tFloat * 0.55) * (n.floatAmpX * 0.4);
+        const driftY = Math.cos(tFloat * 0.85) * n.floatAmpY + Math.sin(tFloat * 0.45) * (n.floatAmpY * 0.4);
+        n.x = n.baseX + driftX;
+        n.y = n.baseY + driftY;
+
+        if (mouse.isInside) {
+          const dx = n.x - mouse.x;
+          const dy = n.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 85 && dist > 0) {
+            const force = (1 - dist / 85) * 16;
+            n.x += (dx / dist) * force;
+            n.y += (dy / dist) * force;
+          }
+        }
+
+        if (n.ping > 0) n.ping *= 0.92;
+
+        const twinkle = 0.65 + 0.35 * Math.sin(time * n.twinkleSpeed + n.pulsePhase);
+        const alpha = Math.min(1, (n.baseAlpha * twinkle + n.ping * 0.6));
+        const r = n.coreRadius * (1 + n.ping * 0.35);
+        const glowR = n.glowRadius * twinkle * (1 + n.ping * 0.4);
+
+        drawGlowingDarkNode(ctx, n.x, n.y, r, glowR, n.color, alpha, { pulse: twinkle, ping: n.ping });
+
+        if (n.microLabel) {
+          ctx.save();
+          ctx.font = '500 7px monospace';
+          ctx.fillStyle = hexToRgba(n.color, 0.40 + alpha * 0.35);
+          ctx.fillText(n.microLabel, n.x + r + 3, n.y + 2.5);
+          ctx.restore();
+        }
+      }
+    }
+
+    function renderSubMasters(time) {
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        const sm = nodes[s];
+        if (!sm) continue;
+        const isHovered = (hoveredNode === sm);
+
+        const tFloat = time * sm.floatSpeed + sm.pulsePhase;
+        const driftX = Math.sin(tFloat) * sm.floatAmpX + Math.cos(tFloat * 0.5) * (sm.floatAmpX * 0.35);
+        const driftY = Math.cos(tFloat * 0.85) * sm.floatAmpY + Math.sin(tFloat * 0.4) * (sm.floatAmpY * 0.35);
+        sm.x = sm.baseX + driftX;
+        sm.y = sm.baseY + driftY;
+
+        if (mouse.isInside) {
+          const dx = sm.x - mouse.x;
+          const dy = sm.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 95 && dist > 0) {
+            const force = (1 - dist / 95) * 14;
+            sm.x += (dx / dist) * force;
+            sm.y += (dy / dist) * force;
+          }
+        }
+
+        if (sm.ping > 0) sm.ping *= 0.93;
+
+        const pulse = 0.5 + 0.5 * Math.sin(time * 0.00075 + s);
+        const r = sm.coreRadius * (isHovered ? 1.25 : 1.0) * (1 + sm.ping * 0.2);
+        const glowR = sm.glowRadius * (isHovered ? 1.35 : 1.0);
+
+        drawGlowingDarkNode(ctx, sm.x, sm.y, r, glowR, sm.color, isHovered ? 1.0 : 0.90, {
+          pulse: pulse,
+          ping: sm.ping,
+          isHovered: isHovered,
+          isMaster: false
+        });
+
+        if (isHovered || sm.ping > 0.2) {
+          ctx.strokeStyle = hexToRgba(sm.color, isHovered ? 0.65 : sm.ping * 0.5);
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(sm.x, sm.y, r + 5 + Math.sin(time * 0.0012) * 1.5, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.save();
+        const isLeft = (sm.x < cx);
+        const textX = isLeft ? sm.x + r + 6 : sm.x - r - 6;
+        const textY = sm.y;
+        ctx.textAlign = isLeft ? 'left' : 'right';
+
+        if (isHovered) {
+          ctx.font = '600 9px Inter, -apple-system, sans-serif';
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+          ctx.shadowBlur = 4;
+          ctx.fillText(sm.label, textX, textY - 2);
+
+          ctx.font = '500 7px monospace';
+          ctx.fillStyle = hexToRgba(sm.color, 0.95);
+          ctx.fillText(sm.code, textX, textY + 8);
+        } else {
+          ctx.font = '500 6.5px monospace';
+          ctx.fillStyle = hexToRgba(sm.color, 0.45);
+          ctx.fillText(sm.code, textX, textY + 2.5);
+        }
+        ctx.restore();
+      }
+    }
+
+    function renderMasterCores(time) {
+      for (let m = 1; m <= 4; m++) {
+        const mc = nodes[m];
+        const isHovered = (hoveredNode === mc);
+
+        mc.x = mc.baseX + Math.sin(time * 0.00035 + m * 1.5) * 2.8;
+        mc.y = mc.baseY + Math.cos(time * 0.00028 + m * 1.2) * 2.2;
+
+        if (mc.ping > 0) mc.ping *= 0.94;
+
+        const pulse = 0.5 + 0.5 * Math.sin(time * 0.0006 + m);
+        const r = mc.coreRadius * (isHovered ? 1.20 : 1.0) * (1 + mc.ping * 0.12);
+        const glowR = mc.glowRadius * (isHovered ? 1.25 : 1.0);
+
+        drawGlowingDarkNode(ctx, mc.x, mc.y, r, glowR, mc.color, 0.98, {
+          isMaster: true,
+          isHovered: isHovered,
+          pulse: pulse,
+          ping: mc.ping
+        });
+
+        ctx.save();
+        const isLeft = (mc.x < cx);
+        const textX = isLeft ? mc.x + r + 10 : mc.x - r - 10;
+        const textY = mc.y;
+        ctx.textAlign = isLeft ? 'left' : 'right';
+
+        ctx.font = '600 7.5px monospace';
+        ctx.fillStyle = hexToRgba(mc.color, 0.85);
+        ctx.fillText(mc.lobe, textX, textY - 10);
+
+        ctx.font = '700 11.5px Inter, -apple-system, sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+        ctx.shadowBlur = 6;
+        ctx.fillText(mc.label, textX, textY + 3);
+
+        ctx.font = '500 8px monospace';
+        ctx.fillStyle = isHovered ? '#ffffff' : hexToRgba(mc.color, 0.80);
+        ctx.fillText(mc.sub, textX, textY + 14);
+        ctx.restore();
+      }
+    }
+
+    function renderCentralCortex(time) {
+      const isHovered = (hoveredNode === CORTEX);
+
+      CORTEX.x = cx + Math.sin(time * 0.00025) * 1.8;
+      CORTEX.y = cy + Math.cos(time * 0.00020) * 1.4;
+
+      if (CORTEX.ping > 0) CORTEX.ping *= 0.94;
+
+      const pulse = 0.5 + 0.5 * Math.sin(time * 0.0005);
+      const r = CORTEX.coreRadius * (isHovered ? 1.20 : 1.0) * (1 + CORTEX.ping * 0.12);
+      const glowR = CORTEX.glowRadius * (isHovered ? 1.25 : 1.0);
+
+      for (let k = 0; k < 2; k++) {
+        const phase = (time * 0.0002 + k * 0.5) % 1;
+        const ripR = r + 4 + phase * 22;
+        const ripAlpha = (1 - phase) * (isHovered ? 0.50 : 0.25);
+        ctx.strokeStyle = hexToRgba(PALETTE.core, ripAlpha);
+        ctx.lineWidth = 0.85;
+        ctx.beginPath();
+        ctx.arc(CORTEX.x, CORTEX.y, ripR, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      const streamCount = 5;
+      for (let s = 0; s < streamCount; s++) {
+        const streamAngle = (time * 0.0003 + s * ((Math.PI * 2) / streamCount));
+        const streamRadius = r + 7 + Math.sin(time * 0.0006 + s) * 5;
+        const px = CORTEX.x + Math.cos(streamAngle) * streamRadius * 1.25;
+        const py = CORTEX.y + Math.sin(streamAngle) * streamRadius * 0.85;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(px, py, 1.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      drawGlowingDarkNode(ctx, CORTEX.x, CORTEX.y, r, glowR, PALETTE.core, 1.0, {
+        isCentral: true,
+        isHovered: isHovered,
+        pulse: pulse,
+        ping: CORTEX.ping
+      });
+
+      const companionCount = 2;
+      for (let c = 0; c < companionCount; c++) {
+        const angle = time * (0.00018 + c * 0.00008) + (c * Math.PI);
+        const orbRx = r * 1.85;
+        const orbRy = r * 1.20;
+        const ox = CORTEX.x + Math.cos(angle) * orbRx;
+        const oy = CORTEX.y + Math.sin(angle) * orbRy;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(ox, oy, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = PALETTE.core;
+        ctx.lineWidth = 0.75;
+        ctx.beginPath();
+        ctx.arc(ox, oy, 1.8, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.save();
+      const labelY = CORTEX.y + r + 16;
+      ctx.textAlign = 'center';
+
+      ctx.font = '700 12.5px Inter, -apple-system, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(CORTEX.label, CORTEX.x, labelY);
+
+      ctx.font = '600 8px monospace';
+      ctx.fillStyle = isHovered ? '#ffffff' : PALETTE.core;
+      ctx.letterSpacing = '0.06em';
+      ctx.fillText(CORTEX.sub, CORTEX.x, labelY + 12);
+      ctx.restore();
+    }
+
+    function tick(time) {
+      ctx.clearRect(0, 0, W, H);
+
+      renderNebulae(time);
+      renderBrainSilhouette(time);
+      renderAmbientVesicles(time);
+      renderEdges(time);
+      renderSignals();
+      renderShockwaves();
+      renderMouseProbe();
+      renderInterneurons(time);
+      renderSubMasters(time);
+      renderMasterCores(time);
+      renderCentralCortex(time);
+
+      animId = requestAnimationFrame(tick);
+    }
+
+    function findHoveredNode(mx, my) {
+      const dCortex = Math.hypot(mx - CORTEX.x, my - CORTEX.y);
+      if (dCortex <= CORTEX.coreRadius + 18) {
+        return CORTEX;
+      }
+      for (let m = 1; m <= 4; m++) {
+        const mc = nodes[m];
+        if (!mc) continue;
+        const d = Math.hypot(mx - mc.x, my - mc.y);
+        if (d <= mc.coreRadius + 15) {
+          return mc;
+        }
+      }
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        const sm = nodes[s];
+        if (!sm) continue;
+        const d = Math.hypot(mx - sm.x, my - sm.y);
+        if (d <= sm.coreRadius + 12) {
+          return sm;
+        }
+      }
+      return null;
+    }
+
+    function updateTooltip(node) {
+      if (!tooltip) return;
+      if (!node) {
+        tooltip.classList.remove('is-visible');
+        tooltip.setAttribute('aria-hidden', 'true');
+        return;
+      }
+
+      tooltip.innerHTML = `
+        <span class="brain-tooltip-field" style="color: ${node.color || PALETTE.cyan}">${node.kicker || (node.isSubMaster ? 'SUB-MASTER RESEARCH INTERMEDIATE' : 'RESEARCH NEURAL NODE')}</span>
+        <span class="brain-tooltip-title">${node.title || node.label}</span>
+        <span class="brain-tooltip-action" style="color: ${node.color || PALETTE.core}">${node.action || 'CLICK TO EXPAND ↗'}</span>
+      `;
+
+      const nodeX = node.x;
+      const nodeY = node.isCortex ? node.y - node.coreRadius - 38 : node.y - node.coreRadius - 32;
+
+      const tooltipLeft = Math.max(16, Math.min(W - 280, nodeX - 120));
+      const tooltipTop = Math.max(12, nodeY - 60);
+
+      tooltip.style.left = tooltipLeft + 'px';
+      tooltip.style.top = tooltipTop + 'px';
+      tooltip.classList.add('is-visible');
+      tooltip.setAttribute('aria-hidden', 'false');
+    }
+
+    function onMouseMove(e) {
+      const rect = stage.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.isInside = true;
+
+      const found = findHoveredNode(mouse.x, mouse.y);
+      if (found !== hoveredNode) {
+        hoveredNode = found;
+        if (hoveredNode) {
+          stage.style.cursor = 'pointer';
+          updateTooltip(hoveredNode);
+        } else {
+          stage.style.cursor = 'default';
+          updateTooltip(null);
+        }
+      }
+    }
+
+    function onMouseLeave() {
+      mouse.isInside = false;
+      mouse.x = -9999;
+      mouse.y = -9999;
+      hoveredNode = null;
+      stage.style.cursor = 'default';
+      updateTooltip(null);
+    }
+
+    function onClick(e) {
+      const rect = stage.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      const clicked = findHoveredNode(clickX, clickY);
+
+      if (clicked) {
+        shockwaves.push({
+          x: clicked.x,
+          y: clicked.y,
+          radius: 12,
+          maxRadius: Math.min(W, H) * 0.45,
+          color: clicked.color,
+          alpha: 0.95
+        });
+
+        if (clicked.artId && typeof openArticleModal === 'function') {
+          openArticleModal(clicked.artId);
+        }
+      }
+    }
+
+    function onTouchStart(e) {
+      if (!e.touches || e.touches.length === 0) return;
+      const rect = stage.getBoundingClientRect();
+      const touchX = e.touches[0].clientX - rect.left;
+      const touchY = e.touches[0].clientY - rect.top;
+      const touched = findHoveredNode(touchX, touchY);
+      if (touched) {
+        e.preventDefault();
+        hoveredNode = touched;
+        updateTooltip(touched);
+        if (touched.artId && typeof openArticleModal === 'function') {
+          openArticleModal(touched.artId);
+        }
+      }
+    }
+
+    stage.addEventListener('mousemove', onMouseMove);
+    stage.addEventListener('mouseleave', onMouseLeave);
+    stage.addEventListener('click', onClick);
+    stage.addEventListener('touchstart', onTouchStart, { passive: false });
+
+    resize();
+    animId = requestAnimationFrame(tick);
+
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(animId);
+      resize();
+      animId = requestAnimationFrame(tick);
+    });
+    ro.observe(stage);
+  }
+
+  initBrainNetwork();
+
+  // Escape key closes all open modals & command palette
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePatentModal();
+      closeResumeModal();
+      closeProjectModal();
+      closeArticleModal();
+      closeCommandPalette();
+    }
+  });
+
+
+  /* ==========================================================================
+     11. TOAST NOTIFICATION HUD
+     ========================================================================== */
+  const toastHud = document.getElementById('toastNotificationHud');
+  function showToast(message, icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') {
+    if (!toastHud) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast-pill';
+    toast.innerHTML = `<span style="color: #38bdf8;">${icon}</span><span>${message}</span>`;
+    toastHud.appendChild(toast);
+    requestAnimationFrame(() => {
+      toast.classList.add('is-active');
+    });
+    setTimeout(() => {
+      toast.classList.remove('is-active');
+      setTimeout(() => toast.remove(), 320);
+    }, 2500);
+  }
+
+  /* ==========================================================================
+     12. MACOS DOCK MAGNIFICATION WAVE
+     ========================================================================== */
+  const dockPill = document.querySelector('.floating-dock');
+  if (dockPill && hasFinePointer) {
+    dockPill.addEventListener('mousemove', (e) => {
+      if (!isLaptop() || dockContainer.classList.contains('is-collapsed')) return;
+      const buttons = dockPill.querySelectorAll('.dock-btn');
+      const isSide = dockContainer.classList.contains('is-side-docked');
+      
+      buttons.forEach((btn) => {
+        const rect = btn.getBoundingClientRect();
+        const btnCenter = isSide ? (rect.top + rect.height / 2) : (rect.left + rect.width / 2);
+        const mouseCoord = isSide ? e.clientY : e.clientX;
+        const dist = Math.abs(mouseCoord - btnCenter);
+        const radius = 95;
+        
+        if (dist < radius) {
+          const factor = Math.cos((dist / radius) * (Math.PI / 2));
+          const scale = 1 + factor * 0.28;
+          const shift = isSide ? `translateX(${-factor * 8}px)` : `translateY(${-factor * 8}px)`;
+          btn.style.transform = `scale(${scale}) ${shift}`;
+        } else {
+          btn.style.transform = '';
+        }
+      });
+    });
+
+    dockPill.addEventListener('mouseleave', () => {
+      const buttons = dockPill.querySelectorAll('.dock-btn');
+      buttons.forEach((btn) => {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  /* ==========================================================================
+     13. PATENT 3D PERSPECTIVE TILT & RADIAL SPOTLIGHT
+     ========================================================================== */
+  document.querySelectorAll('.patent-card-v2').forEach((card) => {
+    if (!card.querySelector('.patent-spotlight-layer')) {
+      const spot = document.createElement('div');
+      spot.className = 'patent-spotlight-layer';
+      card.appendChild(spot);
+    }
+
+    if (hasFinePointer) {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--spot-x', `${x}px`);
+        card.style.setProperty('--spot-y', `${y}px`);
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = -((y - centerY) / centerY) * 7.5;
+        const rotateY = ((x - centerX) / centerX) * 7.5;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    }
+  });
+
+  /* ==========================================================================
+     14. SPOTLIGHT COMMAND PALETTE (⌘K / Ctrl+K)
+     ========================================================================== */
+  const cmdOverlay = document.getElementById('cmdPaletteOverlay');
+  const cmdTrigger = document.getElementById('cmdPaletteTrigger');
+  const cmdInput   = document.getElementById('cmdSearchInput');
+  const cmdList    = document.getElementById('cmdPaletteList');
+
+  const COMMAND_ITEMS = [
+    {
+      id: 'work',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
+      label: 'Career Trajectory & Experience',
+      desc: 'Mphasis, Mavriq AI, Chitkara, ITL',
+      shortcut: '↵ Work',
+      action: () => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+    },
+    {
+      id: 'patents',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>',
+      label: 'Intellectual Property (4 Patents)',
+      desc: 'EEG Earphones, Scalp Scanner, Ghungroo, Toothbrush',
+      shortcut: '↵ Patents',
+      action: () => document.getElementById('patents')?.scrollIntoView({ behavior: 'smooth' })
+    },
+    {
+      id: 'cv',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+      label: 'Curriculum Vitae (CV)',
+      desc: 'Open full printable resume modal',
+      shortcut: '↵ CV',
+      action: () => openResumeModal()
+    },
+    {
+      id: 'email',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+      label: 'Copy Email Address',
+      desc: 'prabhdeep.singh.work@gmail.com',
+      shortcut: 'Copy',
+      action: () => {
+        navigator.clipboard?.writeText('prabhdeep.singh.work@gmail.com');
+        showToast('Email copied to clipboard: prabhdeep.singh.work@gmail.com', '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>');
+      }
+    },
+    {
+      id: 'book',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
+      label: 'The Research Brain // Quantum Giggles',
+      desc: 'Central neural network cortex & global Amazon published book',
+      shortcut: '↵ Book',
+      action: () => document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' })
+    },
+    {
+      id: 'articles',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"></ellipse></svg>',
+      label: 'Scientific Treatises & Neural Cores',
+      desc: 'Dark Energy, Space Radiation, Quantum Computing, Warp Drive',
+      shortcut: '↵ Research',
+      action: () => document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
+    },
+    {
+      id: 'github',
+      icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>',
+      label: 'Open GitHub Profile',
+      desc: 'github.com/PrabhdeepJassal',
+      shortcut: 'External',
+      action: () => window.open('https://github.com/PrabhdeepJassal', '_blank')
+    },
+    {
+      id: 'contact',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
+      label: 'Discuss Opportunities with Prabhdeep',
+      desc: 'Navigate to contact inquiry section',
+      shortcut: '↵ Contact',
+      action: () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    }
+  ];
+
+  let selectedCmdIdx = 0;
+  let filteredCommands = [...COMMAND_ITEMS];
+
+  function renderCommands() {
+    if (!cmdList) return;
+    if (filteredCommands.length === 0) {
+      cmdList.innerHTML = `<div style="padding: 1.5rem; text-align: center; color: var(--text-dim); font-size: 0.9rem;">No matching commands found.</div>`;
+      return;
+    }
+    cmdList.innerHTML = filteredCommands.map((cmd, i) => `
+      <div class="cmd-item ${i === selectedCmdIdx ? 'is-selected' : ''}" data-cmd-idx="${i}">
+        <div class="cmd-item-left">
+          <span class="cmd-item-icon">${cmd.icon}</span>
+          <div>
+            <div class="cmd-item-label">${cmd.label}</div>
+            <div class="cmd-item-desc">${cmd.desc}</div>
+          </div>
+        </div>
+        <span class="cmd-item-shortcut">${cmd.shortcut}</span>
+      </div>
+    `).join('');
+
+    cmdList.querySelectorAll('.cmd-item').forEach((el) => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.getAttribute('data-cmd-idx'), 10);
+        executeCommand(idx);
+      });
+      el.addEventListener('mouseenter', () => {
+        selectedCmdIdx = parseInt(el.getAttribute('data-cmd-idx'), 10);
+        updateCommandSelection();
+      });
+    });
+  }
+
+  function updateCommandSelection() {
+    const items = cmdList.querySelectorAll('.cmd-item');
+    items.forEach((item, i) => {
+      item.classList.toggle('is-selected', i === selectedCmdIdx);
+      if (i === selectedCmdIdx) {
+        item.scrollIntoView({ block: 'nearest' });
+      }
+    });
+  }
+
+  function executeCommand(idx) {
+    const cmd = filteredCommands[idx];
+    if (cmd) {
+      closeCommandPalette();
+      setTimeout(cmd.action, 80);
+    }
+  }
+
+  function openCommandPalette() {
+    if (!cmdOverlay) return;
+    cmdOverlay.classList.add('is-open');
+    cmdOverlay.setAttribute('aria-hidden', 'false');
+    filteredCommands = [...COMMAND_ITEMS];
+    selectedCmdIdx = 0;
+    if (cmdInput) {
+      cmdInput.value = '';
+      setTimeout(() => cmdInput.focus(), 50);
+    }
+    renderCommands();
+  }
+
+  function closeCommandPalette() {
+    if (!cmdOverlay) return;
+    cmdOverlay.classList.remove('is-open');
+    cmdOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  if (cmdTrigger) cmdTrigger.addEventListener('click', openCommandPalette);
+  if (cmdOverlay) {
+    cmdOverlay.addEventListener('click', (e) => {
+      if (e.target === cmdOverlay) closeCommandPalette();
+    });
+  }
+
+  if (cmdInput) {
+    cmdInput.addEventListener('input', () => {
+      const query = cmdInput.value.toLowerCase().trim();
+      filteredCommands = COMMAND_ITEMS.filter(
+        c => c.label.toLowerCase().includes(query) || c.desc.toLowerCase().includes(query) || c.id.includes(query)
+      );
+      selectedCmdIdx = 0;
+      renderCommands();
+    });
+
+    cmdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedCmdIdx = (selectedCmdIdx + 1) % Math.max(1, filteredCommands.length);
+        updateCommandSelection();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedCmdIdx = (selectedCmdIdx - 1 + filteredCommands.length) % Math.max(1, filteredCommands.length);
+        updateCommandSelection();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        executeCommand(selectedCmdIdx);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeCommandPalette();
+      }
+    });
+  }
+
+  // Global ⌘K / Ctrl+K listener
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (cmdOverlay?.classList.contains('is-open')) {
+        closeCommandPalette();
+      } else {
+        openCommandPalette();
+      }
+    }
+  });
+
+});
