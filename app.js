@@ -1,20 +1,15 @@
 /**
  * ============================================================================
- * PRABHDEEP SINGH — MODERN MINIMAL AWWWARDS ENGINE
+ * PRABHDEEP SINGH — V2 MODERN MINIMAL AWWWARDS ENGINE
  * ============================================================================
  * Features:
  *  01. Magnetic Ball Cursor System
  *  02. Magnetic Elastic Floating Arrow Button
  *  03. Dynamic Marquee Velocity Acceleration
  *  04. Floating macOS Island Dock Navigation & Active Section Tracker
- *  05. Patent Technical Blueprints & In-Modal PDF Viewer
+ *  05. Patent Technical Blueprints Modal
  *  06. Curriculum Vitae (CV) Modal
  *  07. Smooth Navigation Links
- *  08. Dennis Snellenberg Floating Cursor Project Preview
- *  09. The Quantum Mind: Neural Brain Connectome
- *  10. Project Architecture Deep-Dive Drawer
- *  11. Toast Notification HUD
- *  12. Spotlight Command Palette (⌘K / Ctrl+K)
  * ============================================================================
  */
 
@@ -39,21 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      cursorDot.style.left = `${mouseX}px`;
-      cursorDot.style.top  = `${mouseY}px`;
+      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
 
       if (!isVisible) {
         isVisible = true;
         cursorDot.classList.remove('is-hidden');
         cursorCircle.classList.remove('is-hidden');
       }
-    });
+    }, { passive: true });
 
     function animateCursorCircle() {
-      circleX += (mouseX - circleX) * 0.15;
-      circleY += (mouseY - circleY) * 0.15;
-      cursorCircle.style.left = `${circleX}px`;
-      cursorCircle.style.top  = `${circleY}px`;
+      circleX += (mouseX - circleX) * 0.16;
+      circleY += (mouseY - circleY) * 0.16;
+      cursorCircle.style.transform = `translate3d(${circleX.toFixed(2)}px, ${circleY.toFixed(2)}px, 0) translate(-50%, -50%)`;
       requestAnimationFrame(animateCursorCircle);
     }
     requestAnimationFrame(animateCursorCircle);
@@ -98,17 +91,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Magnetic Elastic Motion for Callout Group & Arrow
   if (calloutGroup && hasFinePointer) {
+    let calloutRect = null;
+    calloutGroup.addEventListener('mouseenter', () => {
+      calloutRect = calloutGroup.getBoundingClientRect();
+    });
+
     calloutGroup.addEventListener('mousemove', (e) => {
-      const rect = calloutGroup.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+      if (!calloutRect) calloutRect = calloutGroup.getBoundingClientRect();
+      const centerX = calloutRect.left + calloutRect.width / 2;
+      const centerY = calloutRect.top + calloutRect.height / 2;
       const deltaX = (e.clientX - centerX) * 0.22;
       const deltaY = (e.clientY - centerY) * 0.22;
-      calloutGroup.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      calloutGroup.style.transform = `translate3d(${deltaX.toFixed(1)}px, ${deltaY.toFixed(1)}px, 0)`;
     });
 
     calloutGroup.addEventListener('mouseleave', () => {
-      calloutGroup.style.transform = 'translate(0px, 0px)';
+      calloutRect = null;
+      calloutGroup.style.transform = 'translate3d(0px, 0px, 0)';
     });
   }
 
@@ -300,7 +299,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  window.addEventListener('scroll', handleDockScroll, { passive: true });
+  let isDockScrollScheduled = false;
+  function scheduleDockScroll() {
+    if (!isDockScrollScheduled) {
+      isDockScrollScheduled = true;
+      requestAnimationFrame(() => {
+        handleDockScroll();
+        isDockScrollScheduled = false;
+      });
+    }
+  }
+
+  window.addEventListener('scroll', scheduleDockScroll, { passive: true });
   window.addEventListener('resize', () => {
     if (!isLaptop() && dockContainer) {
       isSideDocked = false;
@@ -356,7 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
       kicker: 'PATENT 01 // PUBLISHED GAZETTE',
       status: 'Published Gazette',
       pdfUrl: 'assets/patents/earphone.pdf',
-      fallbackPdfUrl: 'v2/assets/patents/earphone.pdf',
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  EEG BRAIN SIGNAL MONITORING & STERILIZATION ENGINE        │
 │                                                             │
@@ -377,7 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
       kicker: 'PATENT 02 // PUBLISHED GAZETTE',
       status: 'Published Gazette',
       pdfUrl: 'assets/patents/comb.pdf',
-      fallbackPdfUrl: 'v2/assets/patents/comb.pdf',
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  MULTI-SPECTRAL TRICHOLOGICAL OPTICAL SCANNER               │
 │                                                             │
@@ -399,7 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
       kicker: 'PATENT 03 // PUBLISHED GAZETTE',
       status: 'Published Gazette',
       pdfUrl: 'assets/patents/anklet.pdf',
-      fallbackPdfUrl: 'v2/assets/patents/anklet.pdf',
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  KINETIC FOOT-STRIKE ACOUSTIC SYNTHESIS ENGINE              │
 │                                                             │
@@ -421,7 +428,6 @@ document.addEventListener('DOMContentLoaded', () => {
       kicker: 'PATENT 04 // FILED & DOCKETED',
       status: 'Filed // Examination',
       pdfUrl: 'assets/patents/toothbrush.pdf',
-      fallbackPdfUrl: 'v2/assets/patents/toothbrush.pdf',
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  BIOMETRIC ACCESSIBLE ORAL HEALTHCARE ARCHITECTURE          │
 │                                                             │
@@ -439,11 +445,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // State management for viewer
   let currentPdfDoc = null;
   let currentZoom = 1.0;
   let currentPageIndex = 1;
   let totalDocPages = 1;
-  let renderedPageDimensions = new Map();
+  let renderedPageDimensions = new Map(); // pageNum -> { width, height }
   let pageScrollObserver = null;
   let activePatentId = null;
 
@@ -475,22 +482,26 @@ document.addEventListener('DOMContentLoaded', () => {
     pvNoticeSwitchSpecsBtn.addEventListener('click', () => switchViewerTab('specs'));
   }
 
+  // Toggle Maximize Viewer
   function toggleMaximizeViewer() {
     if (!patentModalCard) return;
     const isMax = patentModalCard.classList.toggle('is-maximized');
     if (pvMaximizeBtn) {
       pvMaximizeBtn.title = isMax ? 'Restore Modal Size' : 'Toggle Fullscreen Expansion';
     }
+    // Re-fit page width comfortably after window reflow
     setTimeout(fitWidthToViewer, 200);
   }
   if (pvMaximizeBtn) pvMaximizeBtn.addEventListener('click', toggleMaximizeViewer);
 
+  // Zoom Engine
   function applyZoom(zoom) {
     currentZoom = Math.min(2.4, Math.max(0.5, Math.round(zoom * 100) / 100));
     if (pvZoomLevelBtn) {
       pvZoomLevelBtn.textContent = `${Math.round(currentZoom * 100)}%`;
     }
 
+    // Smoothly scale all rendered page canvases
     renderedPageDimensions.forEach((dim, pageNum) => {
       const card = pvCanvasFlow?.querySelector(`.pv-page-card[data-page-num="${pageNum}"]`);
       const canvas = card?.querySelector('.pv-page-canvas');
@@ -500,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // If in fallback iframe embed mode, scale the wrap
     const embedIframe = pvEmbedContainer?.querySelector('.pv-fallback-iframe');
     if (embedIframe) {
       embedIframe.style.transform = `scale(${currentZoom})`;
@@ -507,13 +519,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function zoomIn() { applyZoom(currentZoom + 0.15); }
-  function zoomOut() { applyZoom(currentZoom - 0.15); }
-  function resetZoom() { applyZoom(1.0); }
+  function zoomIn() {
+    applyZoom(currentZoom + 0.15);
+  }
+
+  function zoomOut() {
+    applyZoom(currentZoom - 0.15);
+  }
+
+  function resetZoom() {
+    applyZoom(1.0);
+  }
 
   function fitWidthToViewer() {
     if (!pvScrollViewport) return;
-    const availableWidth = pvScrollViewport.clientWidth - 56;
+    const availableWidth = pvScrollViewport.clientWidth - 56; // account for padding & scrollbar
     const firstDim = renderedPageDimensions.get(1);
     if (firstDim && firstDim.width > 0) {
       const targetZoom = availableWidth / firstDim.width;
@@ -528,6 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (pvZoomLevelBtn) pvZoomLevelBtn.addEventListener('click', resetZoom);
   if (pvFitWidthBtn) pvFitWidthBtn.addEventListener('click', fitWidthToViewer);
 
+  // Paging controls
   function updatePagingDisplay(page, total) {
     currentPageIndex = page;
     totalDocPages = total;
@@ -557,6 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Setup scroll observation to update current page number dynamically
   function setupPageScrollTracking() {
     if (pageScrollObserver) pageScrollObserver.disconnect();
     if (!pvScrollViewport) return;
@@ -580,6 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Fallback iframe embedding if PDF.js fails or CORS restrictions apply
   function renderEmbedFallback(pdfUrl) {
     if (pvLoader) pvLoader.style.display = 'none';
     if (pvCanvasFlow) pvCanvasFlow.style.display = 'none';
@@ -598,9 +621,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePagingDisplay(1, 1);
   }
 
+  // Render PDF pages sequentially onto high-DPI canvases
   async function loadAndRenderPdf(patentData) {
-    let pdfUrl = patentData.pdfUrl;
+    const pdfUrl = patentData.pdfUrl;
 
+    // Show loading spinner
     if (pvLoader) pvLoader.style.display = 'flex';
     if (pvCanvasFlow) {
       pvCanvasFlow.innerHTML = '';
@@ -613,12 +638,14 @@ document.addEventListener('DOMContentLoaded', () => {
     currentZoom = 1.0;
     if (pvZoomLevelBtn) pvZoomLevelBtn.textContent = '100%';
 
+    // If PDF.js is not loaded on page, immediately use seamless embed fallback
     if (!window.pdfjsLib) {
       renderEmbedFallback(pdfUrl);
       return;
     }
 
     try {
+      // Test if file exists by fetching head/get or via getDocument
       const loadingTask = window.pdfjsLib.getDocument({
         url: pdfUrl,
         cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
@@ -631,7 +658,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (pvLoader) pvLoader.style.display = 'none';
 
-      const pixelRatio = Math.max(2, window.devicePixelRatio || 1);
+      // Render each page into its own card
+      const pixelRatio = Math.max(2, window.devicePixelRatio || 1); // 2x base resolution for razor-sharp zoom
 
       for (let pageNum = 1; pageNum <= numPages; pageNum++) {
         const page = await currentPdfDoc.getPage(pageNum);
@@ -654,6 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.className = 'pv-page-canvas';
         const ctx = canvas.getContext('2d', { alpha: false });
 
+        // High DPI canvas buffer
         const renderViewport = page.getViewport({ scale: pixelRatio });
         canvas.width = Math.floor(renderViewport.width);
         canvas.height = Math.floor(renderViewport.height);
@@ -664,6 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.appendChild(canvas);
         pvCanvasFlow.appendChild(card);
 
+        // Render page vector stream
         const renderContext = {
           canvasContext: ctx,
           viewport: renderViewport
@@ -671,6 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await page.render(renderContext).promise;
       }
 
+      // Automatically fit width comfortably on initial load
       setTimeout(() => {
         fitWidthToViewer();
         setupPageScrollTracking();
@@ -679,35 +710,34 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.warn('PDF.js rendering note:', err.message);
 
-      // Try automatic transparent fallback to v2/assets path if needed
-      if (patentData.fallbackPdfUrl && pdfUrl !== patentData.fallbackPdfUrl && !patentData._retried) {
-        patentData._retried = true;
-        patentData.pdfUrl = patentData.fallbackPdfUrl;
-        return loadAndRenderPdf(patentData);
-      }
-
+      // Check if file is missing (e.g. Patent 4 filed / pending publication)
       if (patentData.status.toLowerCase().includes('filed') || pdfUrl.includes('toothbrush')) {
         if (pvLoader) pvLoader.style.display = 'none';
         if (pvCanvasFlow) pvCanvasFlow.style.display = 'none';
         if (pvEmbedContainer) pvEmbedContainer.style.display = 'none';
         if (pvNoticeContainer) pvNoticeContainer.style.display = 'flex';
+        // Auto-switch to architecture blueprint tab
         switchViewerTab('specs');
       } else {
+        // Otherwise attempt embedded browser frame fallback
         renderEmbedFallback(pdfUrl);
       }
     }
   }
 
+  // Open Patent Modal
   function openPatentModal(id) {
     const data = PATENT_DATA_V2[id];
     if (!data || !patentModal) return;
 
     activePatentId = id;
 
+    // Set modal headers
     if (patentModalTitle) patentModalTitle.textContent = data.title;
     if (patentModalKicker) patentModalKicker.textContent = data.kicker;
     if (pvStatusBadge) pvStatusBadge.textContent = data.status;
 
+    // Inject Architecture & Technical Blueprint Content into specs pane
     if (patentModalBody) {
       patentModalBody.innerHTML = `
         <div style="margin-bottom: 2rem;">
@@ -734,9 +764,14 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
 
+    // Default to PDF view tab
     switchViewerTab('pdf');
+
+    // Open Modal
     document.body.style.overflow = 'hidden';
     patentModal.classList.add('is-open');
+
+    // Load PDF document in custom viewer
     loadAndRenderPdf(data);
   }
 
@@ -750,6 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Attach card click handlers
   document.querySelectorAll('.patent-card-v2[data-patent-id]').forEach((card) => {
     card.addEventListener('click', () => {
       const id = card.getAttribute('data-patent-id');
@@ -760,10 +796,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (patentModalClose) patentModalClose.addEventListener('click', closePatentModal);
   if (patentModal) {
     patentModal.addEventListener('click', (e) => {
-      if (e.target === patentModal) closePatentModal();
+      if (!e.target.closest('.pv-container') && !e.target.closest('.patent-modal-card')) closePatentModal();
     });
   }
 
+  // Keyboard navigation shortcuts when viewer is open
   document.addEventListener('keydown', (e) => {
     if (!patentModal?.classList.contains('is-open')) return;
 
@@ -813,26 +850,67 @@ document.addEventListener('DOMContentLoaded', () => {
   if (resumeModalClose) resumeModalClose.addEventListener('click', closeResumeModal);
   if (resumeModal) {
     resumeModal.addEventListener('click', (e) => {
-      if (e.target === resumeModal) closeResumeModal();
+      if (!e.target.closest('.modal-card-v2') && !e.target.closest('.resume-preview-card')) closeResumeModal();
     });
   }
 
 
   /* ==========================================================================
-     07. CURVED SECTION TRANSITION DYNAMIC MORPHING
+     06. LIVE TELEMETRY CLOCK (PUNJAB, INDIA IST)
      ========================================================================== */
-  const heroCurvePath = document.getElementById('heroCurvePath');
-  function updateCurveOnScroll() {
-    if (!heroCurvePath) return;
-    const scrollY = window.scrollY;
-    const curveAmount = Math.max(0, Math.min(80, 80 - scrollY * 0.22));
-    heroCurvePath.setAttribute('d', `M 0,0 Q 720,${curveAmount} 1440,0 L 1440,90 L 0,90 Z`);
+  const clockEl = document.getElementById('liveClockIST');
+  function updateLiveClock() {
+    if (!clockEl) return;
+    try {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      const formatter = new Intl.DateTimeFormat('en-IN', options);
+      clockEl.textContent = `${formatter.format(now)} IST`;
+    } catch {
+      const now = new Date();
+      clockEl.textContent = `${now.toLocaleTimeString()} IST`;
+    }
   }
-  window.addEventListener('scroll', updateCurveOnScroll, { passive: true });
+  updateLiveClock();
+  setInterval(updateLiveClock, 1000);
 
 
   /* ==========================================================================
-     08. MARQUEE VELOCITY ACCELERATION ON SCROLL
+     07. CURVED SECTION TRANSITION DYNAMIC MORPHING (Dennis Snellenberg Arc)
+     ========================================================================== */
+  const heroCurvePath = document.getElementById('heroCurvePath');
+  let lastCurveVal = -1;
+  let isCurveScheduled = false;
+  function updateCurveOnScroll() {
+    if (!heroCurvePath) return;
+    const scrollY = window.scrollY;
+    if (scrollY > 420 && lastCurveVal === 0) return;
+    const curveAmount = Math.max(0, Math.min(80, 80 - scrollY * 0.22));
+    if (Math.abs(curveAmount - lastCurveVal) >= 0.5 || (curveAmount === 0 && lastCurveVal !== 0)) {
+      lastCurveVal = curveAmount;
+      heroCurvePath.setAttribute('d', `M 0,0 Q 720,${curveAmount.toFixed(1)} 1440,0 L 1440,90 L 0,90 Z`);
+    }
+  }
+  function scheduleCurveScroll() {
+    if (!isCurveScheduled) {
+      isCurveScheduled = true;
+      requestAnimationFrame(() => {
+        updateCurveOnScroll();
+        isCurveScheduled = false;
+      });
+    }
+  }
+  window.addEventListener('scroll', scheduleCurveScroll, { passive: true });
+
+
+  /* ==========================================================================
+     08. MARQUEE VELOCITY ACCELERATION ON SCROLL (THROTTLED & IDLE-EFFICIENT)
      ========================================================================== */
   const marqueeContent = document.querySelector('.marquee-content-hero');
   if (marqueeContent) {
@@ -864,6 +942,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
+      // Check if settled back to base rate: stop loop to free main thread
       if (Math.abs(currentPlayback - 1.0) < 0.01 && Math.abs(targetPlayback - 1.0) < 0.01) {
         if (anims && anims.length > 0) {
           anims.forEach((anim) => {
@@ -883,6 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentScroll = window.scrollY;
       const delta = Math.abs(currentScroll - lastScroll);
       lastScroll = currentScroll;
+      // Exponential acceleration on scroll up to 4.5x baseline speed
       targetPlayback = 1.0 + Math.min(delta * 0.055, 3.8);
 
       if (!isTicking) {
@@ -894,7 +974,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     09. FLOATING INTERACTIVE PROJECT CURSOR PREVIEW
+     09. FLOATING INTERACTIVE PROJECT CURSOR PREVIEW (Dennis Snellenberg Style)
      ========================================================================== */
   const previewContainer = document.getElementById('floatingProjectPreview');
   const previewBadge     = document.getElementById('previewBadge');
@@ -934,20 +1014,34 @@ document.addEventListener('DOMContentLoaded', () => {
     let previewTargetY = window.innerHeight / 2;
     let previewCurrentX = previewTargetX;
     let previewCurrentY = previewTargetY;
+    let isPreviewActive = false;
+    let previewRafId = null;
+
+    function tickProjectPreview() {
+      previewCurrentX += (previewTargetX - previewCurrentX) * 0.14;
+      previewCurrentY += (previewTargetY - previewCurrentY) * 0.14;
+      previewContainer.style.transform = `translate3d(${previewCurrentX.toFixed(1)}px, ${previewCurrentY.toFixed(1)}px, 0) translate(-50%, -50%) ${isPreviewActive ? 'scale(1) rotate(0deg)' : 'scale(0.65) rotate(-6deg)'}`;
+
+      const deltaX = Math.abs(previewTargetX - previewCurrentX);
+      const deltaY = Math.abs(previewTargetY - previewCurrentY);
+      if (isPreviewActive || deltaX > 0.4 || deltaY > 0.4) {
+        previewRafId = requestAnimationFrame(tickProjectPreview);
+      } else {
+        previewRafId = null;
+      }
+    }
+
+    function startPreviewLoop() {
+      if (!previewRafId) {
+        previewRafId = requestAnimationFrame(tickProjectPreview);
+      }
+    }
 
     window.addEventListener('mousemove', (e) => {
       previewTargetX = e.clientX;
       previewTargetY = e.clientY;
-    });
-
-    function animateProjectPreview() {
-      previewCurrentX += (previewTargetX - previewCurrentX) * 0.12;
-      previewCurrentY += (previewTargetY - previewCurrentY) * 0.12;
-      previewContainer.style.left = `${previewCurrentX}px`;
-      previewContainer.style.top  = `${previewCurrentY}px`;
-      requestAnimationFrame(animateProjectPreview);
-    }
-    requestAnimationFrame(animateProjectPreview);
+      if (isPreviewActive) startPreviewLoop();
+    }, { passive: true });
 
     document.querySelectorAll('.work-row-v2[data-project-id]').forEach((row) => {
       row.addEventListener('mouseenter', () => {
@@ -958,17 +1052,23 @@ document.addEventListener('DOMContentLoaded', () => {
           if (previewTitle) previewTitle.textContent = data.title;
           if (previewTags) previewTags.textContent = data.tags;
           if (previewCard) previewCard.style.background = data.gradient;
+          isPreviewActive = true;
           previewContainer.classList.add('is-active');
+          startPreviewLoop();
         }
       });
 
       row.addEventListener('mouseleave', () => {
+        isPreviewActive = false;
         previewContainer.classList.remove('is-active');
       });
     });
   }
 
 
+  /* ==========================================================================
+     10. PROJECT ARCHITECTURE DEEP-DIVE MODAL
+     ========================================================================== */
   /* ==========================================================================
      10. PROJECT ARCHITECTURE & EXPERIENCE DEEP-DIVE MODAL
      ========================================================================== */
@@ -1067,6 +1167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = PROJECT_DETAILS[id];
     if (!data || !projectModal) return;
 
+    // Immediately dismiss floating project cursor preview
     if (previewContainer) {
       previewContainer.classList.remove('is-active');
     }
@@ -1150,7 +1251,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (projectModalClose) projectModalClose.addEventListener('click', closeProjectModal);
   if (projectModal) {
     projectModal.addEventListener('click', (e) => {
-      if (e.target === projectModal) closeProjectModal();
+      if (!e.target.closest('.modal-card-v2')) closeProjectModal();
     });
   }
 
@@ -1181,10 +1282,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const ARTICLE_DATA_V2 = {
     book_qg: {
-      kicker: 'PUBLISHED AUTHOR • GLOBAL AMAZON KINDLE EDITION',
+      kicker: 'PUBLISHED AUTHOR • GLOBAL AMAZON KINDLE RELEASE',
       title: 'Quantum Giggles: Laughing Through Cosmic Wonders',
-      field: 'Quantum Information, Relativistic Physics & Accessible Science',
-      abstract: 'A full-length published book demystifying quantum mechanics—wave-particle duality, superposition, quantum entanglement, and spacetime geometry—with wit, approachable humor, and real-world software engineering analogies.',
+      field: 'Electric Echoes: A Cyberpunk Odyssey of Discovery & Enlightenment',
+      abstract: 'A published cyberpunk and quantum science odyssey by Prabhdeep Singh demystifying quantum mechanics—superposition, teleportation, entanglement, and spacetime—with comedic brilliance and distributed software engineering analogies.',
       content: `
         <div style="margin-bottom: 2rem;">
           <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. Executive Overview &amp; Global Publication</h4>
@@ -1320,7 +1421,7 @@ document.addEventListener('DOMContentLoaded', () => {
 │   [Shor's Algorithm]: Factoring O((log N)^2 (log log N))    │
 │   [Grover's Search]: Quadratic Speedup O(&radic;N) vs O(N)          │
 │   [Josephson Junction Transmons]: Non-linear LC oscillators  │
-│└─────────────────────────────────────────────────────────────┘</pre>
+└─────────────────────────────────────────────────────────────┘</pre>
         </div>
 
         <div style="margin-bottom: 2rem;">
@@ -1374,7 +1475,697 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  /* ==========================================================================
+     SHARED AUDIO CONTEXT (Prevents browser AudioContext leaks & crashes)
+     ========================================================================== */
+  let sharedAudioCtx = null;
+  function getSharedAudioContext() {
+    try {
+      if (!sharedAudioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          sharedAudioCtx = new AudioCtx();
+        }
+      }
+      if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+        sharedAudioCtx.resume().catch(() => {});
+      }
+      return sharedAudioCtx;
+    } catch {
+      return null;
+    }
+  }
+
+  /* ==========================================================================
+     11B. 3D INTERACTIVE BOOK EXPERIENCE (QUANTUM GIGGLES)
+     ========================================================================== */
+  let open3DBookViewer = () => {};
+  let close3DBookViewer = () => {};
+
+  function init3DBookViewer() {
+    const overlay = document.getElementById('bookModal3D');
+    const bookObj = document.getElementById('book3DObject');
+    const coverFront = document.getElementById('bookCoverFront');
+    const closeBtn = document.getElementById('bookModalCloseBtn');
+    const prevBtn = document.getElementById('bookPrevBtn');
+    const nextBtn = document.getElementById('bookNextBtn');
+    const toggleCoverBtn = document.getElementById('bookToggleCoverBtn');
+    const restartBtn = document.getElementById('bookRestartBtn');
+    const quickOpenBtn = document.getElementById('quickOpenBookBtn');
+    const indicatorText = document.getElementById('bookPageIndicatorText');
+    const stateText = document.getElementById('bookStateText');
+    const spreads = document.querySelectorAll('#bookModal3D .book-spread');
+    const turningLeaf = document.getElementById('bookTurningLeaf');
+    const leafFrontContent = document.getElementById('leafFrontContent');
+    const leafBackContent = document.getElementById('leafBackContent');
+
+    if (!overlay || !bookObj) return;
+
+    let currentSpread = 1;
+    const totalSpreads = spreads.length || 4;
+    let isOpen = false;
+    let isFlipping = false;
+
+    // Procedural Web Audio API paper-rustle sound generator (Reuses shared singleton)
+    function playPaperSound() {
+      try {
+        const ctx = getSharedAudioContext();
+        if (!ctx) return;
+        const bufferSize = Math.floor(ctx.sampleRate * 0.12);
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.28));
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.12);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.09, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+      } catch (e) {}
+    }
+
+    function updateSpreadUI() {
+      spreads.forEach((spread, idx) => {
+        const spreadNum = idx + 1;
+        if (spreadNum === currentSpread) {
+          spread.classList.add('is-active');
+        } else {
+          spread.classList.remove('is-active');
+        }
+      });
+
+      if (indicatorText) {
+        const startPage = (currentSpread - 1) * 2 + 1;
+        const endPage = currentSpread * 2;
+        indicatorText.textContent = `Spread ${currentSpread} of ${totalSpreads} (Pages ${startPage}–${endPage})`;
+      }
+
+      if (prevBtn) {
+        prevBtn.disabled = (currentSpread === 1 && !isOpen);
+      }
+      if (nextBtn) {
+        nextBtn.disabled = (currentSpread === totalSpreads);
+      }
+
+      if (stateText) {
+        if (!isOpen) {
+          stateText.textContent = 'Closed Book • Click Cover to Open';
+        } else {
+          stateText.textContent = `Reading Spread ${currentSpread} of ${totalSpreads}`;
+        }
+      }
+
+      if (toggleCoverBtn) {
+        toggleCoverBtn.textContent = isOpen ? 'Close Cover' : 'Open Book';
+      }
+    }
+
+    function openCover() {
+      if (isOpen) return;
+      isOpen = true;
+      playPaperSound();
+      bookObj.classList.remove('is-closed');
+      bookObj.classList.add('is-open');
+      updateSpreadUI();
+    }
+
+    function closeCover() {
+      if (!isOpen) return;
+      isOpen = false;
+      playPaperSound();
+      bookObj.classList.remove('is-open');
+      bookObj.classList.add('is-closed');
+      updateSpreadUI();
+    }
+
+    function flipToSpread(targetSpread, direction = 'next') {
+      if (isFlipping || targetSpread === currentSpread || targetSpread < 1 || targetSpread > totalSpreads) {
+        return;
+      }
+      if (!isOpen) {
+        openCover();
+        return;
+      }
+
+      isFlipping = true;
+      playPaperSound();
+
+      // Animate turning leaf with 3D rotation
+      if (turningLeaf) {
+        const currentSpreadEl = document.querySelector(`#bookModal3D [data-spread="${currentSpread}"]`);
+        const targetSpreadEl = document.querySelector(`#bookModal3D [data-spread="${targetSpread}"]`);
+        
+        if (direction === 'next' && currentSpreadEl && targetSpreadEl) {
+          const rightPage = currentSpreadEl.querySelector('.book-page-right');
+          const nextLeftPage = targetSpreadEl.querySelector('.book-page-left');
+          if (leafFrontContent && rightPage) leafFrontContent.innerHTML = rightPage.innerHTML;
+          if (leafBackContent && nextLeftPage) leafBackContent.innerHTML = nextLeftPage.innerHTML;
+
+          turningLeaf.classList.add('is-turning');
+          turningLeaf.style.transition = 'none';
+          turningLeaf.style.transform = 'rotateY(0deg)';
+          turningLeaf.offsetHeight; // force reflow
+          turningLeaf.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)';
+          turningLeaf.style.transform = 'rotateY(-180deg)';
+        } else if (direction === 'prev' && currentSpreadEl && targetSpreadEl) {
+          const leftPage = currentSpreadEl.querySelector('.book-page-left');
+          const prevRightPage = targetSpreadEl.querySelector('.book-page-right');
+          if (leafBackContent && leftPage) leafBackContent.innerHTML = leftPage.innerHTML;
+          if (leafFrontContent && prevRightPage) leafFrontContent.innerHTML = prevRightPage.innerHTML;
+
+          turningLeaf.classList.add('is-turning');
+          turningLeaf.style.transition = 'none';
+          turningLeaf.style.transform = 'rotateY(-180deg)';
+          turningLeaf.offsetHeight; // force reflow
+          turningLeaf.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)';
+          turningLeaf.style.transform = 'rotateY(0deg)';
+        }
+      }
+
+      setTimeout(() => {
+        currentSpread = targetSpread;
+        updateSpreadUI();
+        if (turningLeaf) {
+          turningLeaf.classList.remove('is-turning');
+          turningLeaf.style.transform = '';
+        }
+        isFlipping = false;
+      }, 760);
+    }
+
+    function nextSpread() {
+      if (!isOpen) {
+        handleCoverClick();
+      } else if (currentSpread < totalSpreads) {
+        flipToSpread(currentSpread + 1, 'next');
+      }
+    }
+
+    function prevSpread() {
+      if (currentSpread > 1) {
+        flipToSpread(currentSpread - 1, 'prev');
+      } else if (currentSpread === 1 && isOpen) {
+        closeCover();
+      }
+    }
+
+    let autoOpenTimer = null;
+    let isOpeningCover = false;
+
+    function handleCoverClick() {
+      if (isOpen || isOpeningCover) return;
+      if (autoOpenTimer) {
+        clearTimeout(autoOpenTimer);
+        autoOpenTimer = null;
+      }
+      isOpeningCover = true;
+      coverFront?.classList.add('is-opening');
+      if (stateText) stateText.textContent = 'Opening Book...';
+      openCover();
+      setTimeout(() => {
+        coverFront?.classList.remove('is-opening');
+        isOpeningCover = false;
+      }, 350);
+    }
+
+    let bookModalOpenedAt = 0;
+
+    open3DBookViewer = function(autoOpen = true) {
+      bookModalOpenedAt = Date.now();
+      if (autoOpenTimer) {
+        clearTimeout(autoOpenTimer);
+        autoOpenTimer = null;
+      }
+      isOpeningCover = false;
+      currentSpread = 1;
+
+      // Always present the authentic closed cover artwork cleanly first
+      isOpen = false;
+      bookObj.classList.add('is-closed');
+      bookObj.classList.remove('is-open');
+      coverFront?.classList.remove('is-opening');
+      updateSpreadUI();
+
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+
+      if (autoOpen) {
+        if (stateText) stateText.textContent = 'Closed Book • Opening...';
+        // Pause on the front cover for 650ms so the user can appreciate the cover art before it swings open
+        autoOpenTimer = setTimeout(() => {
+          openCover();
+        }, 650);
+      }
+    };
+
+    close3DBookViewer = function() {
+      if (autoOpenTimer) {
+        clearTimeout(autoOpenTimer);
+        autoOpenTimer = null;
+      }
+      isOpeningCover = false;
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      currentSpread = 1;
+      isOpen = false;
+      bookObj.classList.remove('is-open');
+      bookObj.classList.add('is-closed');
+      coverFront?.classList.remove('is-opening');
+      updateSpreadUI();
+    };
+
+    // Event Listeners
+    coverFront?.addEventListener('click', handleCoverClick);
+    quickOpenBtn?.addEventListener('click', () => {
+      if (!isOpen) openCover();
+    });
+
+    closeBtn?.addEventListener('click', close3DBookViewer);
+
+    // When clicked outside of book on backdrop/stage, close the book
+    overlay?.addEventListener('click', (e) => {
+      if (Date.now() - bookModalOpenedAt < 800) return;
+      if (
+        e.target === overlay ||
+        e.target.classList.contains('book-3d-stage') ||
+        e.target.classList.contains('book-ambient-glow')
+      ) {
+        close3DBookViewer();
+      }
+    });
+
+    prevBtn?.addEventListener('click', prevSpread);
+    nextBtn?.addEventListener('click', nextSpread);
+    toggleCoverBtn?.addEventListener('click', () => {
+      if (isOpen) closeCover();
+      else handleCoverClick();
+    });
+
+    restartBtn?.addEventListener('click', () => {
+      flipToSpread(1, 'prev');
+      setTimeout(closeCover, 700);
+    });
+
+    // Right page click turns to next page
+    document.querySelectorAll('#bookModal3D .book-page-right').forEach(page => {
+      page.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        nextSpread();
+      });
+    });
+
+    // Left page click on spread 2 & 3 turns back
+    document.querySelectorAll('#bookModal3D .book-page-left').forEach(page => {
+      page.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        if (currentSpread > 1) prevSpread();
+      });
+    });
+
+    // Keyboard support inside book
+    document.addEventListener('keydown', (e) => {
+      if (!overlay.classList.contains('is-open')) return;
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSpread();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSpread();
+      } else if (e.key === ' ' && !isOpen) {
+        e.preventDefault();
+        handleCoverClick();
+      }
+    });
+
+    updateSpreadUI();
+  }
+
+  /* ==========================================================================
+     11C. 3D INTERACTIVE NEWSPAPER BROADSHEET VIEWER (RESEARCH ARTICLES)
+     ========================================================================== */
+  const NEWSPAPER_EDITIONS = {
+    art1: {
+      kicker: 'THEORETICAL ASTROPHYSICS // VOL. IV • NO. 42',
+      mastheadVol: 'VOL. IV • NO. 42',
+      mastheadDate: 'OCTOBER 2024 DISPATCH',
+      field: 'COSMOLOGY & GENERAL RELATIVITY',
+      topic: 'OBSERVATIONAL COSMOLOGY & VACUUM ENERGY',
+      headline: 'Dark Energy and the Mystery of Accelerating Expansion',
+      readTime: '5 MIN READ',
+      citations: '4 PEER CITATIONS',
+      leadTeaser: 'Cosmological surveys including Type Ia Supernovae and Planck CMB measurements confirm that approximately 68.3% of the universe consists of dark energy—a smooth, negative-pressure fluid driving accelerated cosmic expansion.',
+      highlightLabel: 'EINSTEIN-HILBERT FIELD EQUATIONS',
+      highlightText: 'G_μν + Λg_μν = (8πG / c⁴) T_μν where Λ > 0 acts as repulsive gravitational vacuum pressure.',
+      col1Title: '1. Cosmological Constant vs Quintessence',
+      col1Body: '<p>Is dark energy a static vacuum energy constant <em>w = -1</em>, or an evolving scalar field dubbed <em>Quintessence</em> with dynamic equation of state <em>w(a) = w₀ + w_a(1-a)</em>?</p><p>Prabhdeep Singh\'s investigation analyzes the Hubble constant tension ($H₀$: 67.4 vs 73.0 km/s/Mpc), evaluating whether local cosmological discrepancies hint at uncharted physics beyond the standard $\\Lambda\\text{CDM}$ model.</p>',
+      col2Title: '2. Spacetime Stress Tensor Model',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│ COSMIC EXPANSION & EQUATION OF STATE (w)     │
+│                                              │
+│ Pressure-to-Density Ratio:                   │
+│   p = w · ρ · c²                             │
+│                                              │
+│ Cosmological Constant:   w = -1.00 ± 0.03    │
+│ Phantom Energy Boundary: w < -1 (Big Rip)    │
+│ Quintessence Field:      -1 < w < -1/3       │
+│                                              │
+│ Scale Factor Evolution:  a(t) ∝ e^(H·t)      │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Key Observational Deductions',
+      col3List: `<li><strong>Cosmic Coincidence:</strong> Why is dark energy density currently comparable to matter density ($\\Omega_\\Lambda \\approx 0.68, \\Omega_m \\approx 0.32$)?</li><li><strong>Vacuum Catastrophe:</strong> Theoretical quantum field vacuum energy exceeds observations by 120 orders of magnitude.</li><li><strong>Future Trajectory:</strong> If $w \\equiv -1$, cosmic event horizons will shrink until all external galaxies red-shift out of causal contact.</li>`,
+      stampSeal: 'PEER ARCHIVE • ASTROPHYSICS VERIFIED',
+      linkUrl: '#articles'
+    },
+    art2: {
+      kicker: 'SPACE MEDICINE & BIO-PHYSICS // SPECIAL REPORT',
+      mastheadVol: 'VOL. IV • NO. 18',
+      mastheadDate: 'NOVEMBER 2024 DISPATCH',
+      field: 'ASTROBIOLOGY & RELATIVISTIC SHIELDING',
+      topic: 'HEAVY ION BIOPHYSICS & GCR PROTECTION',
+      headline: 'Guardians of the Galaxy: Shielding Astronauts from High-Energy Space Radiation',
+      readTime: '6 MIN READ',
+      citations: '6 PEER CITATIONS',
+      leadTeaser: 'Beyond the Earth’s magnetosphere, deep-space voyagers face Galactic Cosmic Rays (GCR) and Solar Particle Events (SPE). Relativistic heavy iron nuclei (⁵⁶Fe) slice through conventional hull shielding and cellular DNA.',
+      highlightLabel: 'IONIZING DOSIMETRY THRESHOLD',
+      highlightText: 'Cumulative Mars transit dose: ~1.2 Sieverts (Sv), causing clustered DNA double-strand breaks (DSBs).',
+      col1Title: '1. Radiation Spectrum & Cellular Trauma',
+      col1Body: '<p>High-Z and High-Energy (HZE) ions produce dense ionization tracks that standard DNA repair enzymes (NHEJ and HR) cannot repair, leading to chromosomal translocations and elevated oncogenesis risks.</p><p>Secondary Bremsstrahlung photons and spallation neutrons created when ions hit heavy lead hulls often amplify the internal biological dose.</p>',
+      col2Title: '2. Multi-Layer Composite Shielding',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│ MULTI-LAYER COMPOSITE RADIATION SHIELDING   │
+│                                              │
+│ [Outer Hull] Space Debris / Micrometeoroid   │
+│   ↓                                          │
+│ [UHMW-PE] Ultra-High Molecular Wt Polyeth.   │
+│   (High hydrogen density absorbs HZE ions)   │
+│   ↓                                          │
+│ [Liquid H2O / Food Pack Water Buffer Tank]   │
+│   ↓                                          │
+│ [Crew Quarters Storm Shelter: 15 cm H2O eq]  │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Mitigation & Active Magnetospheres',
+      col3List: `<li><strong>Hydrogen-Rich Composites:</strong> UHMW-PE and boronated polymers outperform aluminum by 40% in shielding mass efficiency.</li><li><strong>Active High-Tc Superconductors:</strong> Toroidal magnetic coils generating 3–5 Tesla deflecting positive ions without secondary neutron cascades.</li><li><strong>Pharmacological Radioprotectants:</strong> Synthetic anti-oxidants and NAD+ precursors mitigating acute oxidative cellular degradation.</li>`,
+      stampSeal: 'AEROSPACE BIOPHYSICS • ARCHIVED',
+      linkUrl: '#articles'
+    },
+    art3: {
+      kicker: 'QUANTUM ARCHITECTURE // DISPATCH 03',
+      mastheadVol: 'VOL. V • NO. 09',
+      mastheadDate: 'DECEMBER 2024 DISPATCH',
+      field: 'QUANTUM INFORMATION SCIENCE',
+      topic: 'CIRCUITS & COMPUTATIONAL ADVANTAGE',
+      headline: 'The Evolution of Quantum Computing: Beyond Moore’s Law to Hilbert Supremacy',
+      readTime: '7 MIN READ',
+      citations: '8 PEER CITATIONS',
+      leadTeaser: 'As silicon lithography faces sub-nanometer quantum tunneling walls, quantum computing harnesses superposition and multi-qubit entanglement across a 2ᴺ-dimensional complex Hilbert space.',
+      highlightLabel: 'STATE COMPLEXITY SCALING',
+      highlightText: 'At 300 fault-tolerant entangled qubits, the state space (2³⁰⁰) exceeds the total atom count in the observable universe.',
+      col1Title: '1. The Hardware Modality Race',
+      col1Body: '<p>From transmon superconducting circuits (Josephson junctions cooled in dilution refrigerators to 15 millikelvin) to trapped-ion qubits (¹⁷¹Yb⁺ pulsed by Raman laser pairs), quantum hardware is advancing through NISQ era noise toward fault-tolerance.</p><p>Prabhdeep Singh assesses error thresholds, surface code lattice surgery, and T-gate distillation costs.</p>',
+      col2Title: '2. 2-Qubit Entanglement Bell State Circuit',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│ BELL STATE CIRCUIT: |Φ+⟩ = (|00⟩ + |11⟩)/√2  │
+│                                              │
+│  q[0]: ──|H|──────■────── ⟨Z⟩                │
+│                   │                          │
+│  q[1]: ───────────X────── ⟨Z⟩                │
+│                                              │
+│  Density Matrix:  ρ = |Φ+⟩⟨Φ+|               │
+│  Coherence T1: ~120 μs | T2 Echo: ~95 μs    │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Algorithmic Supremacy Horizons',
+      col3List: `<li><strong>Shor\'s Algorithm:</strong> Polynomial-time period finding O((log N)³) breaks RSA cryptography via Quantum Fourier Transform.</li><li><strong>Grover\'s Search:</strong> Quadratic speedup O(√N) for unstructured query databases.</li><li><strong>VQE & QAOA:</strong> Variational Quantum Eigensolvers modeling molecular orbital catalysis for room-temperature fertilizers and lithium battery cathodes.</li>`,
+      stampSeal: 'QUANTUM LAB ARCHIVE • VERIFIED',
+      linkUrl: '#articles'
+    },
+    art4: {
+      kicker: 'ADVANCED SPACETIME METRICS // TREATISE 04',
+      mastheadVol: 'VOL. V • NO. 14',
+      mastheadDate: 'JANUARY 2025 DISPATCH',
+      field: 'RELATIVISTIC PROPULSION & GENERAL RELATIVITY',
+      topic: 'ALCUBIERRE TOPOLOGY & EXOTIC MATTER',
+      headline: 'In Search of the Impossible: The Physics and Mathematics of Warp Drives',
+      readTime: '8 MIN READ',
+      citations: '10 PEER CITATIONS',
+      leadTeaser: 'Miguel Alcubierre proved in 1994 that General Relativity permits apparent faster-than-light travel by contracting spacetime ahead of a vessel while expanding spacetime behind it, without locally exceeding the speed of light.',
+      highlightLabel: 'ADM (3+1) LINE ELEMENT',
+      highlightText: 'ds² = -c² dt² + [dx - v_s(t) f(r_s) dt]² + dy² + dz² with zero proper acceleration for interior passengers.',
+      col1Title: '1. Geometry Without Acceleration',
+      col1Body: '<p>Within the Alcubierre warp bubble, the craft rests inside a flat Minkowski spacetime patch. The ship experiences no inertia, zero g-forces, and no relativistic time dilation—it is the spacetime manifold itself that translates through coordinate space.</p><p>However, the stress-energy tensor requires negative energy densities ρ < 0, violating the Weak and Dominant Energy Conditions.</p>',
+      col2Title: '2. Alcubierre Spacetime Line Element',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│  ALCUBIERRE WARP METRIC (3+1 ADM FORMALISM)  │
+│                                              │
+│   ds² = -c² dt² + [dx - v_s(t) f(r_s) dt]²   │
+│         + dy² + dz²                          │
+│                                              │
+│   Ship Center:  r_s(t) = √[(x-x_s)²+y²+z²]   │
+│   Bubble Form:  f(r_s) = [tanh σ(r_s+R) -    │
+│                           tanh σ(r_s-R)]/2   │
+│   Negative ρ:   T_00 < 0 (Casimir Vacuum)    │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Solved & Open Engineering Bottlenecks',
+      col3List: `<li><strong>Van Den Broeck Micro-Bubble:</strong> Microscopic internal coordinate radius expands to macroscopic interior, reducing required negative mass from Jupiter\'s mass down to several milligrams.</li><li><strong>Horizon Debris Accumulation:</strong> High-energy gamma ray photons captured along the forward shock wave release catastrophically upon bubble deceleration.</li><li><strong>Causality Horizons:</strong> Interior pilot cannot send signals to the exterior forward edge of the bubble to stop or steer the geometry.</li>`,
+      stampSeal: 'RELATIVITY DISPATCH • PEER CERTIFIED',
+      linkUrl: '#articles'
+    }
+  };
+
+  let open3DNewspaperViewer = () => {};
+  let close3DNewspaperViewer = () => {};
+
+  function init3DNewspaperViewer() {
+    const overlay = document.getElementById('newspaperModal3D');
+    const newsObj = document.getElementById('newspaper3DObject');
+    const closeBtn = document.getElementById('newspaperHudCloseBtn');
+    const toggleBtn = document.getElementById('newspaperToggleFoldBtn');
+    const foldBackBtn = document.getElementById('newsFoldBackBtn');
+    const stateBadgeText = document.getElementById('newsStateBadgeText');
+    const externalLinkBtn = document.getElementById('newspaperExternalLinkBtn');
+
+    // Content fields
+    const hudKicker = document.getElementById('newsHudKicker');
+    const metaVol = document.getElementById('newsMetaVol');
+    const metaDate = document.getElementById('newsMetaDate');
+    const metaField = document.getElementById('newsMetaField');
+    const topicBadge = document.getElementById('newsTopicBadge');
+    const headlineEl = document.getElementById('newsHeadline');
+    const readTimeEl = document.getElementById('newsReadTime');
+    const citationsEl = document.getElementById('newsCitations');
+    const topTeaserCol = document.getElementById('newsTopTeaserCol');
+    const highlightLabel = document.getElementById('newsHighlightLabel');
+    const highlightText = document.getElementById('newsHighlightText');
+    const col1Title = document.getElementById('newsCol1Title');
+    const col1Body = document.getElementById('newsCol1Body');
+    const col2Title = document.getElementById('newsCol2Title');
+    const col2Blueprint = document.getElementById('newsCol2Blueprint');
+    const col3Title = document.getElementById('newsCol3Title');
+    const col3List = document.getElementById('newsCol3List');
+    const stampSeal = document.getElementById('newsStampSeal');
+
+    if (!overlay || !newsObj) return;
+
+    let isUnfolded = false;
+    let isTransitioning = false;
+
+    // Procedural Web Audio API paper-rustle sound generator (Reuses shared singleton)
+    function playPaperSound() {
+      try {
+        const ctx = getSharedAudioContext();
+        if (!ctx) return;
+        const bufferSize = Math.floor(ctx.sampleRate * 0.16);
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1400, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + 0.16);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+      } catch (e) {}
+    }
+
+    function updateUIState() {
+      if (isUnfolded) {
+        newsObj.classList.remove('is-folded', 'is-unfolding');
+        newsObj.classList.add('is-unfolded');
+        if (stateBadgeText) stateBadgeText.textContent = 'Unfolded Broadsheet';
+        if (toggleBtn) toggleBtn.textContent = 'Fold Broadsheet';
+      } else {
+        newsObj.classList.remove('is-unfolded', 'is-unfolding');
+        newsObj.classList.add('is-folded');
+        if (stateBadgeText) stateBadgeText.textContent = 'Folded Broadside';
+        if (toggleBtn) toggleBtn.textContent = 'Unfold Broadsheet';
+      }
+    }
+
+    function unfoldNewspaper() {
+      if (isUnfolded || isTransitioning) return;
+      isTransitioning = true;
+      newsObj.classList.add('is-unfolding');
+      if (stateBadgeText) stateBadgeText.textContent = 'Unfolding...';
+      playPaperSound();
+
+      setTimeout(() => {
+        isUnfolded = true;
+        updateUIState();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 820);
+      }, 100);
+    }
+
+    function foldNewspaper() {
+      if (!isUnfolded || isTransitioning) return;
+      isTransitioning = true;
+      playPaperSound();
+      isUnfolded = false;
+      updateUIState();
+      setTimeout(() => {
+        isTransitioning = false;
+      }, 820);
+    }
+
+    function toggleFold() {
+      if (isUnfolded) foldNewspaper();
+      else unfoldNewspaper();
+    }
+
+    let newsModalOpenedAt = 0;
+
+    open3DNewspaperViewer = function(articleId = 'art1') {
+      const data = NEWSPAPER_EDITIONS[articleId] || NEWSPAPER_EDITIONS.art1;
+
+      // Populate content
+      if (hudKicker) hudKicker.textContent = data.kicker;
+      if (metaVol) metaVol.textContent = data.mastheadVol;
+      if (metaDate) metaDate.textContent = data.mastheadDate;
+      if (metaField) metaField.textContent = data.field;
+      if (topicBadge) topicBadge.textContent = data.topic;
+      if (headlineEl) headlineEl.textContent = data.headline;
+      if (readTimeEl) readTimeEl.textContent = data.readTime;
+      if (citationsEl) citationsEl.textContent = data.citations;
+      if (topTeaserCol) {
+        const text = data.leadTeaser || '';
+        const first = text.charAt(0);
+        const rest = text.slice(1);
+        topTeaserCol.innerHTML = `<p><span class="news-dropcap">${first}</span>${rest}</p>`;
+      }
+      if (highlightLabel) highlightLabel.textContent = data.highlightLabel;
+      if (highlightText) highlightText.textContent = data.highlightText;
+      if (col1Title) col1Title.textContent = data.col1Title;
+      if (col1Body) col1Body.innerHTML = data.col1Body;
+      if (col2Title) col2Title.textContent = data.col2Title;
+      if (col2Blueprint) col2Blueprint.innerHTML = `<pre>${data.col2Blueprint}</pre>`;
+      if (col3Title) col3Title.textContent = data.col3Title;
+      if (col3List) col3List.innerHTML = `<ul>${data.col3List}</ul>`;
+      if (stampSeal) stampSeal.textContent = data.stampSeal;
+      if (externalLinkBtn) {
+        externalLinkBtn.href = data.linkUrl || '#articles';
+        externalLinkBtn.onclick = (e) => {
+          if (data.linkUrl && data.linkUrl.startsWith('#')) {
+            e.preventDefault();
+            close3DNewspaperViewer();
+            const el = document.querySelector(data.linkUrl);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+      }
+
+      // Reset to folded state on open
+      newsModalOpenedAt = Date.now();
+      isUnfolded = false;
+      isTransitioning = false;
+      updateUIState();
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      playPaperSound();
+    };
+
+    close3DNewspaperViewer = function() {
+      isTransitioning = false;
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      isUnfolded = false;
+      updateUIState();
+    };
+
+    // Event listeners
+    closeBtn?.addEventListener('click', close3DNewspaperViewer);
+    toggleBtn?.addEventListener('click', toggleFold);
+    foldBackBtn?.addEventListener('click', foldNewspaper);
+
+    const quickOpenNewsBtn = document.getElementById('quickOpenNewsBtn');
+    quickOpenNewsBtn?.addEventListener('click', () => {
+      open3DNewspaperViewer('art1');
+    });
+    
+    // Clicking folded newspaper unfolds it
+    newsObj?.addEventListener('click', (e) => {
+      if (!isUnfolded && !isTransitioning) {
+        unfoldNewspaper();
+      }
+    });
+
+    // Clicking outside on backdrop closes modal
+    overlay?.addEventListener('click', (e) => {
+      if (Date.now() - newsModalOpenedAt < 800) return;
+      if (
+        e.target === overlay ||
+        e.target.classList.contains('newspaper-3d-stage') ||
+        e.target.classList.contains('news-ambient-glow')
+      ) {
+        close3DNewspaperViewer();
+      }
+    });
+
+    // Keyboard support inside newspaper modal
+    document.addEventListener('keydown', (e) => {
+      if (!overlay.classList.contains('is-open')) return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (!e.target.closest('button') && !e.target.closest('a')) {
+          e.preventDefault();
+          toggleFold();
+        }
+      }
+    });
+  }
+
   function openArticleModal(id) {
+    if (id === 'book_qg' || id === 'book') {
+      if (typeof open3DBookViewer === 'function') {
+        open3DBookViewer(true);
+        return;
+      }
+    }
+
+    // Research articles open as authentic 3D unfolding scientific newspapers!
+    if (NEWSPAPER_EDITIONS && NEWSPAPER_EDITIONS[id]) {
+      if (typeof open3DNewspaperViewer === 'function') {
+        open3DNewspaperViewer(id);
+        return;
+      }
+    }
+
     const data = ARTICLE_DATA_V2[id];
     if (!data || !articleModal) return;
 
@@ -1414,12 +2205,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (articleModalClose) articleModalClose.addEventListener('click', closeArticleModal);
   if (articleModal) {
     articleModal.addEventListener('click', (e) => {
-      if (e.target === articleModal) closeArticleModal();
+      if (!e.target.closest('.modal-card-v2')) closeArticleModal();
     });
   }
 
   /* --------------------------------------------------------------------------
      NEURAL BRAIN CONNECTOME — High-Luminescence Glowing Dark Node Engine
+     Panoramic dual-hemisphere cerebral connectome featuring 360+ glowing dark nodes,
+     intense volumetric neon bloom, commanding central dark hyper-core, and synaptic filaments.
      -------------------------------------------------------------------------- */
   function initBrainNetwork() {
     const canvas  = document.getElementById('brainCanvas');
@@ -1434,22 +2227,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let dpr = window.devicePixelRatio || 1;
     let animId = null;
 
+    // Bioluminescent cybernetic palette (Intense volumetric glow)
     const PALETTE = {
-      core:       '#fbbf24',
+      core:       '#fbbf24', // Warm golden amber hyper-core (Quantum Giggles)
       coreGlow:   'rgba(251, 191, 36, 0.70)',
-      cyan:       '#38bdf8',
+      cyan:       '#38bdf8', // Frontal Lobe: Dark Energy & Beyond Light (Electric Cyan)
       cyanGlow:   'rgba(56, 189, 248, 0.65)',
-      indigo:     '#818cf8',
+      indigo:     '#818cf8', // Parietal Lobe: Space Radiation & Astronaut Health (Ultraviolet Indigo)
       indigoGlow: 'rgba(129, 140, 248, 0.65)',
-      mint:       '#2dd4bf',
+      mint:       '#2dd4bf', // Temporal Lobe: Evolution of Quantum Computing (Bioluminescent Mint)
       mintGlow:   'rgba(45, 212, 191, 0.65)',
-      amethyst:   '#c084fc',
+      amethyst:   '#c084fc', // Occipital Lobe: Warp Drive & Spacetime (Electric Amethyst)
       amethystGlow:'rgba(192, 132, 252, 0.65)',
-      slate:      '#38bdf8',
+      slate:      '#38bdf8', // Deep-space bioluminescent interneurons
       starWhite:  '#ffffff',
       contour:    'rgba(56, 189, 248, 0.06)'
     };
 
+    // Central Big Node (Quantum Giggles Thalamic Hyper-Core)
     const CORTEX = {
       artId: 'book_qg',
       label: 'QUANTUM GIGGLES',
@@ -1457,8 +2252,8 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Quantum Giggles: Laughing Through Cosmic Wonders',
       kicker: 'CENTRAL HYPER-CORE // PUBLISHED BOOK',
       action: 'CLICK TO EXPLORE BOOK CHAPTERS & READ ON AMAZON ↗',
-      coreRadius: 13.0,
-      glowRadius: 28.0,
+      coreRadius: 13.0,   // Refined, radiant central star (not an oversized blob)
+      glowRadius: 28.0,   // Subtle, tight golden starlight halo
       color: PALETTE.core,
       glowColor: PALETTE.coreGlow,
       isCortex: true,
@@ -1466,6 +2261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ping: 0
     };
 
+    // 4 Major Research Supergiant Nodes (Widened across anatomical cerebral lobes)
     const MASTER_CORES = [
       {
         artId: 'art1',
@@ -1541,7 +2337,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     ];
 
+    // 14 Sub-Master Intermediate Hub Nodes (clearly larger than leaf nodes, smaller than primary masters)
     const SUB_MASTERS = [
+      // Cluster 1: Dark Energy and Unseen Forces (Cyan / Azure)
       {
         artId: 'art1',
         parentMasterIdx: 1,
@@ -1587,6 +2385,8 @@ document.addEventListener('DOMContentLoaded', () => {
         action: 'CLICK TO READ TREATISE 01 ↗',
         isSubMaster: true
       },
+
+      // Cluster 2: Space Radiation & Astronauts (Indigo / Violet)
       {
         artId: 'art2',
         parentMasterIdx: 2,
@@ -1632,6 +2432,8 @@ document.addEventListener('DOMContentLoaded', () => {
         action: 'CLICK TO READ TREATISE 02 ↗',
         isSubMaster: true
       },
+
+      // Cluster 3: Evolution of Quantum Computing (Mint / Emerald)
       {
         artId: 'art3',
         parentMasterIdx: 3,
@@ -1677,6 +2479,8 @@ document.addEventListener('DOMContentLoaded', () => {
         action: 'CLICK TO READ TREATISE 03 ↗',
         isSubMaster: true
       },
+
+      // Cluster 4: The Science of Warp Drive (Amethyst / Magenta / Purple)
       {
         artId: 'art4',
         parentMasterIdx: 4,
@@ -1722,6 +2526,8 @@ document.addEventListener('DOMContentLoaded', () => {
         action: 'CLICK TO READ TREATISE 04 ↗',
         isSubMaster: true
       },
+
+      // Cluster 5: Thalamic Central Hub bridges (Golden Amber)
       {
         artId: 'book_qg',
         parentMasterIdx: 0,
@@ -1754,14 +2560,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     ];
 
+    // Volumetric Cluster Nebulae (as in reference graph image)
     const CLUSTER_NEBULAE = [
-      { uNorm: -0.65, vNorm: -0.45, r: 250, color: 'rgba(56, 189, 248, 0.16)', core: 'rgba(56, 189, 248, 0.30)' },
-      { uNorm: 0.68,  vNorm: -0.22, r: 230, color: 'rgba(129, 140, 248, 0.14)', core: 'rgba(129, 140, 248, 0.26)' },
-      { uNorm: -0.72, vNorm: 0.32,  r: 240, color: 'rgba(45, 212, 191, 0.16)', core: 'rgba(45, 212, 191, 0.28)' },
-      { uNorm: 0.62,  vNorm: 0.58,  r: 230, color: 'rgba(192, 132, 252, 0.15)', core: 'rgba(217, 70, 239, 0.26)' },
-      { uNorm: 0.0,   vNorm: 0.14,  r: 270, color: 'rgba(245, 158, 11, 0.13)', core: 'rgba(251, 191, 36, 0.24)' }
+      { uNorm: -0.65, vNorm: -0.45, r: 250, color: 'rgba(56, 189, 248, 0.16)', core: 'rgba(56, 189, 248, 0.30)' }, // Cyan
+      { uNorm: 0.68,  vNorm: -0.22, r: 230, color: 'rgba(129, 140, 248, 0.14)', core: 'rgba(129, 140, 248, 0.26)' }, // Indigo
+      { uNorm: -0.72, vNorm: 0.32,  r: 240, color: 'rgba(45, 212, 191, 0.16)', core: 'rgba(45, 212, 191, 0.28)' }, // Mint/Green
+      { uNorm: 0.62,  vNorm: 0.58,  r: 230, color: 'rgba(192, 132, 252, 0.15)', core: 'rgba(217, 70, 239, 0.26)' }, // Purple/Magenta
+      { uNorm: 0.0,   vNorm: 0.14,  r: 270, color: 'rgba(245, 158, 11, 0.13)', core: 'rgba(251, 191, 36, 0.24)' }  // Warm Amber
     ];
 
+    // Technical data micro-labels assigned to select leaf nodes (reference image look)
     const TECH_MICRO_LABELS = [
       'tensor_fp16.cu', 'qstate_0x3F', 'psi_decohere', 'shor.alu_256',
       'qubit.entangle', 'euv_high_na', 'sub1nm_drift', 'tunnel_leak',
@@ -1776,17 +2584,22 @@ document.addEventListener('DOMContentLoaded', () => {
       'cuda_stream_0', 'synapse_cond.mS', 'sub_threshold', 'qubit_gate.cnot'
     ];
 
+    // Anatomical Brain Silhouette Boundary Function
     function getBrainLobeWidth(v) {
       let w = 0.5;
       if (v < -0.45) {
+        // Frontal Lobe dome
         const t = (v + 0.45) / 0.50;
         w = 0.78 * Math.sqrt(Math.max(0, 1 - t * t)) + 0.10;
       } else if (v < 0.15) {
+        // Parietal Lobe expansion
         w = 0.90;
       } else if (v < 0.55) {
+        // Temporal Lobe wide lateral flare
         const t = (v - 0.35) / 0.20;
         w = 0.96 - 0.05 * (t * t);
       } else {
+        // Occipital Lobe taper
         const t = (v - 0.55) / 0.40;
         w = 0.68 * Math.sqrt(Math.max(0, 1 - t * t)) + 0.12;
       }
@@ -1794,14 +2607,16 @@ document.addEventListener('DOMContentLoaded', () => {
       return Math.min(1.0, Math.max(0.12, w));
     }
 
-    let nodes = [];
-    let edges = [];
-    let signals = [];
-    let shockwaves = [];
-    let ambientVesicles = [];
+    // Network collections
+    let nodes = [];       // [0]=Cortex, [1..4]=Master Cores, [5..N]=Filler Stars
+    let edges = [];       // Curved constellation filaments
+    let signals = [];     // Starlight photon pulses flowing along curves
+    let shockwaves = [];  // Stellar shockwave rings
+    let ambientVesicles = []; // Deep space background star dust
     let subMasterStartIndex = 5;
     let subMasterEndIndex = 19;
 
+    // Mouse & physics state
     const mouse = { x: -9999, y: -9999, isInside: false };
     let hoveredNode = null;
 
@@ -1824,6 +2639,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(3) + ')';
     }
 
+    // Quadratic bezier point evaluation
     function getBezierPoint(p0, cp, p1, t) {
       const it = 1 - t;
       return {
@@ -1832,6 +2648,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+    // Compute curved edge control point dynamically with magnetic cursor pull
     function getEdgeControlPoint(edge, n1, n2) {
       const mx = (n1.x + n2.x) * 0.5;
       const my = (n1.y + n2.y) * 0.5;
@@ -1844,6 +2661,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let cpx = mx + px * edge.curvature;
       let cpy = my + py * edge.curvature;
 
+      // Magnetic Gravitational Cursor Pull on Routes
       if (mouse.isInside) {
         const dist = Math.hypot(mouse.x - cpx, mouse.y - cpy);
         const pullRadius = edge.isTrunk ? 190 : 130;
@@ -1858,6 +2676,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return { x: cpx, y: cpy };
     }
 
+    // -------------------------------------------------------------------------
+    // HIGH-PRECISION REFINED STELLAR NEURAL NODE ENGINE
+    // -------------------------------------------------------------------------
     function drawGlowingDarkNode(ctx, x, y, coreR, glowR, color, alpha, options = {}) {
       const isHovered = options.isHovered || false;
       const isCentral = options.isCentral || false;
@@ -1868,6 +2689,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const r = coreR * (isHovered ? 1.25 : 1.0) * (1 + ping * 0.15);
       const haloR = r * (isCentral ? 2.5 : isMaster ? 2.2 : 1.9);
 
+      // 1. Subtle, tight atmospheric neon halo (clean & delicate, never blurry fog)
       const haloGrd = ctx.createRadialGradient(x, y, r * 0.3, x, y, haloR);
       haloGrd.addColorStop(0, hexToRgba(color, alpha * (isHovered ? 0.75 : 0.40)));
       haloGrd.addColorStop(0.65, hexToRgba(color, alpha * 0.12));
@@ -1878,6 +2700,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.arc(x, y, haloR, 0, Math.PI * 2);
       ctx.fill();
 
+      // 2. Central white-hot radiant core
       const coreGrd = ctx.createRadialGradient(x, y, 0, x, y, r);
       if (isCentral) {
         coreGrd.addColorStop(0, '#ffffff');
@@ -1899,12 +2722,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fill();
 
+      // 3. Crisp outer starlight rim
       ctx.strokeStyle = isHovered ? '#ffffff' : (isCentral ? '#fde68a' : isMaster ? '#ffffff' : hexToRgba(color, 0.85));
       ctx.lineWidth = isCentral ? 1.5 : (isMaster ? 1.2 : 0.75);
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.stroke();
 
+      // 4. Single delicate thin harmonic orbit ring only for BIG (MY BOOK) or hovered node
       if (isCentral || isHovered) {
         const ringR = r + 3.5 + pulse * 2.0;
         ctx.strokeStyle = hexToRgba(color, (isHovered ? 0.65 : 0.30) * alpha);
@@ -1915,6 +2740,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Deterministic Mulberry32 PRNG ensures network structure, node positions, and connections
+    // NEVER scramble or change randomly on page reloads!
     function createPRNG(seed = 42819) {
       let s = seed >>> 0;
       return function() {
@@ -1925,12 +2752,14 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+    // Build the hierarchical graph network topology (Deterministic, persistent, alive)
     function buildTopology() {
       const prng = createPRNG(78219);
       nodes = [];
       edges = [];
       signals = [];
 
+      // 1. Central Grand Core: BIG (MY BOOK) -> index 0
       CORTEX.x = cx;
       CORTEX.y = cy;
       CORTEX.baseX = cx;
@@ -1940,6 +2769,7 @@ document.addEventListener('DOMContentLoaded', () => {
       CORTEX.z = 1.0;
       nodes.push(CORTEX);
 
+      // 2. The 4 Major Primary Research Hubs -> indices 1..4
       MASTER_CORES.forEach((mc) => {
         mc.x = cx + mc.uNorm * Rx;
         mc.y = cy + mc.vNorm * Ry;
@@ -1951,7 +2781,8 @@ document.addEventListener('DOMContentLoaded', () => {
         nodes.push(mc);
       });
 
-      subMasterStartIndex = nodes.length;
+      // 3. 14 Sub-Master Hub Nodes (clearly larger than leaf nodes, smaller than primary masters)
+      subMasterStartIndex = nodes.length; // index 5
       SUB_MASTERS.forEach((sm) => {
         sm.x = cx + sm.uNorm * Rx;
         sm.y = cy + sm.vNorm * Ry;
@@ -1967,8 +2798,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sm.pulsePhase = prng() * Math.PI * 2;
         nodes.push(sm);
       });
-      subMasterEndIndex = nodes.length;
+      subMasterEndIndex = nodes.length; // index 19
 
+      // 4. Fixed Constellation of Leaf Nodes (Strictly 120 deterministic leaf nodes)
       const TOTAL_LEAF_NODES = 120;
       const stellarColors = [
         PALETTE.cyan, PALETTE.cyan,
@@ -1987,13 +2819,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const roll = prng();
 
         if (roll < 0.38) {
+          // Cortical Rim Nodes
           uVal = side * (maxW * (0.84 + prng() * 0.16));
           if (v < -0.2) color = (side === -1 ? PALETTE.cyan : PALETTE.indigo);
           else color = (side === -1 ? PALETTE.mint : PALETTE.amethyst);
         } else if (roll < 0.72) {
+          // Internal Cerebral Nodes
           uVal = side * (0.05 + prng() * (maxW * 0.78));
           color = stellarColors[Math.floor(prng() * stellarColors.length)];
         } else if (roll < 0.88) {
+          // Subcortical Nodes around central hub
           const angle = prng() * Math.PI * 2;
           const rad = 24 + prng() * 85;
           const nx = cx + Math.cos(angle) * rad * 1.15;
@@ -2001,6 +2836,7 @@ document.addEventListener('DOMContentLoaded', () => {
           nodes.push(createLeafNode(nx, ny, PALETTE.core, 0.45 + prng() * 0.5, i));
           continue;
         } else {
+          // Medial Commissural Nodes
           const t = (prng() - 0.5) * 0.14;
           uVal = t;
           color = prng() > 0.4 ? PALETTE.core : PALETTE.starWhite;
@@ -2044,6 +2880,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
       }
 
+      // 5. Build the Dense Synaptic Graph Network
+      // A. Primary Arterial Trunks: 4 Major Hubs into BIG (MY BOOK)
       for (let m = 1; m <= 4; m++) {
         const mc = nodes[m];
         const curv = (mc.x < cx ? -1 : 1) * (18 + prng() * 12);
@@ -2058,6 +2896,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
+      // B. Connect Each Sub-Master to its Parent Primary Master Hub
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         const sm = nodes[s];
         const parentIdx = sm.parentMasterIdx !== undefined ? sm.parentMasterIdx : 0;
@@ -2072,6 +2911,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
+      // C. Direct Express Feeder Conduits into BIG (MY BOOK) from Sub-Masters across all 4 lobes!
+      // Guarantees the middle big node gets continuous data streams from EVERY corner of the network!
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         const sm = nodes[s];
         const curv = (sm.x < cx ? -1 : 1) * (10 + prng() * 14);
@@ -2086,6 +2927,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
+      // D. Connect Sub-Masters within the same cluster to each other
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         for (let s2 = s + 1; s2 < subMasterEndIndex; s2++) {
           if (nodes[s].parentMasterIdx === nodes[s2].parentMasterIdx) {
@@ -2102,6 +2944,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      // E. Connect Each Sub-Master to its 12 Nearest Leaf Nodes in its cluster
       const leafStartIndex = subMasterEndIndex;
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         const sm = nodes[s];
@@ -2126,6 +2969,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      // F. Dense Inter-Leaf Constellation Web (Lattice Mesh for inter-node crosstalk)
       const maxConnectDist = Math.min(W, H) * 0.12;
       for (let i = leafStartIndex; i < nodes.length; i++) {
         let connected = 0;
@@ -2150,11 +2994,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      // G. Cross-Cluster Long-Range Bridge Filaments (connecting opposite lobes across the fissure)
       const crossPairs = [
-        { from: 1, to: 2 },
-        { from: 3, to: 4 },
-        { from: 1, to: 3 },
-        { from: 2, to: 4 }
+        { from: 1, to: 2 }, // Frontal Left <-> Parietal Right
+        { from: 3, to: 4 }, // Temporal Left <-> Occipital Right
+        { from: 1, to: 3 }, // Frontal Left <-> Temporal Left
+        { from: 2, to: 4 }  // Parietal Right <-> Occipital Right
       ];
       crossPairs.forEach((pair) => {
         edges.push({
@@ -2167,6 +3012,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
+      // Fixed Pool of exactly 28 Starlight Data Packets (Constant count, smooth, slow, serene)
       const MAX_SIGNALS = 28;
       signals = [];
       for (let s = 0; s < MAX_SIGNALS; s++) {
@@ -2178,7 +3024,7 @@ document.addEventListener('DOMContentLoaded', () => {
           color: PALETTE.cyan
         };
         resetSignal(sig);
-        sig.t = Math.random();
+        sig.t = Math.random(); // Distribute smoothly across routes initially
         signals.push(sig);
       }
     }
@@ -2188,18 +3034,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const roll = Math.random();
       let edge;
       if (roll < 0.55) {
+        // Arterial lines leading directly into BIG (MY BOOK) (edges where to === 0)
         const centralTrunks = edges.filter(e => e.to === 0);
         edge = centralTrunks[Math.floor(Math.random() * centralTrunks.length)] || edges[0];
       } else if (roll < 0.82) {
+        // Sub-master trunks feeding into primary master hubs (1..4)
         const subTrunks = edges.filter(e => e.isSubTrunk);
         edge = subTrunks[Math.floor(Math.random() * subTrunks.length)] || edges[0];
       } else {
+        // Gentle inter-node mesh crosstalk
         const meshEdges = edges.filter(e => !e.isTrunk && !e.isSubTrunk);
         edge = meshEdges[Math.floor(Math.random() * meshEdges.length)] || edges[0];
       }
 
       sig.edge = edge;
       sig.t = 0;
+      // Slow, peaceful, natural velocity: takes ~12 to 18 seconds to glide across route
       sig.speed = edge.isTrunk ? (0.00065 + Math.random() * 0.00045) : (0.00045 + Math.random() * 0.00035);
       sig.size = edge.isTrunk ? 2.6 : (edge.isSubTrunk ? 2.0 : 1.4);
       sig.color = edge.color || PALETTE.cyan;
@@ -2222,6 +3072,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       cx = W * 0.50;
       cy = H * 0.49;
+      // Expansive panoramic stellar radius spanning across viewport
       Rx = Math.min(W * 0.485, 780);
       Ry = Math.min(H * 0.45, 340);
 
@@ -2231,6 +3082,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initAmbientVesicles() {
       ambientVesicles = [];
+      // Dense cosmic deep space star dust (smooth, serene drift)
       const count = Math.min(65, Math.floor((W * H) / 10000));
       for (let i = 0; i < count; i++) {
         ambientVesicles.push({
@@ -2245,6 +3097,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // -------------------------------------------------------------------------
+    // RENDER PASSES
+    // -------------------------------------------------------------------------
+
+    // 0. Volumetric Chromatic Cluster Nebulae (as in reference image)
     function renderNebulae(time) {
       CLUSTER_NEBULAE.forEach((neb, i) => {
         const nx = cx + neb.uNorm * Rx + Math.sin(time * 0.00022 + i * 1.5) * 5;
@@ -2265,6 +3122,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // 1. Faint Bioluminescent Cortical Contour & Anatomical Axis
     function renderBrainSilhouette(time) {
       ctx.save();
       const pulse = 0.5 + 0.5 * Math.sin(time * 0.00045);
@@ -2273,6 +3131,7 @@ document.addEventListener('DOMContentLoaded', () => {
       drawHemisphereOutline(-1, alpha);
       drawHemisphereOutline(1, alpha);
 
+      // Central Longitudinal Fissure
       ctx.strokeStyle = 'rgba(56, 189, 248, 0.035)';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 8]);
@@ -2282,6 +3141,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.stroke();
       ctx.setLineDash([]);
 
+      // Perimeter astronomical lobe markers
       ctx.font = '600 8.5px monospace';
       ctx.fillStyle = 'rgba(148, 163, 184, 0.28)';
       ctx.textAlign = 'center';
@@ -2314,6 +3174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.stroke();
     }
 
+    // 2. Ambient Deep Space Star Dust
     function renderAmbientVesicles(time) {
       ambientVesicles.forEach((v) => {
         v.x += v.drift;
@@ -2330,6 +3191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // 3. Refined Ethereal Synaptic Routes & Filaments (Light, subtle, elegant)
     function renderEdges(time) {
       edges.forEach((edge) => {
         const n1 = nodes[edge.from];
@@ -2340,6 +3202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cp = getEdgeControlPoint(edge, n1, n2);
 
         if (edge.isTrunk) {
+          // Primary Arterial Conduits into BIG (MY BOOK) & Major Hubs
           const pulse = 0.38 + 0.14 * Math.sin(time * 0.0006 + (edge.pulseOffset || 0));
           const alpha = isHovered ? 0.88 : pulse;
           const grad = ctx.createLinearGradient(n1.x, n1.y, n2.x, n2.y);
@@ -2348,6 +3211,7 @@ document.addEventListener('DOMContentLoaded', () => {
           grad.addColorStop(1, hexToRgba(PALETTE.core, alpha * 0.80));
 
           ctx.save();
+          // Delicate colored conduit baseline
           ctx.strokeStyle = hexToRgba(edge.color, isHovered ? 0.50 : 0.20);
           ctx.lineWidth = isHovered ? 1.8 : 1.2;
           ctx.beginPath();
@@ -2355,6 +3219,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ctx.quadraticCurveTo(cp.x, cp.y, n2.x, n2.y);
           ctx.stroke();
 
+          // Delicate luminous dashed spine
           ctx.strokeStyle = grad;
           ctx.lineWidth = isHovered ? 1.3 : 0.85;
           ctx.setLineDash([5, 8]);
@@ -2366,7 +3231,9 @@ document.addEventListener('DOMContentLoaded', () => {
           ctx.setLineDash([]);
           ctx.restore();
         } else {
+          // Subtle, light, elegant synaptic route filament
           const depthAlpha = ((n1.z + n2.z) * 0.5);
+          // Soft, pleasant light presence (~0.18 - 0.24 opacity)
           const alpha = isHovered ? 0.85 : (0.12 + depthAlpha * 0.12);
           ctx.strokeStyle = hexToRgba(edge.color, alpha);
           ctx.lineWidth = isHovered ? 1.3 : (edge.isSubTrunk ? 1.0 : 0.75);
@@ -2378,9 +3245,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // 4. Starlight Data Packets (Constant pool of 28, zero memory growth, natural slow glide)
     function renderSignals() {
       for (let i = 0; i < signals.length; i++) {
         const sig = signals[i];
+
+        // Smooth natural velocity into destination
         const accel = (sig.edge.to === 0) ? (1 + sig.t * 0.25) : 1.0;
         sig.t += sig.speed * accel;
 
@@ -2399,6 +3269,7 @@ document.addEventListener('DOMContentLoaded', () => {
               });
             }
           }
+          // Reset this packet in place — NEVER INCREASE THE NUMBER OF SIGNALS!
           resetSignal(sig);
           continue;
         }
@@ -2424,11 +3295,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineTo(pt.x, pt.y);
         ctx.stroke();
 
+        // Incandescent glowing head
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, sig.size * 0.75, 0, Math.PI * 2);
         ctx.fill();
 
+        // Subtle soft corona for packets entering Big Book
         if (sig.edge.to === 0) {
           ctx.fillStyle = hexToRgba(sig.color, 0.35);
           ctx.beginPath();
@@ -2438,6 +3311,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // 5. Stellar Shockwaves
     function renderShockwaves() {
       for (let i = shockwaves.length - 1; i >= 0; i--) {
         const sw = shockwaves[i];
@@ -2455,38 +3329,43 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // 6. Interactive Mouse Starlight Probe
     function renderMouseProbe() {
       if (!mouse.isInside) return;
       const probeDist = 110;
-      const near = [];
-      nodes.forEach((n) => {
+      let count = 0;
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
         const d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
-        if (d < probeDist) near.push({ node: n, dist: d });
-      });
-      near.sort((a, b) => a.dist - b.dist);
-      const top = near.slice(0, 3);
-      top.forEach((item) => {
-        const alpha = (1 - item.dist / probeDist) * 0.40;
-        ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha.toFixed(3) + ')';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([3, 4]);
-        ctx.beginPath();
-        ctx.moveTo(mouse.x, mouse.y);
-        ctx.lineTo(item.node.x, item.node.y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      });
+        if (d < probeDist) {
+          const alpha = (1 - d / probeDist) * 0.40;
+          ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha.toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 4]);
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(n.x, n.y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          count++;
+          if (count >= 3) break;
+        }
+      }
     }
 
+    // 7. Dense Leaf Nodes & Synaptic Interneurons (Continuous fluid organic live motion)
     function renderInterneurons(time) {
       for (let i = subMasterEndIndex; i < nodes.length; i++) {
         const n = nodes[i];
+
+        // Fluid organic multi-frequency live motion
         const tFloat = time * n.floatSpeed + n.pulsePhase;
         const driftX = Math.sin(tFloat) * n.floatAmpX + Math.cos(tFloat * 0.55) * (n.floatAmpX * 0.4);
         const driftY = Math.cos(tFloat * 0.85) * n.floatAmpY + Math.sin(tFloat * 0.45) * (n.floatAmpY * 0.4);
         n.x = n.baseX + driftX;
         n.y = n.baseY + driftY;
 
+        // Subtle elastic repulsion from mouse cursor
         if (mouse.isInside) {
           const dx = n.x - mouse.x;
           const dy = n.y - mouse.y;
@@ -2500,13 +3379,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (n.ping > 0) n.ping *= 0.92;
 
+        // Bioluminescent scintillation / breathing
         const twinkle = 0.65 + 0.35 * Math.sin(time * n.twinkleSpeed + n.pulsePhase);
         const alpha = Math.min(1, (n.baseAlpha * twinkle + n.ping * 0.6));
         const r = n.coreRadius * (1 + n.ping * 0.35);
         const glowR = n.glowRadius * twinkle * (1 + n.ping * 0.4);
 
+        // Draw as a Glowing Dark Node with volumetric bloom
         drawGlowingDarkNode(ctx, n.x, n.y, r, glowR, n.color, alpha, { pulse: twinkle, ping: n.ping });
 
+        // Floating Micro Technical Data Label (like in reference image: loss_0.0014, axon_42hz, etc.)
         if (n.microLabel) {
           ctx.save();
           ctx.font = '500 7px monospace';
@@ -2517,12 +3399,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // 7.5. 14 Sub-Master Intermediate Hub Nodes (Fluid organic live motion)
     function renderSubMasters(time) {
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         const sm = nodes[s];
         if (!sm) continue;
         const isHovered = (hoveredNode === sm);
 
+        // Fluid organic floating live drift
         const tFloat = time * sm.floatSpeed + sm.pulsePhase;
         const driftX = Math.sin(tFloat) * sm.floatAmpX + Math.cos(tFloat * 0.5) * (sm.floatAmpX * 0.35);
         const driftY = Math.cos(tFloat * 0.85) * sm.floatAmpY + Math.sin(tFloat * 0.4) * (sm.floatAmpY * 0.35);
@@ -2530,13 +3414,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sm.y = sm.baseY + driftY;
 
         if (mouse.isInside) {
-          const dx = sm.x - mouse.x;
-          const dy = sm.y - mouse.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 95 && dist > 0) {
-            const force = (1 - dist / 95) * 14;
-            sm.x += (dx / dist) * force;
-            sm.y += (dy / dist) * force;
+          const dist = Math.hypot(sm.x - mouse.x, sm.y - mouse.y);
+          if (dist < 85) {
+            sm.ping = Math.max(sm.ping, 0.35);
           }
         }
 
@@ -2546,6 +3426,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const r = sm.coreRadius * (isHovered ? 1.25 : 1.0) * (1 + sm.ping * 0.2);
         const glowR = sm.glowRadius * (isHovered ? 1.35 : 1.0);
 
+        // A. Draw Glowing Dark Node with crisp intermediate profile
         drawGlowingDarkNode(ctx, sm.x, sm.y, r, glowR, sm.color, isHovered ? 1.0 : 0.90, {
           pulse: pulse,
           ping: sm.ping,
@@ -2553,6 +3434,7 @@ document.addEventListener('DOMContentLoaded', () => {
           isMaster: false
         });
 
+        // B. Concentric sub-ring on hover or pulse
         if (isHovered || sm.ping > 0.2) {
           ctx.strokeStyle = hexToRgba(sm.color, isHovered ? 0.65 : sm.ping * 0.5);
           ctx.lineWidth = 1;
@@ -2561,6 +3443,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ctx.stroke();
         }
 
+        // C. Clean Floating Monospace Annotation
         ctx.save();
         const isLeft = (sm.x < cx);
         const textX = isLeft ? sm.x + r + 6 : sm.x - r - 6;
@@ -2586,6 +3469,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // 8. The 4 Major Supergiant Research Nodes (Cyan, Indigo, Mint, Amethyst)
     function renderMasterCores(time) {
       for (let m = 1; m <= 4; m++) {
         const mc = nodes[m];
@@ -2600,6 +3484,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const r = mc.coreRadius * (isHovered ? 1.20 : 1.0) * (1 + mc.ping * 0.12);
         const glowR = mc.glowRadius * (isHovered ? 1.25 : 1.0);
 
+        // A. Render High-Precision Radiant Master Core
         drawGlowingDarkNode(ctx, mc.x, mc.y, r, glowR, mc.color, 0.98, {
           isMaster: true,
           isHovered: isHovered,
@@ -2607,22 +3492,26 @@ document.addEventListener('DOMContentLoaded', () => {
           ping: mc.ping
         });
 
+        // B. Floating Typography with Anatomical Lobe Tag
         ctx.save();
         const isLeft = (mc.x < cx);
         const textX = isLeft ? mc.x + r + 10 : mc.x - r - 10;
         const textY = mc.y;
         ctx.textAlign = isLeft ? 'left' : 'right';
 
+        // Lobe badge
         ctx.font = '600 7.5px monospace';
         ctx.fillStyle = hexToRgba(mc.color, 0.85);
         ctx.fillText(mc.lobe, textX, textY - 10);
 
+        // Title
         ctx.font = '700 11.5px Inter, -apple-system, sans-serif';
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
         ctx.shadowBlur = 6;
         ctx.fillText(mc.label, textX, textY + 3);
 
+        // Subtitle
         ctx.font = '500 8px monospace';
         ctx.fillStyle = isHovered ? '#ffffff' : hexToRgba(mc.color, 0.80);
         ctx.fillText(mc.sub, textX, textY + 14);
@@ -2630,6 +3519,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // 9. Central Commanding Hyper-Core: QUANTUM GIGGLES (BOOK)
     function renderCentralCortex(time) {
       const isHovered = (hoveredNode === CORTEX);
 
@@ -2642,6 +3532,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const r = CORTEX.coreRadius * (isHovered ? 1.20 : 1.0) * (1 + CORTEX.ping * 0.12);
       const glowR = CORTEX.glowRadius * (isHovered ? 1.25 : 1.0);
 
+      // A. Concentric subtle resonant ripples
       for (let k = 0; k < 2; k++) {
         const phase = (time * 0.0002 + k * 0.5) % 1;
         const ripR = r + 4 + phase * 22;
@@ -2653,6 +3544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.stroke();
       }
 
+      // B. Data Ingestion Accretion Vortex (5 delicate sparks spiraling gently inward)
       const streamCount = 5;
       for (let s = 0; s < streamCount; s++) {
         const streamAngle = (time * 0.0003 + s * ((Math.PI * 2) / streamCount));
@@ -2666,6 +3558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fill();
       }
 
+      // C. Render Commanding Radiant Core
       drawGlowingDarkNode(ctx, CORTEX.x, CORTEX.y, r, glowR, PALETTE.core, 1.0, {
         isCentral: true,
         isHovered: isHovered,
@@ -2673,6 +3566,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ping: CORTEX.ping
       });
 
+      // D. Orbiting Miniature Glowing Plasma Satellites
       const companionCount = 2;
       for (let c = 0; c < companionCount; c++) {
         const angle = time * (0.00018 + c * 0.00008) + (c * Math.PI);
@@ -2693,16 +3587,19 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.stroke();
       }
 
+      // E. Prominent Typography Directly Below QUANTUM GIGGLES (BOOK)
       ctx.save();
       const labelY = CORTEX.y + r + 16;
       ctx.textAlign = 'center';
 
+      // Title
       ctx.font = '700 12.5px Inter, -apple-system, sans-serif';
       ctx.fillStyle = '#ffffff';
       ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
       ctx.shadowBlur = 6;
       ctx.fillText(CORTEX.label, CORTEX.x, labelY);
 
+      // Subtitle
       ctx.font = '600 8px monospace';
       ctx.fillStyle = isHovered ? '#ffffff' : PALETTE.core;
       ctx.letterSpacing = '0.06em';
@@ -2710,7 +3607,32 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.restore();
     }
 
+    let isStageVisible = true;
+    let isModalOpen = false;
+
+    function shouldRunLoop() {
+      return isStageVisible && !isModalOpen;
+    }
+
+    function startLoop() {
+      if (!animId && shouldRunLoop()) {
+        animId = requestAnimationFrame(tick);
+      }
+    }
+
+    function stopLoop() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+    }
+
+    // Main animation loop
     function tick(time) {
+      if (!shouldRunLoop()) {
+        animId = null;
+        return;
+      }
       ctx.clearRect(0, 0, W, H);
 
       renderNebulae(time);
@@ -2728,38 +3650,99 @@ document.addEventListener('DOMContentLoaded', () => {
       animId = requestAnimationFrame(tick);
     }
 
-    function findHoveredNode(mx, my) {
+    // -------------------------------------------------------------------------
+    // INTERACTION HANDLING (MOUSE HOVER, CLICK, TOOLTIP)
+    // -------------------------------------------------------------------------
+
+    let activeTooltipNode = null;
+
+    function findHoveredNode(mx, my, isClick = false) {
+      // 1. Check Central Cortex (QUANTUM GIGGLES BOOK)
       const dCortex = Math.hypot(mx - CORTEX.x, my - CORTEX.y);
-      if (dCortex <= CORTEX.coreRadius + 18) {
+      const cortexHitRadius = isClick ? CORTEX.coreRadius + 60 : CORTEX.coreRadius + 45;
+      const cortexLabelX = isClick ? 140 : 120;
+      const cortexTop = isClick ? CORTEX.y - 120 : CORTEX.y - 45;
+      const cortexBottom = isClick ? CORTEX.y + 90 : CORTEX.y + 75;
+
+      if (
+        dCortex <= cortexHitRadius ||
+        (Math.abs(mx - CORTEX.x) <= cortexLabelX && my >= cortexTop && my <= cortexBottom)
+      ) {
         return CORTEX;
       }
+
+      // 2. Check 4 Major Master Hubs
       for (let m = 1; m <= 4; m++) {
         const mc = nodes[m];
         if (!mc) continue;
         const d = Math.hypot(mx - mc.x, my - mc.y);
-        if (d <= mc.coreRadius + 15) {
+        const hitR = isClick ? mc.coreRadius + 42 : mc.coreRadius + 28;
+        const labelW = isClick ? 160 : 110;
+        const labelH = isClick ? 50 : 38;
+        if (d <= hitR || (Math.abs(mx - mc.x) <= labelW && Math.abs(my - mc.y) <= labelH)) {
           return mc;
         }
       }
+
+      // 3. Check 14 Sub-Master Intermediate Hub Nodes (including Cosmic Wonders & Quantum Matrix)
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         const sm = nodes[s];
         if (!sm) continue;
         const d = Math.hypot(mx - sm.x, my - sm.y);
-        if (d <= sm.coreRadius + 12) {
+        const hitR = isClick ? sm.coreRadius + 38 : sm.coreRadius + 24;
+        const labelW = isClick ? 115 : 75;
+        const labelH = isClick ? 38 : 25;
+        if (d <= hitR || (Math.abs(mx - sm.x) <= labelW && Math.abs(my - sm.y) <= labelH)) {
           return sm;
         }
       }
+
+      // 4. Proximity Snap on Click: If user clicked within 75px of any interactive node, snap directly to it!
+      if (isClick) {
+        let bestNode = null;
+        let bestDist = 75;
+
+        if (dCortex < bestDist) {
+          bestDist = dCortex;
+          bestNode = CORTEX;
+        }
+
+        for (let m = 1; m <= 4; m++) {
+          const mc = nodes[m];
+          if (!mc) continue;
+          const d = Math.hypot(mx - mc.x, my - mc.y);
+          if (d < bestDist) {
+            bestDist = d;
+            bestNode = mc;
+          }
+        }
+
+        for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+          const sm = nodes[s];
+          if (!sm) continue;
+          const d = Math.hypot(mx - sm.x, my - sm.y);
+          if (d < bestDist) {
+            bestDist = d;
+            bestNode = sm;
+          }
+        }
+
+        if (bestNode) return bestNode;
+      }
+
       return null;
     }
 
     function updateTooltip(node) {
       if (!tooltip) return;
       if (!node) {
+        activeTooltipNode = null;
         tooltip.classList.remove('is-visible');
         tooltip.setAttribute('aria-hidden', 'true');
         return;
       }
 
+      activeTooltipNode = node;
       tooltip.innerHTML = `
         <span class="brain-tooltip-field" style="color: ${node.color || PALETTE.cyan}">${node.kicker || (node.isSubMaster ? 'SUB-MASTER RESEARCH INTERMEDIATE' : 'RESEARCH NEURAL NODE')}</span>
         <span class="brain-tooltip-title">${node.title || node.label}</span>
@@ -2779,12 +3762,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onMouseMove(e) {
+      if (e.target && (e.target === tooltip || tooltip.contains(e.target))) {
+        return;
+      }
       const rect = stage.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
       mouse.isInside = true;
 
-      const found = findHoveredNode(mouse.x, mouse.y);
+      const found = findHoveredNode(mouse.x, mouse.y, false);
       if (found !== hoveredNode) {
         hoveredNode = found;
         if (hoveredNode) {
@@ -2797,7 +3783,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    function onMouseLeave() {
+    function onMouseLeave(e) {
+      if (e.relatedTarget && (stage.contains(e.relatedTarget) || e.relatedTarget === tooltip || tooltip.contains(e.relatedTarget))) {
+        return;
+      }
       mouse.isInside = false;
       mouse.x = -9999;
       mouse.y = -9999;
@@ -2806,13 +3795,40 @@ document.addEventListener('DOMContentLoaded', () => {
       updateTooltip(null);
     }
 
-    function onClick(e) {
+    let lastActivateTime = 0;
+    function handleActivation(e) {
+      const now = Date.now();
+      if (now - lastActivateTime < 250) return;
+
       const rect = stage.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-      const clicked = findHoveredNode(clickX, clickY);
+      let clientX = null;
+      let clientY = null;
+
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+      } else if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else if (typeof e.clientX === 'number') {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      let clicked = null;
+      if (clientX !== null && clientY !== null) {
+        const clickX = clientX - rect.left;
+        const clickY = clientY - rect.top;
+        clicked = findHoveredNode(clickX, clickY, true);
+      }
+
+      if (!clicked && hoveredNode) clicked = hoveredNode;
+      if (!clicked && activeTooltipNode) clicked = activeTooltipNode;
 
       if (clicked) {
+        lastActivateTime = now;
+        if (e.cancelable) e.preventDefault();
+
         shockwaves.push({
           x: clicked.x,
           y: clicked.y,
@@ -2822,45 +3838,214 @@ document.addEventListener('DOMContentLoaded', () => {
           alpha: 0.95
         });
 
+        if (clicked.artId === 'book_qg' || clicked.isCortex || clicked.label === 'QUANTUM GIGGLES') {
+          if (typeof open3DBookViewer === 'function') {
+            open3DBookViewer(true);
+            return;
+          }
+        }
+
         if (clicked.artId && typeof openArticleModal === 'function') {
           openArticleModal(clicked.artId);
         }
       }
     }
 
-    function onTouchStart(e) {
-      if (!e.touches || e.touches.length === 0) return;
-      const rect = stage.getBoundingClientRect();
-      const touchX = e.touches[0].clientX - rect.left;
-      const touchY = e.touches[0].clientY - rect.top;
-      const touched = findHoveredNode(touchX, touchY);
-      if (touched) {
-        e.preventDefault();
-        hoveredNode = touched;
-        updateTooltip(touched);
-        if (touched.artId && typeof openArticleModal === 'function') {
-          openArticleModal(touched.artId);
-        }
-      }
-    }
-
+    stage.addEventListener('click', handleActivation);
+    stage.addEventListener('touchend', handleActivation, { passive: false });
     stage.addEventListener('mousemove', onMouseMove);
     stage.addEventListener('mouseleave', onMouseLeave);
-    stage.addEventListener('click', onClick);
-    stage.addEventListener('touchstart', onTouchStart, { passive: false });
+
+    tooltip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleActivation(e);
+    });
 
     resize();
-    animId = requestAnimationFrame(tick);
+    startLoop();
 
+    let roRaf = null;
     const ro = new ResizeObserver(() => {
-      cancelAnimationFrame(animId);
-      resize();
-      animId = requestAnimationFrame(tick);
+      if (roRaf) cancelAnimationFrame(roRaf);
+      roRaf = requestAnimationFrame(() => {
+        const rect = stage.getBoundingClientRect();
+        const newW = Math.floor(rect.width);
+        const newH = Math.floor(rect.height);
+        if (newW > 0 && newH > 0 && (newW !== W || newH !== H)) {
+          stopLoop();
+          resize();
+          startLoop();
+        }
+      });
     });
     ro.observe(stage);
+
+    const stageIo = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isStageVisible = entry.isIntersecting;
+        if (isStageVisible && !isModalOpen) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      });
+    }, { rootMargin: '120px 0px' });
+    stageIo.observe(stage);
+
+    const checkModalState = () => {
+      const open = document.body.style.overflow === 'hidden';
+      if (open !== isModalOpen) {
+        isModalOpen = open;
+        if (isModalOpen) {
+          stopLoop();
+        } else if (isStageVisible) {
+          startLoop();
+        }
+      }
+    };
+    const modalObserver = new MutationObserver(checkModalState);
+    modalObserver.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
   }
 
+  init3DBookViewer();
+  init3DNewspaperViewer();
   initBrainNetwork();
+
+
+
+  /* ==========================================================================
+     10. ACADEMIC FOUNDATION & RESEARCH PEDIGREE MODAL
+     ========================================================================== */
+  const educationModal      = document.getElementById('educationModalV2');
+  const educationModalTitle = document.getElementById('educationModalTitleV2');
+  const educationModalKicker= document.getElementById('educationModalKicker');
+  const educationModalBody  = document.getElementById('educationModalBodyV2');
+  const educationModalClose = document.getElementById('educationModalCloseV2');
+
+  const EDUCATION_DATA_V2 = {
+    edu1: {
+      kicker: 'POSTGRADUATE PROGRAM // COMPLETED (7.80 / 10.0 CGPA)',
+      degree: 'Master of Computer Applications (MCA)',
+      university: 'Thapar Institute of Engineering and Technology',
+      duration: '2024 – 2026 • Patiala, Punjab, India • Completed (CGPA: 7.80)',
+      cgpa: '7.80 / 10.0',
+      status: 'Completed',
+      overview: 'Rigorous advanced curriculum completed with a 7.80 CGPA, emphasizing large-scale distributed architectures, high-performance computing, advanced machine learning, and enterprise reactive microservices.',
+      modules: [
+        'Advanced Distributed Systems & Consensus Protocols (Raft, Paxos)',
+        'High-Performance Parallel Computing & GPU Acceleration',
+        'Deep Learning & Neural Network Architectures',
+        'Modern Cloud-Native Infrastructure & Kubernetes Orchestration',
+        'Advanced Algorithms & Computational Complexity',
+        'Enterprise Reactive Microservices & Async Event Pipelines'
+      ],
+      research: 'Master\'s thesis and capstone concentration on low-latency microservices architectures, distributed asynchronous task scheduling, and high-throughput real-time AI pipeline orchestration.'
+    },
+    edu2: {
+      kicker: 'UNDERGRADUATE DEGREE // GRADUATED WITH DISTINCTION (9.0 / 10.0 GPA)',
+      degree: 'Bachelor of Computer Applications (BCA)',
+      university: 'Chitkara University',
+      duration: '2021 – 2024 • Punjab, India • Completed with Honors (GPA: 9.0)',
+      cgpa: '9.0 / 10.0',
+      status: 'Completed',
+      overview: 'Comprehensive foundation in computer science, software engineering paradigms, and algorithmic problem solving. Graduated with an outstanding cumulative GPA of 9.0 out of 10.0 and appointed Quantum Research Scholar.',
+      modules: [
+        'Data Structures & Algorithmic Analysis (C++, Java)',
+        'Object-Oriented Software Design Patterns',
+        'Operating Systems & Memory Concurrency Models',
+        'Database Management Systems (RDBMS & NoSQL)',
+        'Computer Networks & Distributed Communication Protocols',
+        'Quantum Information Science & Simulation Methodologies'
+      ],
+      research: 'Appointed Quantum Computing Research Scholar (Jan 2022 – Dec 2024). Conducted multi-qubit quantum teleportation protocols in IBM Qiskit and empirically verified Grover search quadratic acceleration. Authored and published the acclaimed science book "Quantum Giggles: Laughing Through Cosmic Wonders" during this tenure.'
+    }
+  };
+
+  function openEducationModal(id) {
+    const data = EDUCATION_DATA_V2[id];
+    if (!data || !educationModal) return;
+
+    if (educationModalTitle) educationModalTitle.textContent = data.degree;
+    if (educationModalKicker) educationModalKicker.textContent = data.kicker;
+    if (educationModalBody) {
+      educationModalBody.innerHTML = `
+        <div style="margin-bottom: 2rem;">
+          <h4 style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.35rem;">${data.degree}</h4>
+          <div style="font-family: var(--font-mono); font-size: 0.88rem; color: #a1a1aa; margin-bottom: 0.5rem;">
+            ${data.university}
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1.25rem;">
+            TIMELINE: ${data.duration}
+          </div>
+          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 2rem;">
+            ${data.overview}
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; color: #d4d4d8; margin-bottom: 0.85rem; letter-spacing: 0.05em;">
+            CORE CURRICULUM &amp; SPECIALIZED MODULES:
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem;">
+            ${data.modules.map(mod => `
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.88rem; color: #ffffff; display: flex; align-items: center; gap: 0.6rem;">
+                <span style="color: #a1a1aa;">✓</span> <span>${mod}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="margin-bottom: 2rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 1.5rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; color: #d4d4d8; margin-bottom: 0.5rem; letter-spacing: 0.05em;">
+            RESEARCH &amp; SCHOLAR ACHIEVEMENTS:
+          </div>
+          <p style="font-size: 0.94rem; line-height: 1.7; color: var(--text-light);">
+            ${data.research}
+          </p>
+        </div>
+
+        <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <span>VERIFIED ACADEMIC CREDENTIALS &bull; PUNJAB, INDIA</span>
+          <button class="btn-pill-v2" onclick="openResumeModal()" style="padding: 0.5rem 1.25rem; font-size: 0.82rem; background: #ffffff; color: #000000; border: none; font-weight: 600;">
+            Inspect Full CV Resume ↗
+          </button>
+        </div>
+      `;
+    }
+
+    document.body.style.overflow = 'hidden';
+    educationModal.classList.add('is-open');
+  }
+
+  function closeEducationModal() {
+    if (educationModal) {
+      educationModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (educationModalClose) educationModalClose.addEventListener('click', closeEducationModal);
+  if (educationModal) {
+    educationModal.addEventListener('click', (e) => {
+      if (e.target === educationModal) closeEducationModal();
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     ACADEMIC JOURNEY CONTROLLER (2-DEGREE CONTINUUM)
+     -------------------------------------------------------------------------- */
+  document.querySelectorAll('.academic-stage-card[data-edu-id]').forEach((card) => {
+    const eduId = card.getAttribute('data-edu-id');
+    card.addEventListener('click', () => {
+      openEducationModal(eduId);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openEducationModal(eduId);
+      }
+    });
+  });
 
   // Escape key closes all open modals & command palette
   document.addEventListener('keydown', (e) => {
@@ -2869,6 +4054,9 @@ document.addEventListener('DOMContentLoaded', () => {
       closeResumeModal();
       closeProjectModal();
       closeArticleModal();
+      close3DBookViewer();
+      close3DNewspaperViewer();
+      closeEducationModal();
       closeCommandPalette();
     }
   });
@@ -2894,36 +4082,56 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     12. MACOS DOCK MAGNIFICATION WAVE
+     12. MACOS DOCK MAGNIFICATION WAVE (Physical Proximity Scaling)
      ========================================================================== */
   const dockPill = document.querySelector('.floating-dock');
   if (dockPill && hasFinePointer) {
-    dockPill.addEventListener('mousemove', (e) => {
-      if (!isLaptop() || dockContainer.classList.contains('is-collapsed')) return;
-      const buttons = dockPill.querySelectorAll('.dock-btn');
+    let cachedBtns = null;
+    let dockRaf = null;
+
+    dockPill.addEventListener('mouseenter', () => {
       const isSide = dockContainer.classList.contains('is-side-docked');
-      
-      buttons.forEach((btn) => {
+      cachedBtns = Array.from(dockPill.querySelectorAll('.dock-btn')).map((btn) => {
         const rect = btn.getBoundingClientRect();
-        const btnCenter = isSide ? (rect.top + rect.height / 2) : (rect.left + rect.width / 2);
+        return {
+          btn,
+          center: isSide ? (rect.top + rect.height / 2) : (rect.left + rect.width / 2)
+        };
+      });
+    });
+
+    dockPill.addEventListener('mousemove', (e) => {
+      if (!isLaptop() || dockContainer.classList.contains('is-collapsed') || !cachedBtns) return;
+      if (dockRaf) return;
+
+      dockRaf = requestAnimationFrame(() => {
+        dockRaf = null;
+        if (!cachedBtns) return;
+        const isSide = dockContainer.classList.contains('is-side-docked');
         const mouseCoord = isSide ? e.clientY : e.clientX;
-        const dist = Math.abs(mouseCoord - btnCenter);
         const radius = 95;
-        
-        if (dist < radius) {
-          const factor = Math.cos((dist / radius) * (Math.PI / 2));
-          const scale = 1 + factor * 0.28;
-          const shift = isSide ? `translateX(${-factor * 8}px)` : `translateY(${-factor * 8}px)`;
-          btn.style.transform = `scale(${scale}) ${shift}`;
-        } else {
-          btn.style.transform = '';
-        }
+
+        cachedBtns.forEach((item) => {
+          const dist = Math.abs(mouseCoord - item.center);
+          if (dist < radius) {
+            const factor = Math.cos((dist / radius) * (Math.PI / 2));
+            const scale = 1 + factor * 0.28;
+            const shift = isSide ? `translateX(${-factor * 8}px)` : `translateY(${-factor * 8}px)`;
+            item.btn.style.transform = `scale(${scale.toFixed(3)}) ${shift}`;
+          } else {
+            item.btn.style.transform = '';
+          }
+        });
       });
     });
 
     dockPill.addEventListener('mouseleave', () => {
-      const buttons = dockPill.querySelectorAll('.dock-btn');
-      buttons.forEach((btn) => {
+      cachedBtns = null;
+      if (dockRaf) {
+        cancelAnimationFrame(dockRaf);
+        dockRaf = null;
+      }
+      dockPill.querySelectorAll('.dock-btn').forEach((btn) => {
         btn.style.transform = '';
       });
     });
@@ -2940,21 +4148,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (hasFinePointer) {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--spot-x', `${x}px`);
-        card.style.setProperty('--spot-y', `${y}px`);
+      let cardRect = null;
+      card.addEventListener('mouseenter', () => {
+        cardRect = card.getBoundingClientRect();
+      });
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+      card.addEventListener('mousemove', (e) => {
+        if (!cardRect) cardRect = card.getBoundingClientRect();
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
+        card.style.setProperty('--spot-x', `${x.toFixed(1)}px`);
+        card.style.setProperty('--spot-y', `${y.toFixed(1)}px`);
+
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
         const rotateX = -((y - centerY) / centerY) * 7.5;
         const rotateY = ((x - centerX) / centerX) * 7.5;
         card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
       });
 
       card.addEventListener('mouseleave', () => {
+        cardRect = null;
         card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
       });
     }
@@ -3005,20 +4219,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     },
     {
+      id: 'book_3d',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
+      label: 'Read "Quantum Giggles" (Interactive 3D Book)',
+      desc: 'Open realistic 3D hardcover with page-turning animations',
+      shortcut: '↵ Read Book',
+      action: () => typeof open3DBookViewer === 'function' && open3DBookViewer(true)
+    },
+    {
       id: 'book',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
-      label: 'The Research Brain // Quantum Giggles',
+      label: 'The Research Brain // Neural Connectome',
       desc: 'Central neural network cortex & global Amazon published book',
-      shortcut: '↵ Book',
+      shortcut: '↵ Brain',
       action: () => document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' })
     },
     {
       id: 'articles',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"></ellipse></svg>',
-      label: 'Scientific Treatises & Neural Cores',
+      label: 'Scientific Treatises & Research (3D Broadsheet)',
       desc: 'Dark Energy, Space Radiation, Quantum Computing, Warp Drive',
-      shortcut: '↵ Research',
-      action: () => document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
+      shortcut: '↵ Broadsheet',
+      action: () => typeof open3DNewspaperViewer === 'function' ? open3DNewspaperViewer('art1') : document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
     },
     {
       id: 'github',
