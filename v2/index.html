@@ -15,7 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3.5">
 </head>
 
 <body>
@@ -603,6 +603,503 @@
     </div>
   </div>
 
+  <!-- 3D INTERACTIVE BOOK EXPERIENCE MODAL (QUANTUM GIGGLES) -->
+  <div class="book-modal-overlay" id="bookModal3D" role="dialog" aria-modal="true" aria-label="Quantum Giggles 3D Interactive Book">
+    <!-- Top HUD Bar -->
+    <div class="book-modal-hud">
+      <div class="book-hud-left">
+        <span class="book-kicker-badge">PUBLISHED AUTHOR • AMAZON GLOBAL EDITION</span>
+        <h3 class="book-hud-title">Quantum Giggles: Laughing Through Cosmic Wonders</h3>
+      </div>
+      <div class="book-hud-right">
+        <div class="book-state-badge" id="bookStateBadge">
+          <span class="book-state-dot"></span>
+          <span id="bookStateText">Closed Book • Click Cover to Open</span>
+        </div>
+        <button class="book-hud-close-btn" id="bookModalCloseBtn" aria-label="Close Book" title="Close (ESC)">✕</button>
+      </div>
+    </div>
+
+    <!-- 3D Book Stage Wrapper -->
+    <div class="book-3d-stage">
+      <!-- Ambient light pool underneath -->
+      <div class="book-ambient-glow" aria-hidden="true"></div>
+
+      <!-- The 3D Book Object -->
+      <div class="book-3d-object is-closed" id="book3DObject" role="region" aria-label="Interactive 3D Book">
+        
+        <!-- ================= CLOSED FRONT COVER (OFFICIAL BOOK COVER) ================= -->
+        <div class="book-cover-front" id="bookCoverFront" title="Click to Open Book">
+          <img src="../book.jpg" onerror="this.src='book.jpg'" class="book-cover-img" alt="Quantum Giggles: Laughing Through Cosmic Wonders by Prabhdeep Singh">
+          
+          <!-- Realistic Spine Crease Shadow & Reflection Sheen -->
+          <div class="book-cover-sheen"></div>
+          <div class="book-spine-crease"></div>
+          
+          <!-- Pulsing interactive invitation banner on the cover -->
+          <div class="book-cover-tap-prompt">
+            <span>📖 Click Cover to Open &amp; Turn Pages</span>
+          </div>
+
+          <!-- Page edge block (simulating closed thickness) -->
+          <div class="book-thickness-edge"></div>
+        </div>
+
+        <!-- ================= OPEN BOOK SPREADS ================= -->
+        <div class="book-spreads-container" id="bookSpreadsContainer">
+
+          <!-- SPREAD 1 (Pages 1 & 2): Authentic Frontispiece & The Opening Hook -->
+          <div class="book-spread is-active" data-spread="1">
+            <!-- Left Page: Frontispiece & Official Publication -->
+            <div class="book-page book-page-left">
+              <div class="page-gutter-shadow right"></div>
+              <div class="page-header">
+                <span>FRONTISPIECE</span>
+                <span>VOL. I</span>
+              </div>
+              <div class="page-content editorial-center">
+                <div class="ornament-divider">✦ ✦ ✦</div>
+                <h3 class="page-book-title" style="font-size: 1.95rem;">QUANTUM GIGGLES</h3>
+                <p class="page-book-sub" style="font-size: 1.02rem; font-style: italic;">Laughing Through Cosmic Wonders</p>
+                <p style="font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; color: #b45309; text-transform: uppercase; margin-bottom: 0.35rem;">
+                  Adventures in Quantum Humour
+                </p>
+                <p class="page-book-author" style="margin-bottom: 1.1rem;">By Prabhdeep Singh</p>
+
+                <div class="page-epigraph" style="width: 95%;">
+                  <p class="epigraph-quote">“The quantum future is within reach, and its mysteries are ours to uncover—one question, one qubit, one breakthrough at a time.”</p>
+                  <p class="epigraph-source">— Prabhdeep Singh, Book Epigraph</p>
+                </div>
+
+                <div class="book-meta-stamp">
+                  <span>COPYRIGHT © 2023 BY PRABHDEEP SINGH</span>
+                  <span>PUBLISHED BY PRABHDEEP SINGH • PRINTED IN INDIA</span>
+                  <span>GLOBAL AMAZON KINDLE RELEASE • ASIN: B0F43NH9R3</span>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 1</span>
+              </div>
+            </div>
+
+            <!-- Right Page: Opening Hook (Prologue) -->
+            <div class="book-page book-page-right" id="pageRight1" title="Click to Turn Page">
+              <div class="page-gutter-shadow left"></div>
+              <div class="page-turn-hint">Next Page →</div>
+              <div class="page-header">
+                <span>OPENING HOOK</span>
+                <span>PROLOGUE</span>
+              </div>
+              <div class="page-content">
+                <span class="chapter-number">PROLOGUE</span>
+                <h4 class="chapter-title">The Cosmic Precipice</h4>
+                <div class="chapter-body">
+                  <p class="has-dropcap"><span class="dropcap">I</span>n the quiet solitude of a moonlit night, imagine standing at the edge of a cosmic precipice. The world of familiar rules is just a fragile surface veneer. Beneath it lies a quantum realm so bizarre that even the greatest minds find themselves standing breathless.</p>
+                  <p>Albert Einstein famously remarked: <em>"The most beautiful thing we can experience is the mysterious. It is the source of all true art and science."</em> Little did he know how delightfully strange that mystery would become!</p>
+                  <div class="paper-callout-box">
+                    <strong>The Golden Invitation:</strong>
+                    <p style="margin-top: 4px; font-size: 0.84rem; color: #4b5563;">
+                      “Buckle up, dear reader, for we are about to embark on a voyage beyond the ordinary — a journey into the heart of quantum horizons!”
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPREAD 2 (Pages 3 & 4): Chapters 1 & 2 (Quantum Basics & Computing Wonders) -->
+          <div class="book-spread" data-spread="2">
+            <!-- Left Page: Chapter 1 Quantum Basics -->
+            <div class="book-page book-page-left" id="pageLeft2">
+              <div class="page-gutter-shadow right"></div>
+              <div class="page-header">
+                <span>CHAPTER 1</span>
+                <span>QUANTUM BASICS</span>
+              </div>
+              <div class="page-content">
+                <span class="chapter-number">CHAPTER 01</span>
+                <h4 class="chapter-title">1.1 What is Quantum Physics? &amp; 1.2 Superposition</h4>
+                <div class="chapter-body">
+                  <p class="has-dropcap"><span class="dropcap">I</span>magine flipping a coin, but instead of landing heads or tails, it spins endlessly in mid-air, existing as <strong>both at once</strong>. That is quantum superposition—nature's cosmic coin toss before anyone peeks.</p>
+                  <p>Every particle plays multiple notes simultaneously in a cosmic orchestra. Only when you observe does the wave collapse into a single definitive chord!</p>
+                  <div class="paper-callout-box">
+                    <strong>1.3 Entanglement: The Cosmic Connection</strong>
+                    <p style="margin-top: 4px; font-size: 0.83rem; color: #4b5563;">
+                      Einstein called it <em>"spooky action at a distance."</em> Pull on one entangled thread, and the entire universal tapestry shifts across light-years!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 3</span>
+              </div>
+            </div>
+
+            <!-- Right Page: Chapter 2 Quantum Computing Wonders -->
+            <div class="book-page book-page-right" id="pageRight2" title="Click to Turn Page">
+              <div class="page-gutter-shadow left"></div>
+              <div class="page-turn-hint">Next Page →</div>
+              <div class="page-header">
+                <span>CHAPTER 2</span>
+                <span>QUANTUM COMPUTING WONDERS</span>
+              </div>
+              <div class="page-content">
+                <span class="chapter-number">CHAPTER 02</span>
+                <h4 class="chapter-title">2.1 A Tale of Two Worlds: The Maze vs. Qubits</h4>
+                <div class="chapter-body">
+                  <p class="has-dropcap"><span class="dropcap">G</span>ive a giant maze to your classical computer, and it tests each path one by one. It's thorough, but painfully slow.</p>
+                  <p>Now send in your <strong>quantum computer superhero</strong>. Using qubits in superposition, it explores <em>every corridor simultaneously</em>. While your regular laptop is still at turn one, the quantum machine has already solved the puzzle and is sipping victory coffee!</p>
+                  <div class="paper-callout-box">
+                    <strong>2.2 Qubits: The Superheroes of Quantum</strong>
+                    <code>|ψ⟩ = α|0⟩ + β|1⟩  (where |α|² + |β|² = 1)</code>
+                    <p style="margin-top: 4px; font-size: 0.82rem; color: #4b5563;">
+                      Normal bits are light switches (On/Off). Qubits are dazzling dancers pirouetting across the entire stage in a quantum ballet.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPREAD 3 (Pages 5 & 6): Chapters 3 & 10 (Teleportation & Alcubierre Warp Drive) -->
+          <div class="book-spread" data-spread="3">
+            <!-- Left Page: Chapter 3 Quantum Teleportation -->
+            <div class="book-page book-page-left" id="pageLeft3">
+              <div class="page-gutter-shadow right"></div>
+              <div class="page-header">
+                <span>CHAPTER 3 &amp; 8</span>
+                <span>QUANTUM TELEPORTATION</span>
+              </div>
+              <div class="page-content">
+                <span class="chapter-number">CHAPTER 03 &amp; 08</span>
+                <h4 class="chapter-title">3.1 The Cosmic Postman &amp; Instant Connectivity</h4>
+                <div class="chapter-body">
+                  <p class="has-dropcap"><span class="dropcap">W</span>ant to send a message to Alpha Centauri? Forget waiting 4 years for radio signals.</p>
+                  <p><strong>Quantum teleportation</strong> isn't beaming physical bodies—it is transmitting the exact <em>quantum state</em> across light-years instantaneously. Think of it as a cosmic postman delivering information faster than a blink!</p>
+                  <div class="paper-callout-box">
+                    <strong>The Entanglement Blueprint:</strong>
+                    <code>|Ψ⟩ = 1/√2 (|00⟩ + |11⟩)AB</code>
+                    <p style="margin-top: 4px; font-size: 0.81rem; color: #4b5563;">
+                      <strong>No-Cloning Theorem:</strong> Nature forbids copying unknown quantum states—creating the universe’s most tamper-proof security protocol.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 5</span>
+              </div>
+            </div>
+
+            <!-- Right Page: Chapter 10 Alcubierre Warp Drive -->
+            <div class="book-page book-page-right" id="pageRight3" title="Click to Turn Page">
+              <div class="page-gutter-shadow left"></div>
+              <div class="page-turn-hint">Next Page →</div>
+              <div class="page-header">
+                <span>CHAPTER 10</span>
+                <span>ALCUBIERRE WARP DRIVE</span>
+              </div>
+              <div class="page-content">
+                <span class="chapter-number">CHAPTER 10</span>
+                <h4 class="chapter-title">10.1 Surfing the Undulating Waves of Spacetime</h4>
+                <div class="chapter-body">
+                  <p class="has-dropcap"><span class="dropcap">W</span>hy break Einstein's cosmic speed limit when you can just warp the road? The <strong>Alcubierre Drive</strong> contracts spacetime in front of a spacecraft and expands it behind.</p>
+                  <p>The ship sits completely at rest inside its protective warp bubble, while space itself surfs forward at faster-than-light velocity—bypassing time dilation entirely!</p>
+                  <div class="paper-callout-box">
+                    <strong>The Alcubierre Spacetime Metric:</strong>
+                    <code>ds² = -c² dt² + (dx - vs dt)² + dy² + dz²</code>
+                    <p style="margin-top: 4px; font-size: 0.81rem; color: #4b5563;">
+                      Stabilized with exotic matter possessing negative energy density (ρ = p/c² &lt; 0) to navigate between stars.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 6</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPREAD 4 (Pages 7 & 8): Complete 17-Chapter Table of Contents & Author Journey -->
+          <div class="book-spread" data-spread="4">
+            <!-- Left Page: The 17 Chapters Index -->
+            <div class="book-page book-page-left" id="pageLeft4">
+              <div class="page-gutter-shadow right"></div>
+              <div class="page-header">
+                <span>OFFICIAL INDEX</span>
+                <span>TABLE OF CONTENTS</span>
+              </div>
+              <div class="page-content">
+                <span class="chapter-number">COMPLETE VOLUME OUTLINE</span>
+                <h4 class="chapter-title" style="font-size: 1.25rem; margin-bottom: 0.4rem;">The 17 Cosmic Chapters</h4>
+                <div class="book-toc-grid">
+                  <div class="book-toc-item"><span class="book-toc-num">01</span><span class="book-toc-name">Quantum Basics</span><span class="book-toc-sub">Double-slit &amp; wavefunctions</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">02</span><span class="book-toc-name">Computing Wonders</span><span class="book-toc-sub">Bits vs. qubits ballet</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">03</span><span class="book-toc-name">Quantum Teleportation</span><span class="book-toc-sub">Cosmic postman &amp; relays</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">04</span><span class="book-toc-name">Wormholes &amp; Shortcuts</span><span class="book-toc-sub">Cosmic tapestry portals</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">05</span><span class="book-toc-name">Einstein’s Legacy</span><span class="book-toc-sub">Time dilation &amp; E=mc²</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">06</span><span class="book-toc-name">Gravitational Waves</span><span class="book-toc-sub">LIGO &amp; black hole collisions</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">07</span><span class="book-toc-name">Quantum Leaps</span><span class="book-toc-sub">Subatomic uncertainty</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">08</span><span class="book-toc-name">The Cosmic Courier</span><span class="book-toc-sub">Information highways</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">09</span><span class="book-toc-name">Quantum Communication</span><span class="book-toc-sub">Unbreakable cosmic locks</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">10</span><span class="book-toc-name">Alcubierre Warp Drive</span><span class="book-toc-sub">Surfing spacetime waves</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">11</span><span class="book-toc-name">Particle Blueprint</span><span class="book-toc-sub">Quantum fidelity &amp; protocols</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">12</span><span class="book-toc-name">Theoretical Foundations</span><span class="book-toc-sub">Warp metrics &amp; energy</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">13</span><span class="book-toc-name">Numerical Validation</span><span class="book-toc-sub">Simulations &amp; exotic matter</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">14</span><span class="book-toc-name">Quantum Supremacy</span><span class="book-toc-sub">Gates, VQE &amp; Sycamore</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">15</span><span class="book-toc-name">Quantum Algorithms</span><span class="book-toc-sub">Shor's, Grover's &amp; QAOA</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">16</span><span class="book-toc-name">Quantum Cryptography</span><span class="book-toc-sub">BB84 &amp; Ekert E91 protocols</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">17</span><span class="book-toc-name">The Quantum Internet</span><span class="book-toc-sub">Connecting the cosmos</span></div>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 7</span>
+              </div>
+            </div>
+
+            <!-- Right Page: About Author & Resolution -->
+            <div class="book-page book-page-right" id="pageRight4">
+              <div class="page-gutter-shadow left"></div>
+              <div class="page-header">
+                <span>AUTHOR &amp; RESOLUTION</span>
+                <span>EDITION</span>
+              </div>
+              <div class="page-content editorial-center">
+                <div class="ornament-divider">✦ ✦ ✦</div>
+                <h4 class="chapter-title" style="margin-top: 0.15rem; font-size: 1.2rem;">Prabhdeep Singh's 4-Year Journey</h4>
+                <p style="font-size: 0.83rem; color: #374151; line-height: 1.5; margin-bottom: 0.65rem; text-align: left;">
+                  From BCA at Chitkara University to Master's at Thapar University, Prabhdeep spent four dedicated years testing Qiskit algorithms and publishing research in quantum teleportation to make cosmic physics delightful for all.
+                </p>
+
+                <div class="page-epigraph" style="width: 100%; margin-bottom: 0.65rem; padding: 0.6rem 0.85rem;">
+                  <p class="epigraph-quote" style="font-size: 0.85rem;">“Quantum computing is not just the future of technology—it's the key to unlocking the secrets of the universe, one qubit at a time.”</p>
+                  <p class="epigraph-source">— Prabhdeep Singh, Book Resolution</p>
+                </div>
+
+                <div class="amazon-edition-card" style="padding: 0.85rem;">
+                  <div class="amazon-badge-row" style="margin-bottom: 0.35rem;">
+                    <span class="amazon-pill">AMAZON KINDLE</span>
+                    <span class="rating-stars">★★★★★</span>
+                  </div>
+                  <div class="book-specs-mini" style="margin-bottom: 0.5rem; font-size: 0.72rem;">
+                    <div><span>Title:</span> Quantum Giggles: Laughing Through Cosmic Wonders</div>
+                    <div><span>Author:</span> Prabhdeep Singh (124 Pages)</div>
+                    <div><span>ASIN:</span> B0F43NH9R3 • Worldwide Digital Edition</div>
+                  </div>
+                  <a href="https://www.amazon.in/QUANTUM-GIGGLES-LAUGHING-THROUGH-WONDERS-ebook/dp/B0F43NH9R3"
+                    target="_blank" rel="noopener noreferrer" class="amazon-buy-btn" id="amazonBuyBtn" style="padding: 0.5rem 1rem; font-size: 0.82rem;">
+                    <span>Read on Amazon Kindle Store ↗</span>
+                  </a>
+                </div>
+
+                <div class="spread-restart-wrap" style="margin-top: 0.55rem;">
+                  <button class="spread-restart-btn" id="bookRestartBtn">
+                    ↺ Return to Cover
+                  </button>
+                </div>
+              </div>
+              <div class="page-footer">
+                <span>Page 8</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANIMATED TURNING LEAF (Used for the 3D flipping animation) -->
+          <div class="book-page-turning-leaf" id="bookTurningLeaf" aria-hidden="true">
+            <div class="leaf-front" id="leafFront">
+              <div class="leaf-content" id="leafFrontContent"></div>
+              <div class="leaf-shadow-gradient"></div>
+            </div>
+            <div class="leaf-back" id="leafBack">
+              <div class="leaf-content" id="leafBackContent"></div>
+              <div class="leaf-shadow-gradient"></div>
+            </div>
+          </div>
+
+        </div> <!-- /book-spreads-container -->
+
+      </div> <!-- /book-3d-object -->
+
+      <!-- Bottom Book Controls Bar -->
+      <div class="book-bottom-controls" id="bookBottomControls">
+        <button class="book-ctrl-btn" id="bookPrevBtn" title="Previous Page (←)" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Previous</span>
+        </button>
+
+        <div class="book-page-indicator">
+          <span id="bookPageIndicatorText">Spread 1 of 4 (Pages 1–2)</span>
+        </div>
+
+        <button class="book-ctrl-btn" id="bookNextBtn" title="Next Page (→)">
+          <span>Next</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+
+        <button class="book-ctrl-action-btn" id="bookToggleCoverBtn" title="Close or Open Cover">
+          <span>Close Cover</span>
+        </button>
+      </div>
+
+    </div> <!-- /book-3d-stage -->
+  </div>
+
+  <!-- 3D INTERACTIVE NEWSPAPER / SCIENTIFIC BROADSHEET MODAL -->
+  <div class="newspaper-modal-overlay" id="newspaperModal3D" role="dialog" aria-modal="true" aria-hidden="true">
+    
+    <!-- Top HUD Navigation -->
+    <div class="newspaper-modal-hud">
+      <div class="newspaper-hud-left">
+        <span class="newspaper-kicker-badge" id="newsHudKicker">SCIENTIFIC DISPATCH • BROADSHEET</span>
+        <h3 class="newspaper-hud-title" id="newsHudTitle">The Cosmic &amp; Quantum Dispatch</h3>
+      </div>
+      <div class="newspaper-hud-right">
+        <div class="newspaper-state-badge">
+          <span class="newspaper-state-dot"></span>
+          <span id="newsStateBadgeText">Folded Broadside</span>
+        </div>
+        <button class="newspaper-hud-close-btn" id="newspaperHudCloseBtn" title="Close Dispatch (ESC)" aria-label="Close">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- 3D Stage -->
+    <div class="newspaper-3d-stage" id="newspaper3DStage">
+      <div class="newspaper-ambient-glow"></div>
+
+      <!-- The 3D Newspaper Object -->
+      <article class="newspaper-3d-object is-folded" id="newspaper3DObject" tabindex="0" role="region" aria-label="Interactive Newspaper Article">
+        
+        <!-- Top Half (Always visible when folded or open) -->
+        <div class="newspaper-half newspaper-top-half" id="newspaperTopHalf">
+          <div class="news-masthead-wrap">
+            <div class="news-meta-bar">
+              <span id="newsMetaVol">VOL. IV • NO. 42</span>
+              <span id="newsMetaDate">RESEARCH DISPATCH</span>
+              <span id="newsMetaField">DEEP SPACE &amp; QUANTUM PHYSICS</span>
+            </div>
+            <h2 class="news-masthead-title">The Quantum &amp; Cosmic Times</h2>
+            <div class="news-masthead-tagline">Special Broadsheet Edition — Research Papers by Prabhdeep Singh</div>
+          </div>
+
+          <div class="news-lead-headline-wrap">
+            <span class="news-topic-badge" id="newsTopicBadge">THEORETICAL ASTROPHYSICS</span>
+            <h3 class="news-headline" id="newsHeadline">Article Headline Loading...</h3>
+            <div class="news-byline-bar">
+              <span>BY <strong>PRABHDEEP SINGH</strong></span> • 
+              <span id="newsReadTime">5 MIN READ</span> • 
+              <span id="newsCitations">4 CITATIONS</span>
+            </div>
+          </div>
+
+          <div class="news-top-teaser-grid">
+            <div class="news-teaser-col" id="newsTopTeaserCol">
+              <p>Leading research overview loading...</p>
+            </div>
+            <div class="news-highlight-box" id="newsHighlightBox">
+              <strong id="newsHighlightLabel">CORE PRINCIPLE</strong>
+              <p id="newsHighlightText">Mathematical &amp; physical framework description.</p>
+            </div>
+          </div>
+
+          <div class="newspaper-fold-prompt" id="newsFoldPrompt">
+            ✦ Click Newspaper or Button Below to Unfold ✦
+          </div>
+          <div class="news-crease-shadow"></div>
+        </div>
+
+        <!-- Bottom Half (Flips open in 3D when unfolded) -->
+        <div class="newspaper-half newspaper-bottom-half" id="newspaperBottomHalf">
+          <div class="news-bottom-frontface">
+            <div class="news-bottom-grid">
+              
+              <!-- Column 1: Theoretical Foundations -->
+              <div class="news-col">
+                <h4 class="news-subhead" id="newsCol1Title">1. Foundations</h4>
+                <div class="news-body-text" id="newsCol1Body">
+                  <p>Content loading...</p>
+                </div>
+              </div>
+
+              <!-- Column 2: Blueprint & Circuit / Metric -->
+              <div class="news-col">
+                <h4 class="news-subhead" id="newsCol2Title">2. Blueprint &amp; Framework</h4>
+                <div class="news-blueprint-wrap" id="newsCol2Blueprint">
+                  <pre>Framework diagram loading...</pre>
+                </div>
+              </div>
+
+              <!-- Column 3: Analysis & Impact -->
+              <div class="news-col">
+                <h4 class="news-subhead" id="newsCol3Title">3. Key Deductions</h4>
+                <div class="news-bullet-list" id="newsCol3List">
+                  <ul>
+                    <li>Loading...</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Bottom Dispatch Stamp & Actions -->
+            <div class="news-dispatch-stamp">
+              <span class="news-stamp-seal" id="newsStampSeal">PEER-REVIEWED ARCHIVE • VERIFIED</span>
+              <button class="newspaper-fold-btn" id="newsFoldBackBtn" type="button">
+                Fold Newspaper ↑
+              </button>
+            </div>
+          </div>
+
+          <!-- Physical Backface of the Folded Bottom Half -->
+          <div class="news-bottom-backface" aria-hidden="true">
+            <div class="news-backface-content">
+              <div class="news-backface-masthead">✦ THE QUANTUM TIMES &bull; HISTORICAL DISPATCH ARCHIVES ✦</div>
+              <div class="news-backface-columns">
+                <div class="news-backface-col">
+                  <div class="news-backface-line wide"></div>
+                  <div class="news-backface-line"></div>
+                  <div class="news-backface-line"></div>
+                  <div class="news-backface-line medium"></div>
+                </div>
+                <div class="news-backface-col">
+                  <div class="news-backface-line medium"></div>
+                  <div class="news-backface-line wide"></div>
+                  <div class="news-backface-line"></div>
+                </div>
+                <div class="news-backface-col">
+                  <div class="news-backface-line wide"></div>
+                  <div class="news-backface-line"></div>
+                  <div class="news-backface-line medium"></div>
+                </div>
+              </div>
+              <div class="news-backface-seal">CLASSIFIED THEORETICAL FOLIO &bull; ARCHIVED COPY</div>
+            </div>
+          </div>
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="newspaper-bottom-controls" id="newspaperBottomControls">
+      <button class="newspaper-ctrl-action-btn" id="newspaperToggleFoldBtn" type="button">
+        Unfold Broadsheet
+      </button>
+      <a class="newspaper-ctrl-action-btn" id="newspaperExternalLinkBtn" href="#" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: inline-flex; align-items: center;">
+        Read Full Article ↗
+      </a>
+    </div>
+
+  </div>
+
+
 
     <!-- FLOATING INTERACTIVE PROJECT CURSOR PREVIEW (Dennis Snellenberg Signature) -->
     <div class="floating-project-preview" id="floatingProjectPreview" aria-hidden="true">
@@ -642,7 +1139,7 @@
 
     <!-- PDF.js Mozilla Library for In-Browser Vector Rendering -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="app.js"></script>
+    <script src="app.js?v=3.5"></script>
 </body>
 
 </html>

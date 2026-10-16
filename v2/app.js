@@ -34,21 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      cursorDot.style.left = `${mouseX}px`;
-      cursorDot.style.top  = `${mouseY}px`;
+      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
 
       if (!isVisible) {
         isVisible = true;
         cursorDot.classList.remove('is-hidden');
         cursorCircle.classList.remove('is-hidden');
       }
-    });
+    }, { passive: true });
 
     function animateCursorCircle() {
-      circleX += (mouseX - circleX) * 0.15;
-      circleY += (mouseY - circleY) * 0.15;
-      cursorCircle.style.left = `${circleX}px`;
-      cursorCircle.style.top  = `${circleY}px`;
+      circleX += (mouseX - circleX) * 0.16;
+      circleY += (mouseY - circleY) * 0.16;
+      cursorCircle.style.transform = `translate3d(${circleX.toFixed(2)}px, ${circleY.toFixed(2)}px, 0) translate(-50%, -50%)`;
       requestAnimationFrame(animateCursorCircle);
     }
     requestAnimationFrame(animateCursorCircle);
@@ -93,17 +91,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Magnetic Elastic Motion for Callout Group & Arrow
   if (calloutGroup && hasFinePointer) {
+    let calloutRect = null;
+    calloutGroup.addEventListener('mouseenter', () => {
+      calloutRect = calloutGroup.getBoundingClientRect();
+    });
+
     calloutGroup.addEventListener('mousemove', (e) => {
-      const rect = calloutGroup.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+      if (!calloutRect) calloutRect = calloutGroup.getBoundingClientRect();
+      const centerX = calloutRect.left + calloutRect.width / 2;
+      const centerY = calloutRect.top + calloutRect.height / 2;
       const deltaX = (e.clientX - centerX) * 0.22;
       const deltaY = (e.clientY - centerY) * 0.22;
-      calloutGroup.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      calloutGroup.style.transform = `translate3d(${deltaX.toFixed(1)}px, ${deltaY.toFixed(1)}px, 0)`;
     });
 
     calloutGroup.addEventListener('mouseleave', () => {
-      calloutGroup.style.transform = 'translate(0px, 0px)';
+      calloutRect = null;
+      calloutGroup.style.transform = 'translate3d(0px, 0px, 0)';
     });
   }
 
@@ -295,7 +299,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  window.addEventListener('scroll', handleDockScroll, { passive: true });
+  let isDockScrollScheduled = false;
+  function scheduleDockScroll() {
+    if (!isDockScrollScheduled) {
+      isDockScrollScheduled = true;
+      requestAnimationFrame(() => {
+        handleDockScroll();
+        isDockScrollScheduled = false;
+      });
+    }
+  }
+
+  window.addEventListener('scroll', scheduleDockScroll, { passive: true });
   window.addEventListener('resize', () => {
     if (!isLaptop() && dockContainer) {
       isSideDocked = false;
@@ -781,7 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (patentModalClose) patentModalClose.addEventListener('click', closePatentModal);
   if (patentModal) {
     patentModal.addEventListener('click', (e) => {
-      if (e.target === patentModal) closePatentModal();
+      if (!e.target.closest('.pv-container') && !e.target.closest('.patent-modal-card')) closePatentModal();
     });
   }
 
@@ -835,7 +850,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (resumeModalClose) resumeModalClose.addEventListener('click', closeResumeModal);
   if (resumeModal) {
     resumeModal.addEventListener('click', (e) => {
-      if (e.target === resumeModal) closeResumeModal();
+      if (!e.target.closest('.modal-card-v2') && !e.target.closest('.resume-preview-card')) closeResumeModal();
     });
   }
 
@@ -870,14 +885,28 @@ document.addEventListener('DOMContentLoaded', () => {
      07. CURVED SECTION TRANSITION DYNAMIC MORPHING (Dennis Snellenberg Arc)
      ========================================================================== */
   const heroCurvePath = document.getElementById('heroCurvePath');
+  let lastCurveVal = -1;
+  let isCurveScheduled = false;
   function updateCurveOnScroll() {
     if (!heroCurvePath) return;
     const scrollY = window.scrollY;
-    // Morph quadratic control point height between 80px and 0px as you scroll
+    if (scrollY > 420 && lastCurveVal === 0) return;
     const curveAmount = Math.max(0, Math.min(80, 80 - scrollY * 0.22));
-    heroCurvePath.setAttribute('d', `M 0,0 Q 720,${curveAmount} 1440,0 L 1440,90 L 0,90 Z`);
+    if (Math.abs(curveAmount - lastCurveVal) >= 0.5 || (curveAmount === 0 && lastCurveVal !== 0)) {
+      lastCurveVal = curveAmount;
+      heroCurvePath.setAttribute('d', `M 0,0 Q 720,${curveAmount.toFixed(1)} 1440,0 L 1440,90 L 0,90 Z`);
+    }
   }
-  window.addEventListener('scroll', updateCurveOnScroll, { passive: true });
+  function scheduleCurveScroll() {
+    if (!isCurveScheduled) {
+      isCurveScheduled = true;
+      requestAnimationFrame(() => {
+        updateCurveOnScroll();
+        isCurveScheduled = false;
+      });
+    }
+  }
+  window.addEventListener('scroll', scheduleCurveScroll, { passive: true });
 
 
   /* ==========================================================================
@@ -985,20 +1014,34 @@ document.addEventListener('DOMContentLoaded', () => {
     let previewTargetY = window.innerHeight / 2;
     let previewCurrentX = previewTargetX;
     let previewCurrentY = previewTargetY;
+    let isPreviewActive = false;
+    let previewRafId = null;
+
+    function tickProjectPreview() {
+      previewCurrentX += (previewTargetX - previewCurrentX) * 0.14;
+      previewCurrentY += (previewTargetY - previewCurrentY) * 0.14;
+      previewContainer.style.transform = `translate3d(${previewCurrentX.toFixed(1)}px, ${previewCurrentY.toFixed(1)}px, 0) translate(-50%, -50%) ${isPreviewActive ? 'scale(1) rotate(0deg)' : 'scale(0.65) rotate(-6deg)'}`;
+
+      const deltaX = Math.abs(previewTargetX - previewCurrentX);
+      const deltaY = Math.abs(previewTargetY - previewCurrentY);
+      if (isPreviewActive || deltaX > 0.4 || deltaY > 0.4) {
+        previewRafId = requestAnimationFrame(tickProjectPreview);
+      } else {
+        previewRafId = null;
+      }
+    }
+
+    function startPreviewLoop() {
+      if (!previewRafId) {
+        previewRafId = requestAnimationFrame(tickProjectPreview);
+      }
+    }
 
     window.addEventListener('mousemove', (e) => {
       previewTargetX = e.clientX;
       previewTargetY = e.clientY;
-    });
-
-    function animateProjectPreview() {
-      previewCurrentX += (previewTargetX - previewCurrentX) * 0.12;
-      previewCurrentY += (previewTargetY - previewCurrentY) * 0.12;
-      previewContainer.style.left = `${previewCurrentX}px`;
-      previewContainer.style.top  = `${previewCurrentY}px`;
-      requestAnimationFrame(animateProjectPreview);
-    }
-    requestAnimationFrame(animateProjectPreview);
+      if (isPreviewActive) startPreviewLoop();
+    }, { passive: true });
 
     document.querySelectorAll('.work-row-v2[data-project-id]').forEach((row) => {
       row.addEventListener('mouseenter', () => {
@@ -1009,11 +1052,14 @@ document.addEventListener('DOMContentLoaded', () => {
           if (previewTitle) previewTitle.textContent = data.title;
           if (previewTags) previewTags.textContent = data.tags;
           if (previewCard) previewCard.style.background = data.gradient;
+          isPreviewActive = true;
           previewContainer.classList.add('is-active');
+          startPreviewLoop();
         }
       });
 
       row.addEventListener('mouseleave', () => {
+        isPreviewActive = false;
         previewContainer.classList.remove('is-active');
       });
     });
@@ -1205,7 +1251,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (projectModalClose) projectModalClose.addEventListener('click', closeProjectModal);
   if (projectModal) {
     projectModal.addEventListener('click', (e) => {
-      if (e.target === projectModal) closeProjectModal();
+      if (!e.target.closest('.modal-card-v2')) closeProjectModal();
     });
   }
 
@@ -1236,10 +1282,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const ARTICLE_DATA_V2 = {
     book_qg: {
-      kicker: 'PUBLISHED AUTHOR • GLOBAL AMAZON KINDLE EDITION',
+      kicker: 'PUBLISHED AUTHOR • GLOBAL AMAZON KINDLE RELEASE',
       title: 'Quantum Giggles: Laughing Through Cosmic Wonders',
-      field: 'Quantum Information, Relativistic Physics & Accessible Science',
-      abstract: 'A full-length published book demystifying quantum mechanics—wave-particle duality, superposition, quantum entanglement, and spacetime geometry—with wit, approachable humor, and real-world software engineering analogies.',
+      field: 'Electric Echoes: A Cyberpunk Odyssey of Discovery & Enlightenment',
+      abstract: 'A published cyberpunk and quantum science odyssey by Prabhdeep Singh demystifying quantum mechanics—superposition, teleportation, entanglement, and spacetime—with comedic brilliance and distributed software engineering analogies.',
       content: `
         <div style="margin-bottom: 2rem;">
           <h4 style="font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 0.6rem;">I. Executive Overview &amp; Global Publication</h4>
@@ -1429,7 +1475,697 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  /* ==========================================================================
+     SHARED AUDIO CONTEXT (Prevents browser AudioContext leaks & crashes)
+     ========================================================================== */
+  let sharedAudioCtx = null;
+  function getSharedAudioContext() {
+    try {
+      if (!sharedAudioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          sharedAudioCtx = new AudioCtx();
+        }
+      }
+      if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+        sharedAudioCtx.resume().catch(() => {});
+      }
+      return sharedAudioCtx;
+    } catch {
+      return null;
+    }
+  }
+
+  /* ==========================================================================
+     11B. 3D INTERACTIVE BOOK EXPERIENCE (QUANTUM GIGGLES)
+     ========================================================================== */
+  let open3DBookViewer = () => {};
+  let close3DBookViewer = () => {};
+
+  function init3DBookViewer() {
+    const overlay = document.getElementById('bookModal3D');
+    const bookObj = document.getElementById('book3DObject');
+    const coverFront = document.getElementById('bookCoverFront');
+    const closeBtn = document.getElementById('bookModalCloseBtn');
+    const prevBtn = document.getElementById('bookPrevBtn');
+    const nextBtn = document.getElementById('bookNextBtn');
+    const toggleCoverBtn = document.getElementById('bookToggleCoverBtn');
+    const restartBtn = document.getElementById('bookRestartBtn');
+    const quickOpenBtn = document.getElementById('quickOpenBookBtn');
+    const indicatorText = document.getElementById('bookPageIndicatorText');
+    const stateText = document.getElementById('bookStateText');
+    const spreads = document.querySelectorAll('#bookModal3D .book-spread');
+    const turningLeaf = document.getElementById('bookTurningLeaf');
+    const leafFrontContent = document.getElementById('leafFrontContent');
+    const leafBackContent = document.getElementById('leafBackContent');
+
+    if (!overlay || !bookObj) return;
+
+    let currentSpread = 1;
+    const totalSpreads = spreads.length || 4;
+    let isOpen = false;
+    let isFlipping = false;
+
+    // Procedural Web Audio API paper-rustle sound generator (Reuses shared singleton)
+    function playPaperSound() {
+      try {
+        const ctx = getSharedAudioContext();
+        if (!ctx) return;
+        const bufferSize = Math.floor(ctx.sampleRate * 0.12);
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.28));
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.12);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.09, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+      } catch (e) {}
+    }
+
+    function updateSpreadUI() {
+      spreads.forEach((spread, idx) => {
+        const spreadNum = idx + 1;
+        if (spreadNum === currentSpread) {
+          spread.classList.add('is-active');
+        } else {
+          spread.classList.remove('is-active');
+        }
+      });
+
+      if (indicatorText) {
+        const startPage = (currentSpread - 1) * 2 + 1;
+        const endPage = currentSpread * 2;
+        indicatorText.textContent = `Spread ${currentSpread} of ${totalSpreads} (Pages ${startPage}–${endPage})`;
+      }
+
+      if (prevBtn) {
+        prevBtn.disabled = (currentSpread === 1 && !isOpen);
+      }
+      if (nextBtn) {
+        nextBtn.disabled = (currentSpread === totalSpreads);
+      }
+
+      if (stateText) {
+        if (!isOpen) {
+          stateText.textContent = 'Closed Book • Click Cover to Open';
+        } else {
+          stateText.textContent = `Reading Spread ${currentSpread} of ${totalSpreads}`;
+        }
+      }
+
+      if (toggleCoverBtn) {
+        toggleCoverBtn.textContent = isOpen ? 'Close Cover' : 'Open Book';
+      }
+    }
+
+    function openCover() {
+      if (isOpen) return;
+      isOpen = true;
+      playPaperSound();
+      bookObj.classList.remove('is-closed');
+      bookObj.classList.add('is-open');
+      updateSpreadUI();
+    }
+
+    function closeCover() {
+      if (!isOpen) return;
+      isOpen = false;
+      playPaperSound();
+      bookObj.classList.remove('is-open');
+      bookObj.classList.add('is-closed');
+      updateSpreadUI();
+    }
+
+    function flipToSpread(targetSpread, direction = 'next') {
+      if (isFlipping || targetSpread === currentSpread || targetSpread < 1 || targetSpread > totalSpreads) {
+        return;
+      }
+      if (!isOpen) {
+        openCover();
+        return;
+      }
+
+      isFlipping = true;
+      playPaperSound();
+
+      // Animate turning leaf with 3D rotation
+      if (turningLeaf) {
+        const currentSpreadEl = document.querySelector(`#bookModal3D [data-spread="${currentSpread}"]`);
+        const targetSpreadEl = document.querySelector(`#bookModal3D [data-spread="${targetSpread}"]`);
+        
+        if (direction === 'next' && currentSpreadEl && targetSpreadEl) {
+          const rightPage = currentSpreadEl.querySelector('.book-page-right');
+          const nextLeftPage = targetSpreadEl.querySelector('.book-page-left');
+          if (leafFrontContent && rightPage) leafFrontContent.innerHTML = rightPage.innerHTML;
+          if (leafBackContent && nextLeftPage) leafBackContent.innerHTML = nextLeftPage.innerHTML;
+
+          turningLeaf.classList.add('is-turning');
+          turningLeaf.style.transition = 'none';
+          turningLeaf.style.transform = 'rotateY(0deg)';
+          turningLeaf.offsetHeight; // force reflow
+          turningLeaf.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)';
+          turningLeaf.style.transform = 'rotateY(-180deg)';
+        } else if (direction === 'prev' && currentSpreadEl && targetSpreadEl) {
+          const leftPage = currentSpreadEl.querySelector('.book-page-left');
+          const prevRightPage = targetSpreadEl.querySelector('.book-page-right');
+          if (leafBackContent && leftPage) leafBackContent.innerHTML = leftPage.innerHTML;
+          if (leafFrontContent && prevRightPage) leafFrontContent.innerHTML = prevRightPage.innerHTML;
+
+          turningLeaf.classList.add('is-turning');
+          turningLeaf.style.transition = 'none';
+          turningLeaf.style.transform = 'rotateY(-180deg)';
+          turningLeaf.offsetHeight; // force reflow
+          turningLeaf.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)';
+          turningLeaf.style.transform = 'rotateY(0deg)';
+        }
+      }
+
+      setTimeout(() => {
+        currentSpread = targetSpread;
+        updateSpreadUI();
+        if (turningLeaf) {
+          turningLeaf.classList.remove('is-turning');
+          turningLeaf.style.transform = '';
+        }
+        isFlipping = false;
+      }, 760);
+    }
+
+    function nextSpread() {
+      if (!isOpen) {
+        handleCoverClick();
+      } else if (currentSpread < totalSpreads) {
+        flipToSpread(currentSpread + 1, 'next');
+      }
+    }
+
+    function prevSpread() {
+      if (currentSpread > 1) {
+        flipToSpread(currentSpread - 1, 'prev');
+      } else if (currentSpread === 1 && isOpen) {
+        closeCover();
+      }
+    }
+
+    let autoOpenTimer = null;
+    let isOpeningCover = false;
+
+    function handleCoverClick() {
+      if (isOpen || isOpeningCover) return;
+      if (autoOpenTimer) {
+        clearTimeout(autoOpenTimer);
+        autoOpenTimer = null;
+      }
+      isOpeningCover = true;
+      coverFront?.classList.add('is-opening');
+      if (stateText) stateText.textContent = 'Opening Book...';
+      openCover();
+      setTimeout(() => {
+        coverFront?.classList.remove('is-opening');
+        isOpeningCover = false;
+      }, 350);
+    }
+
+    let bookModalOpenedAt = 0;
+
+    open3DBookViewer = function(autoOpen = true) {
+      bookModalOpenedAt = Date.now();
+      if (autoOpenTimer) {
+        clearTimeout(autoOpenTimer);
+        autoOpenTimer = null;
+      }
+      isOpeningCover = false;
+      currentSpread = 1;
+
+      // Always present the authentic closed cover artwork cleanly first
+      isOpen = false;
+      bookObj.classList.add('is-closed');
+      bookObj.classList.remove('is-open');
+      coverFront?.classList.remove('is-opening');
+      updateSpreadUI();
+
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+
+      if (autoOpen) {
+        if (stateText) stateText.textContent = 'Closed Book • Opening...';
+        // Pause on the front cover for 650ms so the user can appreciate the cover art before it swings open
+        autoOpenTimer = setTimeout(() => {
+          openCover();
+        }, 650);
+      }
+    };
+
+    close3DBookViewer = function() {
+      if (autoOpenTimer) {
+        clearTimeout(autoOpenTimer);
+        autoOpenTimer = null;
+      }
+      isOpeningCover = false;
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      currentSpread = 1;
+      isOpen = false;
+      bookObj.classList.remove('is-open');
+      bookObj.classList.add('is-closed');
+      coverFront?.classList.remove('is-opening');
+      updateSpreadUI();
+    };
+
+    // Event Listeners
+    coverFront?.addEventListener('click', handleCoverClick);
+    quickOpenBtn?.addEventListener('click', () => {
+      if (!isOpen) openCover();
+    });
+
+    closeBtn?.addEventListener('click', close3DBookViewer);
+
+    // When clicked outside of book on backdrop/stage, close the book
+    overlay?.addEventListener('click', (e) => {
+      if (Date.now() - bookModalOpenedAt < 800) return;
+      if (
+        e.target === overlay ||
+        e.target.classList.contains('book-3d-stage') ||
+        e.target.classList.contains('book-ambient-glow')
+      ) {
+        close3DBookViewer();
+      }
+    });
+
+    prevBtn?.addEventListener('click', prevSpread);
+    nextBtn?.addEventListener('click', nextSpread);
+    toggleCoverBtn?.addEventListener('click', () => {
+      if (isOpen) closeCover();
+      else handleCoverClick();
+    });
+
+    restartBtn?.addEventListener('click', () => {
+      flipToSpread(1, 'prev');
+      setTimeout(closeCover, 700);
+    });
+
+    // Right page click turns to next page
+    document.querySelectorAll('#bookModal3D .book-page-right').forEach(page => {
+      page.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        nextSpread();
+      });
+    });
+
+    // Left page click on spread 2 & 3 turns back
+    document.querySelectorAll('#bookModal3D .book-page-left').forEach(page => {
+      page.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        if (currentSpread > 1) prevSpread();
+      });
+    });
+
+    // Keyboard support inside book
+    document.addEventListener('keydown', (e) => {
+      if (!overlay.classList.contains('is-open')) return;
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSpread();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSpread();
+      } else if (e.key === ' ' && !isOpen) {
+        e.preventDefault();
+        handleCoverClick();
+      }
+    });
+
+    updateSpreadUI();
+  }
+
+  /* ==========================================================================
+     11C. 3D INTERACTIVE NEWSPAPER BROADSHEET VIEWER (RESEARCH ARTICLES)
+     ========================================================================== */
+  const NEWSPAPER_EDITIONS = {
+    art1: {
+      kicker: 'THEORETICAL ASTROPHYSICS // VOL. IV • NO. 42',
+      mastheadVol: 'VOL. IV • NO. 42',
+      mastheadDate: 'OCTOBER 2024 DISPATCH',
+      field: 'COSMOLOGY & GENERAL RELATIVITY',
+      topic: 'OBSERVATIONAL COSMOLOGY & VACUUM ENERGY',
+      headline: 'Dark Energy and the Mystery of Accelerating Expansion',
+      readTime: '5 MIN READ',
+      citations: '4 PEER CITATIONS',
+      leadTeaser: 'Cosmological surveys including Type Ia Supernovae and Planck CMB measurements confirm that approximately 68.3% of the universe consists of dark energy—a smooth, negative-pressure fluid driving accelerated cosmic expansion.',
+      highlightLabel: 'EINSTEIN-HILBERT FIELD EQUATIONS',
+      highlightText: 'G_μν + Λg_μν = (8πG / c⁴) T_μν where Λ > 0 acts as repulsive gravitational vacuum pressure.',
+      col1Title: '1. Cosmological Constant vs Quintessence',
+      col1Body: '<p>Is dark energy a static vacuum energy constant <em>w = -1</em>, or an evolving scalar field dubbed <em>Quintessence</em> with dynamic equation of state <em>w(a) = w₀ + w_a(1-a)</em>?</p><p>Prabhdeep Singh\'s investigation analyzes the Hubble constant tension ($H₀$: 67.4 vs 73.0 km/s/Mpc), evaluating whether local cosmological discrepancies hint at uncharted physics beyond the standard $\\Lambda\\text{CDM}$ model.</p>',
+      col2Title: '2. Spacetime Stress Tensor Model',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│ COSMIC EXPANSION & EQUATION OF STATE (w)     │
+│                                              │
+│ Pressure-to-Density Ratio:                   │
+│   p = w · ρ · c²                             │
+│                                              │
+│ Cosmological Constant:   w = -1.00 ± 0.03    │
+│ Phantom Energy Boundary: w < -1 (Big Rip)    │
+│ Quintessence Field:      -1 < w < -1/3       │
+│                                              │
+│ Scale Factor Evolution:  a(t) ∝ e^(H·t)      │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Key Observational Deductions',
+      col3List: `<li><strong>Cosmic Coincidence:</strong> Why is dark energy density currently comparable to matter density ($\\Omega_\\Lambda \\approx 0.68, \\Omega_m \\approx 0.32$)?</li><li><strong>Vacuum Catastrophe:</strong> Theoretical quantum field vacuum energy exceeds observations by 120 orders of magnitude.</li><li><strong>Future Trajectory:</strong> If $w \\equiv -1$, cosmic event horizons will shrink until all external galaxies red-shift out of causal contact.</li>`,
+      stampSeal: 'PEER ARCHIVE • ASTROPHYSICS VERIFIED',
+      linkUrl: '#articles'
+    },
+    art2: {
+      kicker: 'SPACE MEDICINE & BIO-PHYSICS // SPECIAL REPORT',
+      mastheadVol: 'VOL. IV • NO. 18',
+      mastheadDate: 'NOVEMBER 2024 DISPATCH',
+      field: 'ASTROBIOLOGY & RELATIVISTIC SHIELDING',
+      topic: 'HEAVY ION BIOPHYSICS & GCR PROTECTION',
+      headline: 'Guardians of the Galaxy: Shielding Astronauts from High-Energy Space Radiation',
+      readTime: '6 MIN READ',
+      citations: '6 PEER CITATIONS',
+      leadTeaser: 'Beyond the Earth’s magnetosphere, deep-space voyagers face Galactic Cosmic Rays (GCR) and Solar Particle Events (SPE). Relativistic heavy iron nuclei (⁵⁶Fe) slice through conventional hull shielding and cellular DNA.',
+      highlightLabel: 'IONIZING DOSIMETRY THRESHOLD',
+      highlightText: 'Cumulative Mars transit dose: ~1.2 Sieverts (Sv), causing clustered DNA double-strand breaks (DSBs).',
+      col1Title: '1. Radiation Spectrum & Cellular Trauma',
+      col1Body: '<p>High-Z and High-Energy (HZE) ions produce dense ionization tracks that standard DNA repair enzymes (NHEJ and HR) cannot repair, leading to chromosomal translocations and elevated oncogenesis risks.</p><p>Secondary Bremsstrahlung photons and spallation neutrons created when ions hit heavy lead hulls often amplify the internal biological dose.</p>',
+      col2Title: '2. Multi-Layer Composite Shielding',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│ MULTI-LAYER COMPOSITE RADIATION SHIELDING   │
+│                                              │
+│ [Outer Hull] Space Debris / Micrometeoroid   │
+│   ↓                                          │
+│ [UHMW-PE] Ultra-High Molecular Wt Polyeth.   │
+│   (High hydrogen density absorbs HZE ions)   │
+│   ↓                                          │
+│ [Liquid H2O / Food Pack Water Buffer Tank]   │
+│   ↓                                          │
+│ [Crew Quarters Storm Shelter: 15 cm H2O eq]  │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Mitigation & Active Magnetospheres',
+      col3List: `<li><strong>Hydrogen-Rich Composites:</strong> UHMW-PE and boronated polymers outperform aluminum by 40% in shielding mass efficiency.</li><li><strong>Active High-Tc Superconductors:</strong> Toroidal magnetic coils generating 3–5 Tesla deflecting positive ions without secondary neutron cascades.</li><li><strong>Pharmacological Radioprotectants:</strong> Synthetic anti-oxidants and NAD+ precursors mitigating acute oxidative cellular degradation.</li>`,
+      stampSeal: 'AEROSPACE BIOPHYSICS • ARCHIVED',
+      linkUrl: '#articles'
+    },
+    art3: {
+      kicker: 'QUANTUM ARCHITECTURE // DISPATCH 03',
+      mastheadVol: 'VOL. V • NO. 09',
+      mastheadDate: 'DECEMBER 2024 DISPATCH',
+      field: 'QUANTUM INFORMATION SCIENCE',
+      topic: 'CIRCUITS & COMPUTATIONAL ADVANTAGE',
+      headline: 'The Evolution of Quantum Computing: Beyond Moore’s Law to Hilbert Supremacy',
+      readTime: '7 MIN READ',
+      citations: '8 PEER CITATIONS',
+      leadTeaser: 'As silicon lithography faces sub-nanometer quantum tunneling walls, quantum computing harnesses superposition and multi-qubit entanglement across a 2ᴺ-dimensional complex Hilbert space.',
+      highlightLabel: 'STATE COMPLEXITY SCALING',
+      highlightText: 'At 300 fault-tolerant entangled qubits, the state space (2³⁰⁰) exceeds the total atom count in the observable universe.',
+      col1Title: '1. The Hardware Modality Race',
+      col1Body: '<p>From transmon superconducting circuits (Josephson junctions cooled in dilution refrigerators to 15 millikelvin) to trapped-ion qubits (¹⁷¹Yb⁺ pulsed by Raman laser pairs), quantum hardware is advancing through NISQ era noise toward fault-tolerance.</p><p>Prabhdeep Singh assesses error thresholds, surface code lattice surgery, and T-gate distillation costs.</p>',
+      col2Title: '2. 2-Qubit Entanglement Bell State Circuit',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│ BELL STATE CIRCUIT: |Φ+⟩ = (|00⟩ + |11⟩)/√2  │
+│                                              │
+│  q[0]: ──|H|──────■────── ⟨Z⟩                │
+│                   │                          │
+│  q[1]: ───────────X────── ⟨Z⟩                │
+│                                              │
+│  Density Matrix:  ρ = |Φ+⟩⟨Φ+|               │
+│  Coherence T1: ~120 μs | T2 Echo: ~95 μs    │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Algorithmic Supremacy Horizons',
+      col3List: `<li><strong>Shor\'s Algorithm:</strong> Polynomial-time period finding O((log N)³) breaks RSA cryptography via Quantum Fourier Transform.</li><li><strong>Grover\'s Search:</strong> Quadratic speedup O(√N) for unstructured query databases.</li><li><strong>VQE & QAOA:</strong> Variational Quantum Eigensolvers modeling molecular orbital catalysis for room-temperature fertilizers and lithium battery cathodes.</li>`,
+      stampSeal: 'QUANTUM LAB ARCHIVE • VERIFIED',
+      linkUrl: '#articles'
+    },
+    art4: {
+      kicker: 'ADVANCED SPACETIME METRICS // TREATISE 04',
+      mastheadVol: 'VOL. V • NO. 14',
+      mastheadDate: 'JANUARY 2025 DISPATCH',
+      field: 'RELATIVISTIC PROPULSION & GENERAL RELATIVITY',
+      topic: 'ALCUBIERRE TOPOLOGY & EXOTIC MATTER',
+      headline: 'In Search of the Impossible: The Physics and Mathematics of Warp Drives',
+      readTime: '8 MIN READ',
+      citations: '10 PEER CITATIONS',
+      leadTeaser: 'Miguel Alcubierre proved in 1994 that General Relativity permits apparent faster-than-light travel by contracting spacetime ahead of a vessel while expanding spacetime behind it, without locally exceeding the speed of light.',
+      highlightLabel: 'ADM (3+1) LINE ELEMENT',
+      highlightText: 'ds² = -c² dt² + [dx - v_s(t) f(r_s) dt]² + dy² + dz² with zero proper acceleration for interior passengers.',
+      col1Title: '1. Geometry Without Acceleration',
+      col1Body: '<p>Within the Alcubierre warp bubble, the craft rests inside a flat Minkowski spacetime patch. The ship experiences no inertia, zero g-forces, and no relativistic time dilation—it is the spacetime manifold itself that translates through coordinate space.</p><p>However, the stress-energy tensor requires negative energy densities ρ < 0, violating the Weak and Dominant Energy Conditions.</p>',
+      col2Title: '2. Alcubierre Spacetime Line Element',
+      col2Blueprint: `┌──────────────────────────────────────────────┐
+│  ALCUBIERRE WARP METRIC (3+1 ADM FORMALISM)  │
+│                                              │
+│   ds² = -c² dt² + [dx - v_s(t) f(r_s) dt]²   │
+│         + dy² + dz²                          │
+│                                              │
+│   Ship Center:  r_s(t) = √[(x-x_s)²+y²+z²]   │
+│   Bubble Form:  f(r_s) = [tanh σ(r_s+R) -    │
+│                           tanh σ(r_s-R)]/2   │
+│   Negative ρ:   T_00 < 0 (Casimir Vacuum)    │
+└──────────────────────────────────────────────┘`,
+      col3Title: '3. Solved & Open Engineering Bottlenecks',
+      col3List: `<li><strong>Van Den Broeck Micro-Bubble:</strong> Microscopic internal coordinate radius expands to macroscopic interior, reducing required negative mass from Jupiter\'s mass down to several milligrams.</li><li><strong>Horizon Debris Accumulation:</strong> High-energy gamma ray photons captured along the forward shock wave release catastrophically upon bubble deceleration.</li><li><strong>Causality Horizons:</strong> Interior pilot cannot send signals to the exterior forward edge of the bubble to stop or steer the geometry.</li>`,
+      stampSeal: 'RELATIVITY DISPATCH • PEER CERTIFIED',
+      linkUrl: '#articles'
+    }
+  };
+
+  let open3DNewspaperViewer = () => {};
+  let close3DNewspaperViewer = () => {};
+
+  function init3DNewspaperViewer() {
+    const overlay = document.getElementById('newspaperModal3D');
+    const newsObj = document.getElementById('newspaper3DObject');
+    const closeBtn = document.getElementById('newspaperHudCloseBtn');
+    const toggleBtn = document.getElementById('newspaperToggleFoldBtn');
+    const foldBackBtn = document.getElementById('newsFoldBackBtn');
+    const stateBadgeText = document.getElementById('newsStateBadgeText');
+    const externalLinkBtn = document.getElementById('newspaperExternalLinkBtn');
+
+    // Content fields
+    const hudKicker = document.getElementById('newsHudKicker');
+    const metaVol = document.getElementById('newsMetaVol');
+    const metaDate = document.getElementById('newsMetaDate');
+    const metaField = document.getElementById('newsMetaField');
+    const topicBadge = document.getElementById('newsTopicBadge');
+    const headlineEl = document.getElementById('newsHeadline');
+    const readTimeEl = document.getElementById('newsReadTime');
+    const citationsEl = document.getElementById('newsCitations');
+    const topTeaserCol = document.getElementById('newsTopTeaserCol');
+    const highlightLabel = document.getElementById('newsHighlightLabel');
+    const highlightText = document.getElementById('newsHighlightText');
+    const col1Title = document.getElementById('newsCol1Title');
+    const col1Body = document.getElementById('newsCol1Body');
+    const col2Title = document.getElementById('newsCol2Title');
+    const col2Blueprint = document.getElementById('newsCol2Blueprint');
+    const col3Title = document.getElementById('newsCol3Title');
+    const col3List = document.getElementById('newsCol3List');
+    const stampSeal = document.getElementById('newsStampSeal');
+
+    if (!overlay || !newsObj) return;
+
+    let isUnfolded = false;
+    let isTransitioning = false;
+
+    // Procedural Web Audio API paper-rustle sound generator (Reuses shared singleton)
+    function playPaperSound() {
+      try {
+        const ctx = getSharedAudioContext();
+        if (!ctx) return;
+        const bufferSize = Math.floor(ctx.sampleRate * 0.16);
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1400, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + 0.16);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+      } catch (e) {}
+    }
+
+    function updateUIState() {
+      if (isUnfolded) {
+        newsObj.classList.remove('is-folded', 'is-unfolding');
+        newsObj.classList.add('is-unfolded');
+        if (stateBadgeText) stateBadgeText.textContent = 'Unfolded Broadsheet';
+        if (toggleBtn) toggleBtn.textContent = 'Fold Broadsheet';
+      } else {
+        newsObj.classList.remove('is-unfolded', 'is-unfolding');
+        newsObj.classList.add('is-folded');
+        if (stateBadgeText) stateBadgeText.textContent = 'Folded Broadside';
+        if (toggleBtn) toggleBtn.textContent = 'Unfold Broadsheet';
+      }
+    }
+
+    function unfoldNewspaper() {
+      if (isUnfolded || isTransitioning) return;
+      isTransitioning = true;
+      newsObj.classList.add('is-unfolding');
+      if (stateBadgeText) stateBadgeText.textContent = 'Unfolding...';
+      playPaperSound();
+
+      setTimeout(() => {
+        isUnfolded = true;
+        updateUIState();
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 820);
+      }, 100);
+    }
+
+    function foldNewspaper() {
+      if (!isUnfolded || isTransitioning) return;
+      isTransitioning = true;
+      playPaperSound();
+      isUnfolded = false;
+      updateUIState();
+      setTimeout(() => {
+        isTransitioning = false;
+      }, 820);
+    }
+
+    function toggleFold() {
+      if (isUnfolded) foldNewspaper();
+      else unfoldNewspaper();
+    }
+
+    let newsModalOpenedAt = 0;
+
+    open3DNewspaperViewer = function(articleId = 'art1') {
+      const data = NEWSPAPER_EDITIONS[articleId] || NEWSPAPER_EDITIONS.art1;
+
+      // Populate content
+      if (hudKicker) hudKicker.textContent = data.kicker;
+      if (metaVol) metaVol.textContent = data.mastheadVol;
+      if (metaDate) metaDate.textContent = data.mastheadDate;
+      if (metaField) metaField.textContent = data.field;
+      if (topicBadge) topicBadge.textContent = data.topic;
+      if (headlineEl) headlineEl.textContent = data.headline;
+      if (readTimeEl) readTimeEl.textContent = data.readTime;
+      if (citationsEl) citationsEl.textContent = data.citations;
+      if (topTeaserCol) {
+        const text = data.leadTeaser || '';
+        const first = text.charAt(0);
+        const rest = text.slice(1);
+        topTeaserCol.innerHTML = `<p><span class="news-dropcap">${first}</span>${rest}</p>`;
+      }
+      if (highlightLabel) highlightLabel.textContent = data.highlightLabel;
+      if (highlightText) highlightText.textContent = data.highlightText;
+      if (col1Title) col1Title.textContent = data.col1Title;
+      if (col1Body) col1Body.innerHTML = data.col1Body;
+      if (col2Title) col2Title.textContent = data.col2Title;
+      if (col2Blueprint) col2Blueprint.innerHTML = `<pre>${data.col2Blueprint}</pre>`;
+      if (col3Title) col3Title.textContent = data.col3Title;
+      if (col3List) col3List.innerHTML = `<ul>${data.col3List}</ul>`;
+      if (stampSeal) stampSeal.textContent = data.stampSeal;
+      if (externalLinkBtn) {
+        externalLinkBtn.href = data.linkUrl || '#articles';
+        externalLinkBtn.onclick = (e) => {
+          if (data.linkUrl && data.linkUrl.startsWith('#')) {
+            e.preventDefault();
+            close3DNewspaperViewer();
+            const el = document.querySelector(data.linkUrl);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+      }
+
+      // Reset to folded state on open
+      newsModalOpenedAt = Date.now();
+      isUnfolded = false;
+      isTransitioning = false;
+      updateUIState();
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      playPaperSound();
+    };
+
+    close3DNewspaperViewer = function() {
+      isTransitioning = false;
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      isUnfolded = false;
+      updateUIState();
+    };
+
+    // Event listeners
+    closeBtn?.addEventListener('click', close3DNewspaperViewer);
+    toggleBtn?.addEventListener('click', toggleFold);
+    foldBackBtn?.addEventListener('click', foldNewspaper);
+
+    const quickOpenNewsBtn = document.getElementById('quickOpenNewsBtn');
+    quickOpenNewsBtn?.addEventListener('click', () => {
+      open3DNewspaperViewer('art1');
+    });
+    
+    // Clicking folded newspaper unfolds it
+    newsObj?.addEventListener('click', (e) => {
+      if (!isUnfolded && !isTransitioning) {
+        unfoldNewspaper();
+      }
+    });
+
+    // Clicking outside on backdrop closes modal
+    overlay?.addEventListener('click', (e) => {
+      if (Date.now() - newsModalOpenedAt < 800) return;
+      if (
+        e.target === overlay ||
+        e.target.classList.contains('newspaper-3d-stage') ||
+        e.target.classList.contains('news-ambient-glow')
+      ) {
+        close3DNewspaperViewer();
+      }
+    });
+
+    // Keyboard support inside newspaper modal
+    document.addEventListener('keydown', (e) => {
+      if (!overlay.classList.contains('is-open')) return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (!e.target.closest('button') && !e.target.closest('a')) {
+          e.preventDefault();
+          toggleFold();
+        }
+      }
+    });
+  }
+
   function openArticleModal(id) {
+    if (id === 'book_qg' || id === 'book') {
+      if (typeof open3DBookViewer === 'function') {
+        open3DBookViewer(true);
+        return;
+      }
+    }
+
+    // Research articles open as authentic 3D unfolding scientific newspapers!
+    if (NEWSPAPER_EDITIONS && NEWSPAPER_EDITIONS[id]) {
+      if (typeof open3DNewspaperViewer === 'function') {
+        open3DNewspaperViewer(id);
+        return;
+      }
+    }
+
     const data = ARTICLE_DATA_V2[id];
     if (!data || !articleModal) return;
 
@@ -1469,7 +2205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (articleModalClose) articleModalClose.addEventListener('click', closeArticleModal);
   if (articleModal) {
     articleModal.addEventListener('click', (e) => {
-      if (e.target === articleModal) closeArticleModal();
+      if (!e.target.closest('.modal-card-v2')) closeArticleModal();
     });
   }
 
@@ -2597,24 +3333,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderMouseProbe() {
       if (!mouse.isInside) return;
       const probeDist = 110;
-      const near = [];
-      nodes.forEach((n) => {
+      let count = 0;
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
         const d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
-        if (d < probeDist) near.push({ node: n, dist: d });
-      });
-      near.sort((a, b) => a.dist - b.dist);
-      const top = near.slice(0, 3);
-      top.forEach((item) => {
-        const alpha = (1 - item.dist / probeDist) * 0.40;
-        ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha.toFixed(3) + ')';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([3, 4]);
-        ctx.beginPath();
-        ctx.moveTo(mouse.x, mouse.y);
-        ctx.lineTo(item.node.x, item.node.y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      });
+        if (d < probeDist) {
+          const alpha = (1 - d / probeDist) * 0.40;
+          ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha.toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 4]);
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(n.x, n.y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          count++;
+          if (count >= 3) break;
+        }
+      }
     }
 
     // 7. Dense Leaf Nodes & Synaptic Interneurons (Continuous fluid organic live motion)
@@ -2677,15 +3413,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sm.x = sm.baseX + driftX;
         sm.y = sm.baseY + driftY;
 
-        // Subtle elastic repulsion from mouse cursor
         if (mouse.isInside) {
-          const dx = sm.x - mouse.x;
-          const dy = sm.y - mouse.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 95 && dist > 0) {
-            const force = (1 - dist / 95) * 14;
-            sm.x += (dx / dist) * force;
-            sm.y += (dy / dist) * force;
+          const dist = Math.hypot(sm.x - mouse.x, sm.y - mouse.y);
+          if (dist < 85) {
+            sm.ping = Math.max(sm.ping, 0.35);
           }
         }
 
@@ -2876,8 +3607,32 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.restore();
     }
 
+    let isStageVisible = true;
+    let isModalOpen = false;
+
+    function shouldRunLoop() {
+      return isStageVisible && !isModalOpen;
+    }
+
+    function startLoop() {
+      if (!animId && shouldRunLoop()) {
+        animId = requestAnimationFrame(tick);
+      }
+    }
+
+    function stopLoop() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+    }
+
     // Main animation loop
     function tick(time) {
+      if (!shouldRunLoop()) {
+        animId = null;
+        return;
+      }
       ctx.clearRect(0, 0, W, H);
 
       renderNebulae(time);
@@ -2899,41 +3654,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // INTERACTION HANDLING (MOUSE HOVER, CLICK, TOOLTIP)
     // -------------------------------------------------------------------------
 
-    function findHoveredNode(mx, my) {
-      // 1. Check Central BIG (MY BOOK) first
+    let activeTooltipNode = null;
+
+    function findHoveredNode(mx, my, isClick = false) {
+      // 1. Check Central Cortex (QUANTUM GIGGLES BOOK)
       const dCortex = Math.hypot(mx - CORTEX.x, my - CORTEX.y);
-      if (dCortex <= CORTEX.coreRadius + 18) {
+      const cortexHitRadius = isClick ? CORTEX.coreRadius + 60 : CORTEX.coreRadius + 45;
+      const cortexLabelX = isClick ? 140 : 120;
+      const cortexTop = isClick ? CORTEX.y - 120 : CORTEX.y - 45;
+      const cortexBottom = isClick ? CORTEX.y + 90 : CORTEX.y + 75;
+
+      if (
+        dCortex <= cortexHitRadius ||
+        (Math.abs(mx - CORTEX.x) <= cortexLabelX && my >= cortexTop && my <= cortexBottom)
+      ) {
         return CORTEX;
       }
-      // 2. Check 4 Major Supergiant Stars
+
+      // 2. Check 4 Major Master Hubs
       for (let m = 1; m <= 4; m++) {
         const mc = nodes[m];
         if (!mc) continue;
         const d = Math.hypot(mx - mc.x, my - mc.y);
-        if (d <= mc.coreRadius + 15) {
+        const hitR = isClick ? mc.coreRadius + 42 : mc.coreRadius + 28;
+        const labelW = isClick ? 160 : 110;
+        const labelH = isClick ? 50 : 38;
+        if (d <= hitR || (Math.abs(mx - mc.x) <= labelW && Math.abs(my - mc.y) <= labelH)) {
           return mc;
         }
       }
-      // 3. Check 14 Sub-Master Intermediate Hub Nodes
+
+      // 3. Check 14 Sub-Master Intermediate Hub Nodes (including Cosmic Wonders & Quantum Matrix)
       for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
         const sm = nodes[s];
         if (!sm) continue;
         const d = Math.hypot(mx - sm.x, my - sm.y);
-        if (d <= sm.coreRadius + 12) {
+        const hitR = isClick ? sm.coreRadius + 38 : sm.coreRadius + 24;
+        const labelW = isClick ? 115 : 75;
+        const labelH = isClick ? 38 : 25;
+        if (d <= hitR || (Math.abs(mx - sm.x) <= labelW && Math.abs(my - sm.y) <= labelH)) {
           return sm;
         }
       }
+
+      // 4. Proximity Snap on Click: If user clicked within 75px of any interactive node, snap directly to it!
+      if (isClick) {
+        let bestNode = null;
+        let bestDist = 75;
+
+        if (dCortex < bestDist) {
+          bestDist = dCortex;
+          bestNode = CORTEX;
+        }
+
+        for (let m = 1; m <= 4; m++) {
+          const mc = nodes[m];
+          if (!mc) continue;
+          const d = Math.hypot(mx - mc.x, my - mc.y);
+          if (d < bestDist) {
+            bestDist = d;
+            bestNode = mc;
+          }
+        }
+
+        for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+          const sm = nodes[s];
+          if (!sm) continue;
+          const d = Math.hypot(mx - sm.x, my - sm.y);
+          if (d < bestDist) {
+            bestDist = d;
+            bestNode = sm;
+          }
+        }
+
+        if (bestNode) return bestNode;
+      }
+
       return null;
     }
 
     function updateTooltip(node) {
       if (!tooltip) return;
       if (!node) {
+        activeTooltipNode = null;
         tooltip.classList.remove('is-visible');
         tooltip.setAttribute('aria-hidden', 'true');
         return;
       }
 
+      activeTooltipNode = node;
       tooltip.innerHTML = `
         <span class="brain-tooltip-field" style="color: ${node.color || PALETTE.cyan}">${node.kicker || (node.isSubMaster ? 'SUB-MASTER RESEARCH INTERMEDIATE' : 'RESEARCH NEURAL NODE')}</span>
         <span class="brain-tooltip-title">${node.title || node.label}</span>
@@ -2953,12 +3762,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onMouseMove(e) {
+      if (e.target && (e.target === tooltip || tooltip.contains(e.target))) {
+        return;
+      }
       const rect = stage.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
       mouse.isInside = true;
 
-      const found = findHoveredNode(mouse.x, mouse.y);
+      const found = findHoveredNode(mouse.x, mouse.y, false);
       if (found !== hoveredNode) {
         hoveredNode = found;
         if (hoveredNode) {
@@ -2971,7 +3783,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    function onMouseLeave() {
+    function onMouseLeave(e) {
+      if (e.relatedTarget && (stage.contains(e.relatedTarget) || e.relatedTarget === tooltip || tooltip.contains(e.relatedTarget))) {
+        return;
+      }
       mouse.isInside = false;
       mouse.x = -9999;
       mouse.y = -9999;
@@ -2980,13 +3795,40 @@ document.addEventListener('DOMContentLoaded', () => {
       updateTooltip(null);
     }
 
-    function onClick(e) {
+    let lastActivateTime = 0;
+    function handleActivation(e) {
+      const now = Date.now();
+      if (now - lastActivateTime < 250) return;
+
       const rect = stage.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-      const clicked = findHoveredNode(clickX, clickY);
+      let clientX = null;
+      let clientY = null;
+
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+      } else if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else if (typeof e.clientX === 'number') {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      let clicked = null;
+      if (clientX !== null && clientY !== null) {
+        const clickX = clientX - rect.left;
+        const clickY = clientY - rect.top;
+        clicked = findHoveredNode(clickX, clickY, true);
+      }
+
+      if (!clicked && hoveredNode) clicked = hoveredNode;
+      if (!clicked && activeTooltipNode) clicked = activeTooltipNode;
 
       if (clicked) {
+        lastActivateTime = now;
+        if (e.cancelable) e.preventDefault();
+
         shockwaves.push({
           x: clicked.x,
           y: clicked.y,
@@ -2996,44 +3838,77 @@ document.addEventListener('DOMContentLoaded', () => {
           alpha: 0.95
         });
 
+        if (clicked.artId === 'book_qg' || clicked.isCortex || clicked.label === 'QUANTUM GIGGLES') {
+          if (typeof open3DBookViewer === 'function') {
+            open3DBookViewer(true);
+            return;
+          }
+        }
+
         if (clicked.artId && typeof openArticleModal === 'function') {
           openArticleModal(clicked.artId);
         }
       }
     }
 
-    function onTouchStart(e) {
-      if (!e.touches || e.touches.length === 0) return;
-      const rect = stage.getBoundingClientRect();
-      const touchX = e.touches[0].clientX - rect.left;
-      const touchY = e.touches[0].clientY - rect.top;
-      const touched = findHoveredNode(touchX, touchY);
-      if (touched) {
-        e.preventDefault();
-        hoveredNode = touched;
-        updateTooltip(touched);
-        if (touched.artId && typeof openArticleModal === 'function') {
-          openArticleModal(touched.artId);
-        }
-      }
-    }
-
+    stage.addEventListener('click', handleActivation);
+    stage.addEventListener('touchend', handleActivation, { passive: false });
     stage.addEventListener('mousemove', onMouseMove);
     stage.addEventListener('mouseleave', onMouseLeave);
-    stage.addEventListener('click', onClick);
-    stage.addEventListener('touchstart', onTouchStart, { passive: false });
+
+    tooltip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleActivation(e);
+    });
 
     resize();
-    animId = requestAnimationFrame(tick);
+    startLoop();
 
+    let roRaf = null;
     const ro = new ResizeObserver(() => {
-      cancelAnimationFrame(animId);
-      resize();
-      animId = requestAnimationFrame(tick);
+      if (roRaf) cancelAnimationFrame(roRaf);
+      roRaf = requestAnimationFrame(() => {
+        const rect = stage.getBoundingClientRect();
+        const newW = Math.floor(rect.width);
+        const newH = Math.floor(rect.height);
+        if (newW > 0 && newH > 0 && (newW !== W || newH !== H)) {
+          stopLoop();
+          resize();
+          startLoop();
+        }
+      });
     });
     ro.observe(stage);
+
+    const stageIo = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isStageVisible = entry.isIntersecting;
+        if (isStageVisible && !isModalOpen) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      });
+    }, { rootMargin: '120px 0px' });
+    stageIo.observe(stage);
+
+    const checkModalState = () => {
+      const open = document.body.style.overflow === 'hidden';
+      if (open !== isModalOpen) {
+        isModalOpen = open;
+        if (isModalOpen) {
+          stopLoop();
+        } else if (isStageVisible) {
+          startLoop();
+        }
+      }
+    };
+    const modalObserver = new MutationObserver(checkModalState);
+    modalObserver.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
   }
 
+  init3DBookViewer();
+  init3DNewspaperViewer();
   initBrainNetwork();
 
 
@@ -3179,6 +4054,8 @@ document.addEventListener('DOMContentLoaded', () => {
       closeResumeModal();
       closeProjectModal();
       closeArticleModal();
+      close3DBookViewer();
+      close3DNewspaperViewer();
       closeEducationModal();
       closeCommandPalette();
     }
@@ -3209,32 +4086,52 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   const dockPill = document.querySelector('.floating-dock');
   if (dockPill && hasFinePointer) {
-    dockPill.addEventListener('mousemove', (e) => {
-      if (!isLaptop() || dockContainer.classList.contains('is-collapsed')) return;
-      const buttons = dockPill.querySelectorAll('.dock-btn');
+    let cachedBtns = null;
+    let dockRaf = null;
+
+    dockPill.addEventListener('mouseenter', () => {
       const isSide = dockContainer.classList.contains('is-side-docked');
-      
-      buttons.forEach((btn) => {
+      cachedBtns = Array.from(dockPill.querySelectorAll('.dock-btn')).map((btn) => {
         const rect = btn.getBoundingClientRect();
-        const btnCenter = isSide ? (rect.top + rect.height / 2) : (rect.left + rect.width / 2);
+        return {
+          btn,
+          center: isSide ? (rect.top + rect.height / 2) : (rect.left + rect.width / 2)
+        };
+      });
+    });
+
+    dockPill.addEventListener('mousemove', (e) => {
+      if (!isLaptop() || dockContainer.classList.contains('is-collapsed') || !cachedBtns) return;
+      if (dockRaf) return;
+
+      dockRaf = requestAnimationFrame(() => {
+        dockRaf = null;
+        if (!cachedBtns) return;
+        const isSide = dockContainer.classList.contains('is-side-docked');
         const mouseCoord = isSide ? e.clientY : e.clientX;
-        const dist = Math.abs(mouseCoord - btnCenter);
         const radius = 95;
-        
-        if (dist < radius) {
-          const factor = Math.cos((dist / radius) * (Math.PI / 2));
-          const scale = 1 + factor * 0.28;
-          const shift = isSide ? `translateX(${-factor * 8}px)` : `translateY(${-factor * 8}px)`;
-          btn.style.transform = `scale(${scale}) ${shift}`;
-        } else {
-          btn.style.transform = '';
-        }
+
+        cachedBtns.forEach((item) => {
+          const dist = Math.abs(mouseCoord - item.center);
+          if (dist < radius) {
+            const factor = Math.cos((dist / radius) * (Math.PI / 2));
+            const scale = 1 + factor * 0.28;
+            const shift = isSide ? `translateX(${-factor * 8}px)` : `translateY(${-factor * 8}px)`;
+            item.btn.style.transform = `scale(${scale.toFixed(3)}) ${shift}`;
+          } else {
+            item.btn.style.transform = '';
+          }
+        });
       });
     });
 
     dockPill.addEventListener('mouseleave', () => {
-      const buttons = dockPill.querySelectorAll('.dock-btn');
-      buttons.forEach((btn) => {
+      cachedBtns = null;
+      if (dockRaf) {
+        cancelAnimationFrame(dockRaf);
+        dockRaf = null;
+      }
+      dockPill.querySelectorAll('.dock-btn').forEach((btn) => {
         btn.style.transform = '';
       });
     });
@@ -3251,21 +4148,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (hasFinePointer) {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--spot-x', `${x}px`);
-        card.style.setProperty('--spot-y', `${y}px`);
+      let cardRect = null;
+      card.addEventListener('mouseenter', () => {
+        cardRect = card.getBoundingClientRect();
+      });
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+      card.addEventListener('mousemove', (e) => {
+        if (!cardRect) cardRect = card.getBoundingClientRect();
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
+        card.style.setProperty('--spot-x', `${x.toFixed(1)}px`);
+        card.style.setProperty('--spot-y', `${y.toFixed(1)}px`);
+
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
         const rotateX = -((y - centerY) / centerY) * 7.5;
         const rotateY = ((x - centerX) / centerX) * 7.5;
         card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
       });
 
       card.addEventListener('mouseleave', () => {
+        cardRect = null;
         card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
       });
     }
@@ -3316,20 +4219,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     },
     {
+      id: 'book_3d',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
+      label: 'Read "Quantum Giggles" (Interactive 3D Book)',
+      desc: 'Open realistic 3D hardcover with page-turning animations',
+      shortcut: '↵ Read Book',
+      action: () => typeof open3DBookViewer === 'function' && open3DBookViewer(true)
+    },
+    {
       id: 'book',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
-      label: 'The Research Brain // Quantum Giggles',
+      label: 'The Research Brain // Neural Connectome',
       desc: 'Central neural network cortex & global Amazon published book',
-      shortcut: '↵ Book',
+      shortcut: '↵ Brain',
       action: () => document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' })
     },
     {
       id: 'articles',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"></ellipse></svg>',
-      label: 'Scientific Treatises & Neural Cores',
-      desc: 'Quantum GPU, Moore’s Law, Green AI, Neuromorphic AI',
-      shortcut: '↵ Research',
-      action: () => document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
+      label: 'Scientific Treatises & Research (3D Broadsheet)',
+      desc: 'Dark Energy, Space Radiation, Quantum Computing, Warp Drive',
+      shortcut: '↵ Broadsheet',
+      action: () => typeof open3DNewspaperViewer === 'function' ? open3DNewspaperViewer('art1') : document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' })
     },
     {
       id: 'github',

@@ -15,7 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=3.5">
+  <link rel="stylesheet" href="style.css?v=3.6">
 </head>
 
 <body>
@@ -34,7 +34,8 @@
       </div>
 
       <!-- Quick Command Palette Pill (⌘K) -->
-      <button class="cmd-palette-trigger" id="cmdPaletteTrigger" aria-label="Open Command Menu (⌘K)" title="Press ⌘K or Ctrl+K">
+      <button class="cmd-palette-trigger" id="cmdPaletteTrigger" aria-label="Open Command Menu (⌘K)"
+        title="Press ⌘K or Ctrl+K">
         <span class="cmd-icon-key">⌘K</span>
         <span class="cmd-text">Quick Actions</span>
       </button>
@@ -62,7 +63,7 @@
     <div class="hero-centerpiece">
       <!-- Centered Portrait Cutout -->
       <div class="hero-portrait-wrapper">
-        <img src="assets/Smiling%20Sikh%20Man%20in%20Turban%20and%20Shirt.png" alt="Prabhdeep Singh"
+        <img src="v2/assets/Smiling%20Sikh%20Man%20in%20Turban%20and%20Shirt.png" alt="Prabhdeep Singh"
           class="hero-portrait-img">
       </div>
 
@@ -124,7 +125,8 @@
       <!-- 4. Central Headshot Avatar -->
       <button class="dock-btn dock-avatar-btn" data-target="#about" aria-label="About Prabhdeep">
         <div class="dock-avatar-ring">
-          <img src="assets/Cheerful%20Turbaned%20Avatar%20Portrait.png" alt="Prabhdeep avatar" class="dock-avatar-img">
+          <img src="v2/assets/Cheerful%20Turbaned%20Avatar%20Portrait.png" alt="Prabhdeep avatar"
+            class="dock-avatar-img">
         </div>
         <span class="dock-tooltip">About</span>
       </button>
@@ -301,7 +303,10 @@
       <div class="section-heading-wrap">
         <h2 class="studio-title-v2">The Research Brain.</h2>
         <p class="studio-subtitle-v2">
-          A living dual-hemisphere cerebral connectome. The central commanding hyper-core &mdash; <strong style="color: #fbbf24;">QUANTUM GIGGLES</strong> &mdash; actively consumes and synthesizes incoming research streams from the 4 primary master hubs and 14 sub-masters. Filaments magnetically pull toward your cursor &mdash; click any glowing node to read the treatise or book.
+          A living dual-hemisphere cerebral connectome. The central commanding hyper-core &mdash; <strong
+            style="color: #fbbf24;">QUANTUM GIGGLES</strong> &mdash; actively consumes and synthesizes incoming research
+          streams from the 4 primary master hubs and 14 sub-masters. Filaments magnetically pull toward your cursor
+          &mdash; click any glowing node to read the treatise or book.
         </p>
       </div>
 
@@ -311,10 +316,11 @@
         <!-- Floating tooltip rendered by JS on hover -->
         <div class="brain-tooltip" id="brainTooltip" aria-hidden="true"></div>
         <!-- Floating Neural HUD Status -->
-        <div class="brain-hud" aria-hidden="true">
-          <div class="brain-hud-item">
+        <div class="brain-hud" aria-hidden="false">
+          <div class="brain-hud-item brain-hud-clickable" id="hudHyperCoreBtn" role="button" tabindex="0"
+            title="Click to open Quantum Giggles 3D Book">
             <span class="brain-hud-dot gold-pulse"></span>
-            <span>HYPER-CORE: QUANTUM GIGGLES</span>
+            <span>HYPER-CORE: QUANTUM GIGGLES ↗</span>
           </div>
           <div class="brain-hud-item">
             <span class="brain-hud-dot cyan-pulse"></span>
@@ -386,7 +392,8 @@
   </main>
 
   <!-- PATENT TECHNICAL BLUEPRINT & CUSTOM PDF VIEWER MODAL -->
-  <div class="modal-overlay-v2 patent-modal-overlay" id="patentModalV2" role="dialog" aria-modal="true" aria-labelledby="patentModalTitleV2">
+  <div class="modal-overlay-v2 patent-modal-overlay" id="patentModalV2" role="dialog" aria-modal="true"
+    aria-labelledby="patentModalTitleV2">
     <div class="modal-card-v2 patent-modal-card" id="patentModalCardV2">
       <!-- Top Header / Bar -->
       <div class="modal-head-v2 pv-head-v2">
@@ -396,14 +403,16 @@
         </div>
         <div class="pv-head-actions">
           <button class="pv-head-btn" id="pvMaximizeBtn" title="Toggle Fullscreen Expansion" aria-label="Expand Viewer">
-            <svg class="pv-icon-expand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 3 21 3 21 9"/>
-              <polyline points="9 21 3 21 3 15"/>
-              <line x1="21" y1="3" x2="14" y2="10"/>
-              <line x1="3" y1="21" x2="10" y2="14"/>
+            <svg class="pv-icon-expand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <polyline points="15 3 21 3 21 9" />
+              <polyline points="9 21 3 21 3 15" />
+              <line x1="21" y1="3" x2="14" y2="10" />
+              <line x1="3" y1="21" x2="10" y2="14" />
             </svg>
           </button>
-          <button class="modal-close-btn-v2" id="patentModalCloseV2" title="Close Viewer (ESC)" aria-label="Close">✕</button>
+          <button class="modal-close-btn-v2" id="patentModalCloseV2" title="Close Viewer (ESC)"
+            aria-label="Close">✕</button>
         </div>
       </div>
 
@@ -415,19 +424,19 @@
             <div class="pv-tab-group" role="tablist">
               <button class="pv-tab-btn is-active" id="pvTabPdf" data-tab="pdf" role="tab" aria-selected="true">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
-                  <polyline points="10 9 9 9 8 9"/>
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
                 </svg>
                 <span>Patent PDF Gazette</span>
               </button>
               <button class="pv-tab-btn" id="pvTabSpecs" data-tab="specs" role="tab" aria-selected="false">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                  <line x1="8" y1="21" x2="16" y2="21"/>
-                  <line x1="12" y1="17" x2="12" y2="21"/>
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                  <line x1="8" y1="21" x2="16" y2="21" />
+                  <line x1="12" y1="17" x2="12" y2="21" />
                 </svg>
                 <span>Architecture &amp; Blueprint</span>
               </button>
@@ -440,24 +449,33 @@
             <!-- Page Paging -->
             <div class="pv-control-pill pv-paging-pill">
               <button class="pv-btn-icon" id="pvPrevPageBtn" title="Previous Page (←)" aria-label="Previous Page">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
               </button>
               <span class="pv-page-text">
                 Page <strong id="pvCurrentPage">1</strong> / <span id="pvTotalPages">1</span>
               </span>
               <button class="pv-btn-icon" id="pvNextPageBtn" title="Next Page (→)" aria-label="Next Page">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
               </button>
             </div>
 
             <!-- Zoom Controls -->
             <div class="pv-control-pill pv-zoom-pill">
               <button class="pv-btn-icon" id="pvZoomOutBtn" title="Zoom Out (−)" aria-label="Zoom Out">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
               </button>
               <button class="pv-zoom-label" id="pvZoomLevelBtn" title="Click to Reset Zoom (100%)">100%</button>
               <button class="pv-btn-icon" id="pvZoomInBtn" title="Zoom In (+)" aria-label="Zoom In">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
               </button>
             </div>
 
@@ -488,7 +506,8 @@
               <div class="pv-notice-container" id="pvNoticeContainer" style="display:none;">
                 <div class="pv-notice-card">
                   <div class="pv-notice-icon">
-                    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.75"
+                      stroke-linecap="round" stroke-linejoin="round">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                       <polyline points="14 2 14 8 20 8"></polyline>
                       <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -497,8 +516,10 @@
                     </svg>
                   </div>
                   <h4>Official Patent Application Filed &amp; Docketed</h4>
-                  <p id="pvNoticeDesc">This intellectual property application has been officially filed with the Indian Patent Office (CGPDTM) and is currently in examination pending published gazette issuance.</p>
-                  <button class="btn-pill-v2" id="pvNoticeSwitchSpecsBtn" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; margin-top: 1rem;">
+                  <p id="pvNoticeDesc">This intellectual property application has been officially filed with the Indian
+                    Patent Office (CGPDTM) and is currently in examination pending published gazette issuance.</p>
+                  <button class="btn-pill-v2" id="pvNoticeSwitchSpecsBtn"
+                    style="padding: 0.55rem 1.25rem; font-size: 0.85rem; margin-top: 1rem;">
                     Inspect System Architecture &amp; Claims Blueprint ↗
                   </button>
                 </div>
@@ -546,8 +567,10 @@
         <h4
           style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.75rem;">
           Education</h4>
-        <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">MCA (CGPA 7.80/10.0):</strong> Thapar Institute of Engineering and Technology (2024 – 2026 &bull; Completed)</p>
-        <p style="margin-bottom: 1.5rem;"><strong style="color: #fff;">BCA (GPA 9.0/10.0):</strong> Chitkara University (2021 – 2024 &bull; Completed with Honors)</p>
+        <p style="margin-bottom: 0.5rem;"><strong style="color: #fff;">MCA (CGPA 7.80/10.0):</strong> Thapar Institute
+          of Engineering and Technology (2024 – 2026 &bull; Completed)</p>
+        <p style="margin-bottom: 1.5rem;"><strong style="color: #fff;">BCA (GPA 9.0/10.0):</strong> Chitkara University
+          (2021 – 2024 &bull; Completed with Honors)</p>
 
         <h4
           style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.75rem;">
@@ -576,19 +599,20 @@
 
   <!-- PROJECT DEEP-DIVE ARCHITECTURE MODAL -->
   <div class="modal-overlay-v2" id="projectModalV2" role="dialog" aria-modal="true">
-      <div class="modal-card-v2">
-        <div class="modal-head-v2">
-          <h3 class="modal-title-v2" id="projectModalTitleV2">Architecture Deep Dive</h3>
-          <button class="modal-close-btn-v2" id="projectModalCloseV2" aria-label="Close">✕</button>
-        </div>
-        <div class="modal-body-v2" id="projectModalBodyV2">
-          <!-- Injected dynamically by app.js -->
-        </div>
+    <div class="modal-card-v2">
+      <div class="modal-head-v2">
+        <h3 class="modal-title-v2" id="projectModalTitleV2">Architecture Deep Dive</h3>
+        <button class="modal-close-btn-v2" id="projectModalCloseV2" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body-v2" id="projectModalBodyV2">
+        <!-- Injected dynamically by app.js -->
       </div>
     </div>
+  </div>
 
   <!-- RESEARCH ARTICLE DEEP-DIVE MODAL -->
-  <div class="modal-overlay-v2" id="articleModalV2" role="dialog" aria-modal="true" aria-labelledby="articleModalTitleV2">
+  <div class="modal-overlay-v2" id="articleModalV2" role="dialog" aria-modal="true"
+    aria-labelledby="articleModalTitleV2">
     <div class="modal-card-v2 article-modal-card">
       <div class="modal-head-v2">
         <div class="pv-head-title-wrap">
@@ -604,7 +628,8 @@
   </div>
 
   <!-- 3D INTERACTIVE BOOK EXPERIENCE MODAL (QUANTUM GIGGLES) -->
-  <div class="book-modal-overlay" id="bookModal3D" role="dialog" aria-modal="true" aria-label="Quantum Giggles 3D Interactive Book">
+  <div class="book-modal-overlay" id="bookModal3D" role="dialog" aria-modal="true"
+    aria-label="Quantum Giggles 3D Interactive Book">
     <!-- Top HUD Bar -->
     <div class="book-modal-hud">
       <div class="book-hud-left">
@@ -627,15 +652,16 @@
 
       <!-- The 3D Book Object -->
       <div class="book-3d-object is-closed" id="book3DObject" role="region" aria-label="Interactive 3D Book">
-        
+
         <!-- ================= CLOSED FRONT COVER (OFFICIAL BOOK COVER) ================= -->
         <div class="book-cover-front" id="bookCoverFront" title="Click to Open Book">
-          <img src="../book.jpg" onerror="this.src='book.jpg'" class="book-cover-img" alt="Quantum Giggles: Laughing Through Cosmic Wonders by Prabhdeep Singh">
-          
+          <img src="book.jpg" class="book-cover-img"
+            alt="Quantum Giggles: Laughing Through Cosmic Wonders by Prabhdeep Singh">
+
           <!-- Realistic Spine Crease Shadow & Reflection Sheen -->
           <div class="book-cover-sheen"></div>
           <div class="book-spine-crease"></div>
-          
+
           <!-- Pulsing interactive invitation banner on the cover -->
           <div class="book-cover-tap-prompt">
             <span>📖 Click Cover to Open &amp; Turn Pages</span>
@@ -660,14 +686,17 @@
               <div class="page-content editorial-center">
                 <div class="ornament-divider">✦ ✦ ✦</div>
                 <h3 class="page-book-title" style="font-size: 1.95rem;">QUANTUM GIGGLES</h3>
-                <p class="page-book-sub" style="font-size: 1.02rem; font-style: italic;">Laughing Through Cosmic Wonders</p>
-                <p style="font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; color: #b45309; text-transform: uppercase; margin-bottom: 0.35rem;">
+                <p class="page-book-sub" style="font-size: 1.02rem; font-style: italic;">Laughing Through Cosmic Wonders
+                </p>
+                <p
+                  style="font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; color: #b45309; text-transform: uppercase; margin-bottom: 0.35rem;">
                   Adventures in Quantum Humour
                 </p>
                 <p class="page-book-author" style="margin-bottom: 1.1rem;">By Prabhdeep Singh</p>
 
                 <div class="page-epigraph" style="width: 95%;">
-                  <p class="epigraph-quote">“The quantum future is within reach, and its mysteries are ours to uncover—one question, one qubit, one breakthrough at a time.”</p>
+                  <p class="epigraph-quote">“The quantum future is within reach, and its mysteries are ours to
+                    uncover—one question, one qubit, one breakthrough at a time.”</p>
                   <p class="epigraph-source">— Prabhdeep Singh, Book Epigraph</p>
                 </div>
 
@@ -694,12 +723,18 @@
                 <span class="chapter-number">PROLOGUE</span>
                 <h4 class="chapter-title">The Cosmic Precipice</h4>
                 <div class="chapter-body">
-                  <p class="has-dropcap"><span class="dropcap">I</span>n the quiet solitude of a moonlit night, imagine standing at the edge of a cosmic precipice. The world of familiar rules is just a fragile surface veneer. Beneath it lies a quantum realm so bizarre that even the greatest minds find themselves standing breathless.</p>
-                  <p>Albert Einstein famously remarked: <em>"The most beautiful thing we can experience is the mysterious. It is the source of all true art and science."</em> Little did he know how delightfully strange that mystery would become!</p>
+                  <p class="has-dropcap"><span class="dropcap">I</span>n the quiet solitude of a moonlit night, imagine
+                    standing at the edge of a cosmic precipice. The world of familiar rules is just a fragile surface
+                    veneer. Beneath it lies a quantum realm so bizarre that even the greatest minds find themselves
+                    standing breathless.</p>
+                  <p>Albert Einstein famously remarked: <em>"The most beautiful thing we can experience is the
+                      mysterious. It is the source of all true art and science."</em> Little did he know how
+                    delightfully strange that mystery would become!</p>
                   <div class="paper-callout-box">
                     <strong>The Golden Invitation:</strong>
                     <p style="margin-top: 4px; font-size: 0.84rem; color: #4b5563;">
-                      “Buckle up, dear reader, for we are about to embark on a voyage beyond the ordinary — a journey into the heart of quantum horizons!”
+                      “Buckle up, dear reader, for we are about to embark on a voyage beyond the ordinary — a journey
+                      into the heart of quantum horizons!”
                     </p>
                   </div>
                 </div>
@@ -723,12 +758,16 @@
                 <span class="chapter-number">CHAPTER 01</span>
                 <h4 class="chapter-title">1.1 What is Quantum Physics? &amp; 1.2 Superposition</h4>
                 <div class="chapter-body">
-                  <p class="has-dropcap"><span class="dropcap">I</span>magine flipping a coin, but instead of landing heads or tails, it spins endlessly in mid-air, existing as <strong>both at once</strong>. That is quantum superposition—nature's cosmic coin toss before anyone peeks.</p>
-                  <p>Every particle plays multiple notes simultaneously in a cosmic orchestra. Only when you observe does the wave collapse into a single definitive chord!</p>
+                  <p class="has-dropcap"><span class="dropcap">I</span>magine flipping a coin, but instead of landing
+                    heads or tails, it spins endlessly in mid-air, existing as <strong>both at once</strong>. That is
+                    quantum superposition—nature's cosmic coin toss before anyone peeks.</p>
+                  <p>Every particle plays multiple notes simultaneously in a cosmic orchestra. Only when you observe
+                    does the wave collapse into a single definitive chord!</p>
                   <div class="paper-callout-box">
                     <strong>1.3 Entanglement: The Cosmic Connection</strong>
                     <p style="margin-top: 4px; font-size: 0.83rem; color: #4b5563;">
-                      Einstein called it <em>"spooky action at a distance."</em> Pull on one entangled thread, and the entire universal tapestry shifts across light-years!
+                      Einstein called it <em>"spooky action at a distance."</em> Pull on one entangled thread, and the
+                      entire universal tapestry shifts across light-years!
                     </p>
                   </div>
                 </div>
@@ -750,13 +789,17 @@
                 <span class="chapter-number">CHAPTER 02</span>
                 <h4 class="chapter-title">2.1 A Tale of Two Worlds: The Maze vs. Qubits</h4>
                 <div class="chapter-body">
-                  <p class="has-dropcap"><span class="dropcap">G</span>ive a giant maze to your classical computer, and it tests each path one by one. It's thorough, but painfully slow.</p>
-                  <p>Now send in your <strong>quantum computer superhero</strong>. Using qubits in superposition, it explores <em>every corridor simultaneously</em>. While your regular laptop is still at turn one, the quantum machine has already solved the puzzle and is sipping victory coffee!</p>
+                  <p class="has-dropcap"><span class="dropcap">G</span>ive a giant maze to your classical computer, and
+                    it tests each path one by one. It's thorough, but painfully slow.</p>
+                  <p>Now send in your <strong>quantum computer superhero</strong>. Using qubits in superposition, it
+                    explores <em>every corridor simultaneously</em>. While your regular laptop is still at turn one, the
+                    quantum machine has already solved the puzzle and is sipping victory coffee!</p>
                   <div class="paper-callout-box">
                     <strong>2.2 Qubits: The Superheroes of Quantum</strong>
                     <code>|ψ⟩ = α|0⟩ + β|1⟩  (where |α|² + |β|² = 1)</code>
                     <p style="margin-top: 4px; font-size: 0.82rem; color: #4b5563;">
-                      Normal bits are light switches (On/Off). Qubits are dazzling dancers pirouetting across the entire stage in a quantum ballet.
+                      Normal bits are light switches (On/Off). Qubits are dazzling dancers pirouetting across the entire
+                      stage in a quantum ballet.
                     </p>
                   </div>
                 </div>
@@ -780,13 +823,18 @@
                 <span class="chapter-number">CHAPTER 03 &amp; 08</span>
                 <h4 class="chapter-title">3.1 The Cosmic Postman &amp; Instant Connectivity</h4>
                 <div class="chapter-body">
-                  <p class="has-dropcap"><span class="dropcap">W</span>ant to send a message to Alpha Centauri? Forget waiting 4 years for radio signals.</p>
-                  <p><strong>Quantum teleportation</strong> isn't beaming physical bodies—it is transmitting the exact <em>quantum state</em> across light-years instantaneously. Think of it as a cosmic postman delivering information faster than a blink!</p>
+                  <p class="has-dropcap"><span class="dropcap">W</span>ant to send a message to Alpha Centauri? Forget
+                    waiting 4 years for radio signals.</p>
+                  <p><strong>Quantum teleportation</strong> isn't beaming physical bodies—it is transmitting the exact
+                    <em>quantum state</em> across light-years instantaneously. Think of it as a cosmic postman
+                    delivering information faster than a blink!
+                  </p>
                   <div class="paper-callout-box">
                     <strong>The Entanglement Blueprint:</strong>
                     <code>|Ψ⟩ = 1/√2 (|00⟩ + |11⟩)AB</code>
                     <p style="margin-top: 4px; font-size: 0.81rem; color: #4b5563;">
-                      <strong>No-Cloning Theorem:</strong> Nature forbids copying unknown quantum states—creating the universe’s most tamper-proof security protocol.
+                      <strong>No-Cloning Theorem:</strong> Nature forbids copying unknown quantum states—creating the
+                      universe’s most tamper-proof security protocol.
                     </p>
                   </div>
                 </div>
@@ -808,13 +856,17 @@
                 <span class="chapter-number">CHAPTER 10</span>
                 <h4 class="chapter-title">10.1 Surfing the Undulating Waves of Spacetime</h4>
                 <div class="chapter-body">
-                  <p class="has-dropcap"><span class="dropcap">W</span>hy break Einstein's cosmic speed limit when you can just warp the road? The <strong>Alcubierre Drive</strong> contracts spacetime in front of a spacecraft and expands it behind.</p>
-                  <p>The ship sits completely at rest inside its protective warp bubble, while space itself surfs forward at faster-than-light velocity—bypassing time dilation entirely!</p>
+                  <p class="has-dropcap"><span class="dropcap">W</span>hy break Einstein's cosmic speed limit when you
+                    can just warp the road? The <strong>Alcubierre Drive</strong> contracts spacetime in front of a
+                    spacecraft and expands it behind.</p>
+                  <p>The ship sits completely at rest inside its protective warp bubble, while space itself surfs
+                    forward at faster-than-light velocity—bypassing time dilation entirely!</p>
                   <div class="paper-callout-box">
                     <strong>The Alcubierre Spacetime Metric:</strong>
                     <code>ds² = -c² dt² + (dx - vs dt)² + dy² + dz²</code>
                     <p style="margin-top: 4px; font-size: 0.81rem; color: #4b5563;">
-                      Stabilized with exotic matter possessing negative energy density (ρ = p/c² &lt; 0) to navigate between stars.
+                      Stabilized with exotic matter possessing negative energy density (ρ = p/c² &lt; 0) to navigate
+                      between stars.
                     </p>
                   </div>
                 </div>
@@ -838,23 +890,41 @@
                 <span class="chapter-number">COMPLETE VOLUME OUTLINE</span>
                 <h4 class="chapter-title" style="font-size: 1.25rem; margin-bottom: 0.4rem;">The 17 Cosmic Chapters</h4>
                 <div class="book-toc-grid">
-                  <div class="book-toc-item"><span class="book-toc-num">01</span><span class="book-toc-name">Quantum Basics</span><span class="book-toc-sub">Double-slit &amp; wavefunctions</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">02</span><span class="book-toc-name">Computing Wonders</span><span class="book-toc-sub">Bits vs. qubits ballet</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">03</span><span class="book-toc-name">Quantum Teleportation</span><span class="book-toc-sub">Cosmic postman &amp; relays</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">04</span><span class="book-toc-name">Wormholes &amp; Shortcuts</span><span class="book-toc-sub">Cosmic tapestry portals</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">05</span><span class="book-toc-name">Einstein’s Legacy</span><span class="book-toc-sub">Time dilation &amp; E=mc²</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">06</span><span class="book-toc-name">Gravitational Waves</span><span class="book-toc-sub">LIGO &amp; black hole collisions</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">07</span><span class="book-toc-name">Quantum Leaps</span><span class="book-toc-sub">Subatomic uncertainty</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">08</span><span class="book-toc-name">The Cosmic Courier</span><span class="book-toc-sub">Information highways</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">09</span><span class="book-toc-name">Quantum Communication</span><span class="book-toc-sub">Unbreakable cosmic locks</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">10</span><span class="book-toc-name">Alcubierre Warp Drive</span><span class="book-toc-sub">Surfing spacetime waves</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">11</span><span class="book-toc-name">Particle Blueprint</span><span class="book-toc-sub">Quantum fidelity &amp; protocols</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">12</span><span class="book-toc-name">Theoretical Foundations</span><span class="book-toc-sub">Warp metrics &amp; energy</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">13</span><span class="book-toc-name">Numerical Validation</span><span class="book-toc-sub">Simulations &amp; exotic matter</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">14</span><span class="book-toc-name">Quantum Supremacy</span><span class="book-toc-sub">Gates, VQE &amp; Sycamore</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">15</span><span class="book-toc-name">Quantum Algorithms</span><span class="book-toc-sub">Shor's, Grover's &amp; QAOA</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">16</span><span class="book-toc-name">Quantum Cryptography</span><span class="book-toc-sub">BB84 &amp; Ekert E91 protocols</span></div>
-                  <div class="book-toc-item"><span class="book-toc-num">17</span><span class="book-toc-name">The Quantum Internet</span><span class="book-toc-sub">Connecting the cosmos</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">01</span><span class="book-toc-name">Quantum
+                      Basics</span><span class="book-toc-sub">Double-slit &amp; wavefunctions</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">02</span><span class="book-toc-name">Computing
+                      Wonders</span><span class="book-toc-sub">Bits vs. qubits ballet</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">03</span><span class="book-toc-name">Quantum
+                      Teleportation</span><span class="book-toc-sub">Cosmic postman &amp; relays</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">04</span><span class="book-toc-name">Wormholes
+                      &amp; Shortcuts</span><span class="book-toc-sub">Cosmic tapestry portals</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">05</span><span class="book-toc-name">Einstein’s
+                      Legacy</span><span class="book-toc-sub">Time dilation &amp; E=mc²</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">06</span><span
+                      class="book-toc-name">Gravitational Waves</span><span class="book-toc-sub">LIGO &amp; black hole
+                      collisions</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">07</span><span class="book-toc-name">Quantum
+                      Leaps</span><span class="book-toc-sub">Subatomic uncertainty</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">08</span><span class="book-toc-name">The Cosmic
+                      Courier</span><span class="book-toc-sub">Information highways</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">09</span><span class="book-toc-name">Quantum
+                      Communication</span><span class="book-toc-sub">Unbreakable cosmic locks</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">10</span><span class="book-toc-name">Alcubierre
+                      Warp Drive</span><span class="book-toc-sub">Surfing spacetime waves</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">11</span><span class="book-toc-name">Particle
+                      Blueprint</span><span class="book-toc-sub">Quantum fidelity &amp; protocols</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">12</span><span class="book-toc-name">Theoretical
+                      Foundations</span><span class="book-toc-sub">Warp metrics &amp; energy</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">13</span><span class="book-toc-name">Numerical
+                      Validation</span><span class="book-toc-sub">Simulations &amp; exotic matter</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">14</span><span class="book-toc-name">Quantum
+                      Supremacy</span><span class="book-toc-sub">Gates, VQE &amp; Sycamore</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">15</span><span class="book-toc-name">Quantum
+                      Algorithms</span><span class="book-toc-sub">Shor's, Grover's &amp; QAOA</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">16</span><span class="book-toc-name">Quantum
+                      Cryptography</span><span class="book-toc-sub">BB84 &amp; Ekert E91 protocols</span></div>
+                  <div class="book-toc-item"><span class="book-toc-num">17</span><span class="book-toc-name">The Quantum
+                      Internet</span><span class="book-toc-sub">Connecting the cosmos</span></div>
                 </div>
               </div>
               <div class="page-footer">
@@ -871,13 +941,18 @@
               </div>
               <div class="page-content editorial-center">
                 <div class="ornament-divider">✦ ✦ ✦</div>
-                <h4 class="chapter-title" style="margin-top: 0.15rem; font-size: 1.2rem;">Prabhdeep Singh's 4-Year Journey</h4>
-                <p style="font-size: 0.83rem; color: #374151; line-height: 1.5; margin-bottom: 0.65rem; text-align: left;">
-                  From BCA at Chitkara University to Master's at Thapar University, Prabhdeep spent four dedicated years testing Qiskit algorithms and publishing research in quantum teleportation to make cosmic physics delightful for all.
+                <h4 class="chapter-title" style="margin-top: 0.15rem; font-size: 1.2rem;">Prabhdeep Singh's 4-Year
+                  Journey</h4>
+                <p
+                  style="font-size: 0.83rem; color: #374151; line-height: 1.5; margin-bottom: 0.65rem; text-align: left;">
+                  From BCA at Chitkara University to Master's at Thapar University, Prabhdeep spent four dedicated years
+                  testing Qiskit algorithms and publishing research in quantum teleportation to make cosmic physics
+                  delightful for all.
                 </p>
 
                 <div class="page-epigraph" style="width: 100%; margin-bottom: 0.65rem; padding: 0.6rem 0.85rem;">
-                  <p class="epigraph-quote" style="font-size: 0.85rem;">“Quantum computing is not just the future of technology—it's the key to unlocking the secrets of the universe, one qubit at a time.”</p>
+                  <p class="epigraph-quote" style="font-size: 0.85rem;">“Quantum computing is not just the future of
+                    technology—it's the key to unlocking the secrets of the universe, one qubit at a time.”</p>
                   <p class="epigraph-source">— Prabhdeep Singh, Book Resolution</p>
                 </div>
 
@@ -892,7 +967,8 @@
                     <div><span>ASIN:</span> B0F43NH9R3 • Worldwide Digital Edition</div>
                   </div>
                   <a href="https://www.amazon.in/QUANTUM-GIGGLES-LAUGHING-THROUGH-WONDERS-ebook/dp/B0F43NH9R3"
-                    target="_blank" rel="noopener noreferrer" class="amazon-buy-btn" id="amazonBuyBtn" style="padding: 0.5rem 1rem; font-size: 0.82rem;">
+                    target="_blank" rel="noopener noreferrer" class="amazon-buy-btn" id="amazonBuyBtn"
+                    style="padding: 0.5rem 1rem; font-size: 0.82rem;">
                     <span>Read on Amazon Kindle Store ↗</span>
                   </a>
                 </div>
@@ -928,7 +1004,9 @@
       <!-- Bottom Book Controls Bar -->
       <div class="book-bottom-controls" id="bookBottomControls">
         <button class="book-ctrl-btn" id="bookPrevBtn" title="Previous Page (←)" disabled>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
           <span>Previous</span>
         </button>
 
@@ -938,7 +1016,9 @@
 
         <button class="book-ctrl-btn" id="bookNextBtn" title="Next Page (→)">
           <span>Next</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
 
         <button class="book-ctrl-action-btn" id="bookToggleCoverBtn" title="Close or Open Cover">
@@ -951,7 +1031,7 @@
 
   <!-- 3D INTERACTIVE NEWSPAPER / SCIENTIFIC BROADSHEET MODAL -->
   <div class="newspaper-modal-overlay" id="newspaperModal3D" role="dialog" aria-modal="true" aria-hidden="true">
-    
+
     <!-- Top HUD Navigation -->
     <div class="newspaper-modal-hud">
       <div class="newspaper-hud-left">
@@ -963,7 +1043,8 @@
           <span class="newspaper-state-dot"></span>
           <span id="newsStateBadgeText">Folded Broadside</span>
         </div>
-        <button class="newspaper-hud-close-btn" id="newspaperHudCloseBtn" title="Close Dispatch (ESC)" aria-label="Close">
+        <button class="newspaper-hud-close-btn" id="newspaperHudCloseBtn" title="Close Dispatch (ESC)"
+          aria-label="Close">
           ✕
         </button>
       </div>
@@ -974,8 +1055,9 @@
       <div class="newspaper-ambient-glow"></div>
 
       <!-- The 3D Newspaper Object -->
-      <article class="newspaper-3d-object is-folded" id="newspaper3DObject" tabindex="0" role="region" aria-label="Interactive Newspaper Article">
-        
+      <article class="newspaper-3d-object is-folded" id="newspaper3DObject" tabindex="0" role="region"
+        aria-label="Interactive Newspaper Article">
+
         <!-- Top Half (Always visible when folded or open) -->
         <div class="newspaper-half newspaper-top-half" id="newspaperTopHalf">
           <div class="news-masthead-wrap">
@@ -992,8 +1074,8 @@
             <span class="news-topic-badge" id="newsTopicBadge">THEORETICAL ASTROPHYSICS</span>
             <h3 class="news-headline" id="newsHeadline">Article Headline Loading...</h3>
             <div class="news-byline-bar">
-              <span>BY <strong>PRABHDEEP SINGH</strong></span> • 
-              <span id="newsReadTime">5 MIN READ</span> • 
+              <span>BY <strong>PRABHDEEP SINGH</strong></span> •
+              <span id="newsReadTime">5 MIN READ</span> •
               <span id="newsCitations">4 CITATIONS</span>
             </div>
           </div>
@@ -1018,7 +1100,7 @@
         <div class="newspaper-half newspaper-bottom-half" id="newspaperBottomHalf">
           <div class="news-bottom-frontface">
             <div class="news-bottom-grid">
-              
+
               <!-- Column 1: Theoretical Foundations -->
               <div class="news-col">
                 <h4 class="news-subhead" id="newsCol1Title">1. Foundations</h4>
@@ -1092,7 +1174,9 @@
       <button class="newspaper-ctrl-action-btn" id="newspaperToggleFoldBtn" type="button">
         Unfold Broadsheet
       </button>
-      <a class="newspaper-ctrl-action-btn" id="newspaperExternalLinkBtn" href="#" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: inline-flex; align-items: center;">
+      <a class="newspaper-ctrl-action-btn" id="newspaperExternalLinkBtn" href="#" target="_blank"
+        rel="noopener noreferrer"
+        style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: inline-flex; align-items: center;">
         Read Full Article ↗
       </a>
     </div>
@@ -1101,45 +1185,46 @@
 
 
 
-    <!-- FLOATING INTERACTIVE PROJECT CURSOR PREVIEW (Dennis Snellenberg Signature) -->
-    <div class="floating-project-preview" id="floatingProjectPreview" aria-hidden="true">
-      <div class="preview-card" id="previewCard">
-        <div class="preview-badge" id="previewBadge">Mphasis • Enterprise</div>
-        <div class="preview-title" id="previewTitle">Java &amp; Spring Boot Core</div>
-        <div class="preview-tags" id="previewTags">Microservices • Distributed Systems</div>
-        <div class="preview-cta">Inspect Case Study ↗</div>
+  <!-- FLOATING INTERACTIVE PROJECT CURSOR PREVIEW (Dennis Snellenberg Signature) -->
+  <div class="floating-project-preview" id="floatingProjectPreview" aria-hidden="true">
+    <div class="preview-card" id="previewCard">
+      <div class="preview-badge" id="previewBadge">Mphasis • Enterprise</div>
+      <div class="preview-title" id="previewTitle">Java &amp; Spring Boot Core</div>
+      <div class="preview-tags" id="previewTags">Microservices • Distributed Systems</div>
+      <div class="preview-cta">Inspect Case Study ↗</div>
+    </div>
+  </div>
+
+  <!-- MACOS SPOTLIGHT COMMAND PALETTE (⌘K / Ctrl+K) -->
+  <div class="cmd-palette-overlay" id="cmdPaletteOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="cmd-palette-card">
+      <div class="cmd-palette-input-wrap">
+        <svg class="cmd-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="cmdSearchInput" class="cmd-search-input"
+          placeholder="Type a command or jump to section... (ESC to close)" autocomplete="off" spellcheck="false">
+        <span class="cmd-esc-badge">ESC</span>
+      </div>
+      <div class="cmd-palette-list" id="cmdPaletteList">
+        <!-- Dynamically populated & fuzzy filtered by app.js -->
+      </div>
+      <div class="cmd-palette-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate</span>
+        <span><kbd>↵</kbd> Select</span>
+        <span><kbd>ESC</kbd> Close</span>
       </div>
     </div>
+  </div>
 
-    <!-- MACOS SPOTLIGHT COMMAND PALETTE (⌘K / Ctrl+K) -->
-    <div class="cmd-palette-overlay" id="cmdPaletteOverlay" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="cmd-palette-card">
-        <div class="cmd-palette-input-wrap">
-          <svg class="cmd-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="cmdSearchInput" class="cmd-search-input" placeholder="Type a command or jump to section... (ESC to close)" autocomplete="off" spellcheck="false">
-          <span class="cmd-esc-badge">ESC</span>
-        </div>
-        <div class="cmd-palette-list" id="cmdPaletteList">
-          <!-- Dynamically populated & fuzzy filtered by app.js -->
-        </div>
-        <div class="cmd-palette-footer">
-          <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate</span>
-          <span><kbd>↵</kbd> Select</span>
-          <span><kbd>ESC</kbd> Close</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION HUD -->
-    <div class="toast-notification-hud" id="toastNotificationHud" aria-live="polite"></div>
+  <!-- TOAST NOTIFICATION HUD -->
+  <div class="toast-notification-hud" id="toastNotificationHud" aria-live="polite"></div>
 
 
-    <!-- PDF.js Mozilla Library for In-Browser Vector Rendering -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="app.js?v=3.5"></script>
+  <!-- PDF.js Mozilla Library for In-Browser Vector Rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="app.js?v=3.6"></script>
 </body>
 
 </html>

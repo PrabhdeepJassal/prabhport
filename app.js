@@ -1719,11 +1719,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = 'hidden';
 
       if (autoOpen) {
-        if (stateText) stateText.textContent = 'Closed Book • Opening...';
-        // Pause on the front cover for 650ms so the user can appreciate the cover art before it swings open
+        if (stateText) stateText.textContent = 'Opening Book...';
+        // Fluid transition: brief paint of cover orientation, then smoothly unfold into Spread 1
         autoOpenTimer = setTimeout(() => {
           openCover();
-        }, 650);
+        }, 180);
       }
     };
 
@@ -1751,14 +1751,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeBtn?.addEventListener('click', close3DBookViewer);
 
-    // When clicked outside of book on backdrop/stage, close the book
+    // When clicked outside of book directly on modal overlay backdrop, close the book
     overlay?.addEventListener('click', (e) => {
-      if (Date.now() - bookModalOpenedAt < 800) return;
-      if (
-        e.target === overlay ||
-        e.target.classList.contains('book-3d-stage') ||
-        e.target.classList.contains('book-ambient-glow')
-      ) {
+      if (Date.now() - bookModalOpenedAt < 1000) return;
+      if (e.target === overlay) {
         close3DBookViewer();
       }
     });
@@ -1807,6 +1803,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateSpreadUI();
+    window.open3DBookViewer = open3DBookViewer;
+    window.close3DBookViewer = close3DBookViewer;
   }
 
   /* ==========================================================================
@@ -3659,10 +3657,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function findHoveredNode(mx, my, isClick = false) {
       // 1. Check Central Cortex (QUANTUM GIGGLES BOOK)
       const dCortex = Math.hypot(mx - CORTEX.x, my - CORTEX.y);
-      const cortexHitRadius = isClick ? CORTEX.coreRadius + 60 : CORTEX.coreRadius + 45;
-      const cortexLabelX = isClick ? 140 : 120;
+      const cortexHitRadius = isClick ? CORTEX.coreRadius + 75 : CORTEX.coreRadius + 45;
+      const cortexLabelX = isClick ? 160 : 120;
       const cortexTop = isClick ? CORTEX.y - 120 : CORTEX.y - 45;
-      const cortexBottom = isClick ? CORTEX.y + 90 : CORTEX.y + 75;
+      const cortexBottom = isClick ? CORTEX.y + 110 : CORTEX.y + 75;
 
       if (
         dCortex <= cortexHitRadius ||
@@ -3676,7 +3674,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mc = nodes[m];
         if (!mc) continue;
         const d = Math.hypot(mx - mc.x, my - mc.y);
-        const hitR = isClick ? mc.coreRadius + 42 : mc.coreRadius + 28;
+        const hitR = isClick ? mc.coreRadius + 48 : mc.coreRadius + 28;
         const labelW = isClick ? 160 : 110;
         const labelH = isClick ? 50 : 38;
         if (d <= hitR || (Math.abs(mx - mc.x) <= labelW && Math.abs(my - mc.y) <= labelH)) {
@@ -3689,18 +3687,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const sm = nodes[s];
         if (!sm) continue;
         const d = Math.hypot(mx - sm.x, my - sm.y);
-        const hitR = isClick ? sm.coreRadius + 38 : sm.coreRadius + 24;
-        const labelW = isClick ? 115 : 75;
-        const labelH = isClick ? 38 : 25;
+        const hitR = isClick ? sm.coreRadius + 42 : sm.coreRadius + 24;
+        const labelW = isClick ? 125 : 75;
+        const labelH = isClick ? 42 : 25;
         if (d <= hitR || (Math.abs(mx - sm.x) <= labelW && Math.abs(my - sm.y) <= labelH)) {
           return sm;
         }
       }
 
-      // 4. Proximity Snap on Click: If user clicked within 75px of any interactive node, snap directly to it!
+      // 4. Proximity Snap on Click: If user clicked within 95px of any interactive node, snap directly to it!
       if (isClick) {
         let bestNode = null;
-        let bestDist = 75;
+        let bestDist = 95;
 
         if (dCortex < bestDist) {
           bestDist = dCortex;
@@ -3838,7 +3836,16 @@ document.addEventListener('DOMContentLoaded', () => {
           alpha: 0.95
         });
 
-        if (clicked.artId === 'book_qg' || clicked.isCortex || clicked.label === 'QUANTUM GIGGLES') {
+        const isBookTarget = (
+          clicked.artId === 'book_qg' ||
+          clicked.artId === 'book' ||
+          clicked.isCortex ||
+          clicked.label === 'QUANTUM GIGGLES' ||
+          (clicked.title && clicked.title.includes('Quantum Giggles')) ||
+          (clicked.kicker && clicked.kicker.includes('QUANTUM GIGGLES'))
+        );
+
+        if (isBookTarget) {
           if (typeof open3DBookViewer === 'function') {
             open3DBookViewer(true);
             return;
@@ -3851,6 +3858,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Direct event binding on both canvas and stage ensures zero dropped clicks
+    canvas.addEventListener('click', handleActivation);
+    canvas.addEventListener('touchend', handleActivation, { passive: false });
+    canvas.addEventListener('mousemove', onMouseMove);
+
     stage.addEventListener('click', handleActivation);
     stage.addEventListener('touchend', handleActivation, { passive: false });
     stage.addEventListener('mousemove', onMouseMove);
@@ -3860,6 +3872,25 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation();
       handleActivation(e);
     });
+
+    // Wire floating HUD hyper-core indicator pill to open book directly
+    const hudHyperCoreBtn = document.getElementById('hudHyperCoreBtn');
+    if (hudHyperCoreBtn) {
+      hudHyperCoreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (typeof open3DBookViewer === 'function') {
+          open3DBookViewer(true);
+        }
+      });
+      hudHyperCoreBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (typeof open3DBookViewer === 'function') {
+            open3DBookViewer(true);
+          }
+        }
+      });
+    }
 
     resize();
     startLoop();
