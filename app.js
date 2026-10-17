@@ -273,17 +273,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Track active section and highlight dock icon
+    // Track active section and highlight dock icon using absolute document metrics
     let currentId = '';
-    const scrollPosition = scrollY + 220;
+    const scrollPosition = scrollY + 240;
+    const docHeight = document.documentElement.scrollHeight;
+    const winHeight = window.innerHeight;
 
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      if (scrollPosition >= top && scrollPosition < top + height) {
-        currentId = `#${section.id}`;
-      }
-    });
+    if (scrollY < 120) {
+      currentId = '#hero';
+    } else if (winHeight + scrollY >= docHeight - 80) {
+      currentId = '#contact';
+    } else {
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const top = rect.top + scrollY;
+        const height = section.offsetHeight;
+        if (scrollPosition >= top && scrollPosition < top + height) {
+          currentId = `#${section.id}`;
+        }
+      });
+    }
 
     if (currentId) {
       dockButtons.forEach((btn) => {
@@ -360,12 +369,18 @@ document.addEventListener('DOMContentLoaded', () => {
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   }
 
+  // Resolve patent PDF URLs correctly from root or nested path
+  const getPatentPdfUrl = (filename) => {
+    const isV2 = window.location.pathname.includes('/v2/');
+    return (isV2 ? 'assets/patents/' : 'v2/assets/patents/') + filename;
+  };
+
   const PATENT_DATA_V2 = {
     p1: {
       title: 'Earphone with Auto On & Off via Brain Signal Monitoring',
       kicker: 'PATENT 01 // PUBLISHED GAZETTE',
       status: 'Published Gazette',
-      pdfUrl: 'assets/patents/earphone.pdf',
+      pdfUrl: getPatentPdfUrl('earphone.pdf'),
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  EEG BRAIN SIGNAL MONITORING & STERILIZATION ENGINE        │
 │                                                             │
@@ -385,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Device and Method for Detecting Infection State of Hair and Scalp',
       kicker: 'PATENT 02 // PUBLISHED GAZETTE',
       status: 'Published Gazette',
-      pdfUrl: 'assets/patents/comb.pdf',
+      pdfUrl: getPatentPdfUrl('comb.pdf'),
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  MULTI-SPECTRAL TRICHOLOGICAL OPTICAL SCANNER               │
 │                                                             │
@@ -406,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Wearable Device for Generating Sound of Anklet Bell (Ghungroo)',
       kicker: 'PATENT 03 // PUBLISHED GAZETTE',
       status: 'Published Gazette',
-      pdfUrl: 'assets/patents/anklet.pdf',
+      pdfUrl: getPatentPdfUrl('anklet.pdf'),
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  KINETIC FOOT-STRIKE ACOUSTIC SYNTHESIS ENGINE              │
 │                                                             │
@@ -427,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Colorblind & Multi-Usable Electric Toothbrush with Biometric Auth',
       kicker: 'PATENT 04 // FILED & DOCKETED',
       status: 'Filed // Examination',
-      pdfUrl: 'assets/patents/toothbrush.pdf',
+      pdfUrl: getPatentPdfUrl('toothbrush.pdf'),
       diagram: `┌─────────────────────────────────────────────────────────────┐
 │  BIOMETRIC ACCESSIBLE ORAL HEALTHCARE ARCHITECTURE          │
 │                                                             │
@@ -3330,9 +3345,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Interactive Mouse Starlight Probe
     function renderMouseProbe() {
       if (!mouse.isInside) return;
-      const probeDist = 110;
+      const probeDist = 120;
       let count = 0;
-      for (let i = 0; i < nodes.length; i++) {
+
+      // Special magnetic starlight probe to Central Book Hyper-Core
+      const dCortex = Math.hypot(CORTEX.x - mouse.x, CORTEX.y - mouse.y);
+      if (dCortex < 150) {
+        const cAlpha = (1 - dCortex / 150) * 0.85;
+        ctx.strokeStyle = hexToRgba(PALETTE.core, cAlpha);
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.moveTo(mouse.x, mouse.y);
+        ctx.lineTo(CORTEX.x, CORTEX.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      for (let i = 1; i < nodes.length; i++) {
         const n = nodes[i];
         const d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
         if (d < probeDist) {
@@ -3524,6 +3554,21 @@ document.addEventListener('DOMContentLoaded', () => {
       CORTEX.x = cx + Math.sin(time * 0.00025) * 1.8;
       CORTEX.y = cy + Math.cos(time * 0.00020) * 1.4;
 
+      // Magnetic gravitational snap towards mouse cursor when in proximity
+      if (mouse.isInside) {
+        const dx = mouse.x - cx;
+        const dy = mouse.y - cy;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 150 && dist > 0) {
+          const pull = (1 - dist / 150) * 9.0;
+          CORTEX.x += (dx / dist) * pull;
+          CORTEX.y += (dy / dist) * pull;
+          if (dist < 100) {
+            CORTEX.ping = Math.max(CORTEX.ping, 0.45);
+          }
+        }
+      }
+
       if (CORTEX.ping > 0) CORTEX.ping *= 0.94;
 
       const pulse = 0.5 + 0.5 * Math.sin(time * 0.0005);
@@ -3657,10 +3702,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function findHoveredNode(mx, my, isClick = false) {
       // 1. Check Central Cortex (QUANTUM GIGGLES BOOK)
       const dCortex = Math.hypot(mx - CORTEX.x, my - CORTEX.y);
-      const cortexHitRadius = isClick ? CORTEX.coreRadius + 75 : CORTEX.coreRadius + 45;
-      const cortexLabelX = isClick ? 160 : 120;
-      const cortexTop = isClick ? CORTEX.y - 120 : CORTEX.y - 45;
-      const cortexBottom = isClick ? CORTEX.y + 110 : CORTEX.y + 75;
+      const cortexHitRadius = isClick ? CORTEX.coreRadius + 85 : CORTEX.coreRadius + 65;
+      const cortexLabelX = isClick ? 180 : 150;
+      const cortexTop = CORTEX.y - 130; // seamlessly covers the upper halo and tooltip approach zone
+      const cortexBottom = CORTEX.y + 115; // covers label and subtitle
 
       if (
         dCortex <= cortexHitRadius ||
@@ -3674,9 +3719,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const mc = nodes[m];
         if (!mc) continue;
         const d = Math.hypot(mx - mc.x, my - mc.y);
-        const hitR = isClick ? mc.coreRadius + 48 : mc.coreRadius + 28;
-        const labelW = isClick ? 160 : 110;
-        const labelH = isClick ? 50 : 38;
+        const hitR = isClick ? mc.coreRadius + 48 : mc.coreRadius + 30;
+        const labelW = isClick ? 160 : 120;
+        const labelH = isClick ? 50 : 40;
         if (d <= hitR || (Math.abs(mx - mc.x) <= labelW && Math.abs(my - mc.y) <= labelH)) {
           return mc;
         }
@@ -3687,49 +3732,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const sm = nodes[s];
         if (!sm) continue;
         const d = Math.hypot(mx - sm.x, my - sm.y);
-        const hitR = isClick ? sm.coreRadius + 42 : sm.coreRadius + 24;
-        const labelW = isClick ? 125 : 75;
-        const labelH = isClick ? 42 : 25;
+        const hitR = isClick ? sm.coreRadius + 42 : sm.coreRadius + 26;
+        const labelW = isClick ? 125 : 85;
+        const labelH = isClick ? 42 : 28;
         if (d <= hitR || (Math.abs(mx - sm.x) <= labelW && Math.abs(my - sm.y) <= labelH)) {
           return sm;
         }
       }
 
-      // 4. Proximity Snap on Click: If user clicked within 95px of any interactive node, snap directly to it!
-      if (isClick) {
-        let bestNode = null;
-        let bestDist = 95;
+      // 4. Proximity Snap: If cursor is within snap threshold of any interactive node, snap directly to it!
+      // (Runs on BOTH hover and click so cursor magnetically locks onto the book node)
+      const snapThreshold = isClick ? 120 : 90;
+      let bestNode = null;
+      let bestDist = snapThreshold;
 
-        if (dCortex < bestDist) {
-          bestDist = dCortex;
-          bestNode = CORTEX;
-        }
-
-        for (let m = 1; m <= 4; m++) {
-          const mc = nodes[m];
-          if (!mc) continue;
-          const d = Math.hypot(mx - mc.x, my - mc.y);
-          if (d < bestDist) {
-            bestDist = d;
-            bestNode = mc;
-          }
-        }
-
-        for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
-          const sm = nodes[s];
-          if (!sm) continue;
-          const d = Math.hypot(mx - sm.x, my - sm.y);
-          if (d < bestDist) {
-            bestDist = d;
-            bestNode = sm;
-          }
-        }
-
-        if (bestNode) return bestNode;
+      if (dCortex < bestDist) {
+        bestDist = dCortex;
+        bestNode = CORTEX;
       }
+
+      for (let m = 1; m <= 4; m++) {
+        const mc = nodes[m];
+        if (!mc) continue;
+        const d = Math.hypot(mx - mc.x, my - mc.y);
+        if (d < bestDist) {
+          bestDist = d;
+          bestNode = mc;
+        }
+      }
+
+      for (let s = subMasterStartIndex; s < subMasterEndIndex; s++) {
+        const sm = nodes[s];
+        if (!sm) continue;
+        const d = Math.hypot(mx - sm.x, my - sm.y);
+        if (d < bestDist) {
+          bestDist = d;
+          bestNode = sm;
+        }
+      }
+
+      if (bestNode) return bestNode;
 
       return null;
     }
+
+    const stageBookFloatingPill = document.getElementById('stageBookFloatingPill');
+    const stageOpenBookBtn = document.getElementById('stageOpenBookBtn');
 
     function updateTooltip(node) {
       if (!tooltip) return;
@@ -3737,15 +3785,46 @@ document.addEventListener('DOMContentLoaded', () => {
         activeTooltipNode = null;
         tooltip.classList.remove('is-visible');
         tooltip.setAttribute('aria-hidden', 'true');
+        stageBookFloatingPill?.classList.remove('is-active-pulse');
         return;
       }
 
       activeTooltipNode = node;
-      tooltip.innerHTML = `
-        <span class="brain-tooltip-field" style="color: ${node.color || PALETTE.cyan}">${node.kicker || (node.isSubMaster ? 'SUB-MASTER RESEARCH INTERMEDIATE' : 'RESEARCH NEURAL NODE')}</span>
-        <span class="brain-tooltip-title">${node.title || node.label}</span>
-        <span class="brain-tooltip-action" style="color: ${node.color || PALETTE.core}">${node.action || 'CLICK TO EXPAND ↗'}</span>
-      `;
+      const isBook = (
+        node.isCortex ||
+        node.artId === 'book_qg' ||
+        node.artId === 'book' ||
+        node.label === 'QUANTUM GIGGLES' ||
+        (node.title && node.title.includes('Quantum Giggles'))
+      );
+
+      if (isBook) {
+        stageBookFloatingPill?.classList.add('is-active-pulse');
+        tooltip.innerHTML = `
+          <div class="brain-tooltip-header">
+            <span class="brain-tooltip-field" style="color: #f59e0b">✦ CENTRAL HYPER-CORE // PUBLISHED WORK</span>
+            <span class="brain-tooltip-badge">HARDCOVER</span>
+          </div>
+          <span class="brain-tooltip-title">${node.title || node.label}</span>
+          <div class="brain-tooltip-btn-wrap">
+            <button type="button" class="brain-tooltip-launch-btn" id="tooltipOpenBookBtn" aria-label="Open 3D Book Experience">
+              <svg class="btn-book-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+              <span>Open 3D Book</span>
+              <span class="btn-arrow-glow" aria-hidden="true">↗</span>
+            </button>
+          </div>
+        `;
+      } else {
+        stageBookFloatingPill?.classList.remove('is-active-pulse');
+        tooltip.innerHTML = `
+          <span class="brain-tooltip-field" style="color: ${node.color || PALETTE.cyan}">${node.kicker || (node.isSubMaster ? 'SUB-MASTER RESEARCH INTERMEDIATE' : 'RESEARCH NEURAL NODE')}</span>
+          <span class="brain-tooltip-title">${node.title || node.label}</span>
+          <span class="brain-tooltip-action" style="color: ${node.color || PALETTE.core}">${node.action || 'CLICK TO EXPAND ↗'}</span>
+        `;
+      }
 
       const nodeX = node.x;
       const nodeY = node.isCortex ? node.y - node.coreRadius - 38 : node.y - node.coreRadius - 32;
@@ -3760,7 +3839,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onMouseMove(e) {
-      if (e.target && (e.target === tooltip || tooltip.contains(e.target))) {
+      if (e.target && (e.target === tooltip || tooltip.contains(e.target) || e.target.closest('#stageBookFloatingPill'))) {
         return;
       }
       const rect = stage.getBoundingClientRect();
@@ -3782,7 +3861,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onMouseLeave(e) {
-      if (e.relatedTarget && (stage.contains(e.relatedTarget) || e.relatedTarget === tooltip || tooltip.contains(e.relatedTarget))) {
+      if (e.relatedTarget && (stage.contains(e.relatedTarget) || e.relatedTarget === tooltip || tooltip.contains(e.relatedTarget) || e.relatedTarget.closest?.('#stageBookFloatingPill'))) {
         return;
       }
       mouse.isInside = false;
@@ -3818,8 +3897,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const clickX = clientX - rect.left;
         const clickY = clientY - rect.top;
         clicked = findHoveredNode(clickX, clickY, true);
+
+        // Fail-safe direct hit within 130px radius of CORTEX
+        if (!clicked && Math.hypot(clickX - CORTEX.x, clickY - CORTEX.y) <= 130) {
+          clicked = CORTEX;
+        }
       }
 
+      if (!clicked && (e.target === tooltip || tooltip.contains(e.target))) {
+        clicked = activeTooltipNode || hoveredNode || CORTEX;
+      }
       if (!clicked && hoveredNode) clicked = hoveredNode;
       if (!clicked && activeTooltipNode) clicked = activeTooltipNode;
 
@@ -3846,8 +3933,9 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (isBookTarget) {
-          if (typeof open3DBookViewer === 'function') {
-            open3DBookViewer(true);
+          const opener = (typeof open3DBookViewer === 'function') ? open3DBookViewer : window.open3DBookViewer;
+          if (typeof opener === 'function') {
+            opener(true);
             return;
           }
         }
@@ -3870,6 +3958,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tooltip.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (activeTooltipNode) {
+        const isBookTarget = (
+          activeTooltipNode.artId === 'book_qg' ||
+          activeTooltipNode.artId === 'book' ||
+          activeTooltipNode.isCortex ||
+          activeTooltipNode.label === 'QUANTUM GIGGLES' ||
+          (activeTooltipNode.title && activeTooltipNode.title.includes('Quantum Giggles'))
+        );
+        if (isBookTarget) {
+          const opener = (typeof open3DBookViewer === 'function') ? open3DBookViewer : window.open3DBookViewer;
+          if (typeof opener === 'function') {
+            opener(true);
+            return;
+          }
+        }
+      }
       handleActivation(e);
     });
 
@@ -3888,6 +3992,28 @@ document.addEventListener('DOMContentLoaded', () => {
           if (typeof open3DBookViewer === 'function') {
             open3DBookViewer(true);
           }
+        }
+      });
+    }
+
+    // Wire hovering 3D book launch pill with button
+    const launchBookFromFloatingPill = (e) => {
+      e?.stopPropagation?.();
+      const opener = (typeof open3DBookViewer === 'function') ? open3DBookViewer : window.open3DBookViewer;
+      if (typeof opener === 'function') {
+        opener(true);
+      }
+    };
+
+    if (stageBookFloatingPill) {
+      stageBookFloatingPill.addEventListener('click', launchBookFromFloatingPill);
+    }
+    if (stageOpenBookBtn) {
+      stageOpenBookBtn.addEventListener('click', launchBookFromFloatingPill);
+      stageOpenBookBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          launchBookFromFloatingPill(e);
         }
       });
     }
@@ -3944,140 +4070,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  /* ==========================================================================
-     10. ACADEMIC FOUNDATION & RESEARCH PEDIGREE MODAL
-     ========================================================================== */
-  const educationModal      = document.getElementById('educationModalV2');
-  const educationModalTitle = document.getElementById('educationModalTitleV2');
-  const educationModalKicker= document.getElementById('educationModalKicker');
-  const educationModalBody  = document.getElementById('educationModalBodyV2');
-  const educationModalClose = document.getElementById('educationModalCloseV2');
-
-  const EDUCATION_DATA_V2 = {
-    edu1: {
-      kicker: 'POSTGRADUATE PROGRAM // COMPLETED (7.80 / 10.0 CGPA)',
-      degree: 'Master of Computer Applications (MCA)',
-      university: 'Thapar Institute of Engineering and Technology',
-      duration: '2024 – 2026 • Patiala, Punjab, India • Completed (CGPA: 7.80)',
-      cgpa: '7.80 / 10.0',
-      status: 'Completed',
-      overview: 'Rigorous advanced curriculum completed with a 7.80 CGPA, emphasizing large-scale distributed architectures, high-performance computing, advanced machine learning, and enterprise reactive microservices.',
-      modules: [
-        'Advanced Distributed Systems & Consensus Protocols (Raft, Paxos)',
-        'High-Performance Parallel Computing & GPU Acceleration',
-        'Deep Learning & Neural Network Architectures',
-        'Modern Cloud-Native Infrastructure & Kubernetes Orchestration',
-        'Advanced Algorithms & Computational Complexity',
-        'Enterprise Reactive Microservices & Async Event Pipelines'
-      ],
-      research: 'Master\'s thesis and capstone concentration on low-latency microservices architectures, distributed asynchronous task scheduling, and high-throughput real-time AI pipeline orchestration.'
-    },
-    edu2: {
-      kicker: 'UNDERGRADUATE DEGREE // GRADUATED WITH DISTINCTION (9.0 / 10.0 GPA)',
-      degree: 'Bachelor of Computer Applications (BCA)',
-      university: 'Chitkara University',
-      duration: '2021 – 2024 • Punjab, India • Completed with Honors (GPA: 9.0)',
-      cgpa: '9.0 / 10.0',
-      status: 'Completed',
-      overview: 'Comprehensive foundation in computer science, software engineering paradigms, and algorithmic problem solving. Graduated with an outstanding cumulative GPA of 9.0 out of 10.0 and appointed Quantum Research Scholar.',
-      modules: [
-        'Data Structures & Algorithmic Analysis (C++, Java)',
-        'Object-Oriented Software Design Patterns',
-        'Operating Systems & Memory Concurrency Models',
-        'Database Management Systems (RDBMS & NoSQL)',
-        'Computer Networks & Distributed Communication Protocols',
-        'Quantum Information Science & Simulation Methodologies'
-      ],
-      research: 'Appointed Quantum Computing Research Scholar (Jan 2022 – Dec 2024). Conducted multi-qubit quantum teleportation protocols in IBM Qiskit and empirically verified Grover search quadratic acceleration. Authored and published the acclaimed science book "Quantum Giggles: Laughing Through Cosmic Wonders" during this tenure.'
-    }
-  };
-
-  function openEducationModal(id) {
-    const data = EDUCATION_DATA_V2[id];
-    if (!data || !educationModal) return;
-
-    if (educationModalTitle) educationModalTitle.textContent = data.degree;
-    if (educationModalKicker) educationModalKicker.textContent = data.kicker;
-    if (educationModalBody) {
-      educationModalBody.innerHTML = `
-        <div style="margin-bottom: 2rem;">
-          <h4 style="font-size: 1.35rem; font-weight: 600; color: #ffffff; margin-bottom: 0.35rem;">${data.degree}</h4>
-          <div style="font-family: var(--font-mono); font-size: 0.88rem; color: #a1a1aa; margin-bottom: 0.5rem;">
-            ${data.university}
-          </div>
-          <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1.25rem;">
-            TIMELINE: ${data.duration}
-          </div>
-          <p style="font-size: 1rem; line-height: 1.75; color: var(--text-light); margin-bottom: 2rem;">
-            ${data.overview}
-          </p>
-        </div>
-
-        <div style="margin-bottom: 2rem;">
-          <div style="font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; color: #d4d4d8; margin-bottom: 0.85rem; letter-spacing: 0.05em;">
-            CORE CURRICULUM &amp; SPECIALIZED MODULES:
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem;">
-            ${data.modules.map(mod => `
-              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.88rem; color: #ffffff; display: flex; align-items: center; gap: 0.6rem;">
-                <span style="color: #a1a1aa;">✓</span> <span>${mod}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div style="margin-bottom: 2rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 1.5rem;">
-          <div style="font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; color: #d4d4d8; margin-bottom: 0.5rem; letter-spacing: 0.05em;">
-            RESEARCH &amp; SCHOLAR ACHIEVEMENTS:
-          </div>
-          <p style="font-size: 0.94rem; line-height: 1.7; color: var(--text-light);">
-            ${data.research}
-          </p>
-        </div>
-
-        <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-          <span>VERIFIED ACADEMIC CREDENTIALS &bull; PUNJAB, INDIA</span>
-          <button class="btn-pill-v2" onclick="openResumeModal()" style="padding: 0.5rem 1.25rem; font-size: 0.82rem; background: #ffffff; color: #000000; border: none; font-weight: 600;">
-            Inspect Full CV Resume ↗
-          </button>
-        </div>
-      `;
-    }
-
-    document.body.style.overflow = 'hidden';
-    educationModal.classList.add('is-open');
-  }
-
-  function closeEducationModal() {
-    if (educationModal) {
-      educationModal.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
-  }
-
-  if (educationModalClose) educationModalClose.addEventListener('click', closeEducationModal);
-  if (educationModal) {
-    educationModal.addEventListener('click', (e) => {
-      if (e.target === educationModal) closeEducationModal();
-    });
-  }
-
-  /* --------------------------------------------------------------------------
-     ACADEMIC JOURNEY CONTROLLER (2-DEGREE CONTINUUM)
-     -------------------------------------------------------------------------- */
-  document.querySelectorAll('.academic-stage-card[data-edu-id]').forEach((card) => {
-    const eduId = card.getAttribute('data-edu-id');
-    card.addEventListener('click', () => {
-      openEducationModal(eduId);
-    });
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openEducationModal(eduId);
-      }
-    });
-  });
-
   // Escape key closes all open modals & command palette
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -4087,7 +4079,6 @@ document.addEventListener('DOMContentLoaded', () => {
       closeArticleModal();
       close3DBookViewer();
       close3DNewspaperViewer();
-      closeEducationModal();
       closeCommandPalette();
     }
   });

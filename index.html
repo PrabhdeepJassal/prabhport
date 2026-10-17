@@ -15,7 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=3.6">
+  <link rel="stylesheet" href="style.css?v=3.9">
 </head>
 
 <body>
@@ -313,6 +313,27 @@
       <!-- PURE CANVAS NEURAL NETWORK STAGE -->
       <div class="brain-network-stage" id="brainNetworkStage">
         <canvas id="brainCanvas" class="brain-canvas"></canvas>
+        <!-- Floating Hovering Quick-Launch Pill with Button for 3D Book -->
+        <aside class="brain-stage-book-pill" id="stageBookFloatingPill" aria-label="Quantum Giggles 3D Book Quick Launch">
+          <div class="bs-pill-left">
+            <span class="bs-pill-dot gold-pulse" aria-hidden="true"></span>
+            <div class="bs-pill-text">
+              <span class="bs-pill-kicker">FEATURED WORK &bull; 3D HARDCOVER</span>
+              <span class="bs-pill-title">Quantum Giggles</span>
+            </div>
+          </div>
+          <button class="bs-pill-btn" id="stageOpenBookBtn" type="button" aria-label="Open Quantum Giggles 3D Interactive Book">
+            <svg class="bs-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              <path d="M9 7h6"/>
+              <path d="M9 11h4"/>
+            </svg>
+            <span>Open 3D Book</span>
+            <span class="bs-btn-arrow" aria-hidden="true">↗</span>
+          </button>
+        </aside>
+
         <!-- Floating tooltip rendered by JS on hover -->
         <div class="brain-tooltip" id="brainTooltip" aria-hidden="true"></div>
         <!-- Floating Neural HUD Status -->
@@ -1224,7 +1245,7 @@
 
   <!-- PDF.js Mozilla Library for In-Browser Vector Rendering -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="app.js?v=3.6"></script>
+  <script src="app.js?v=3.9"></script>
 </body>
 
 </html>
